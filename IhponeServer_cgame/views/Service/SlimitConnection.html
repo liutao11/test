@@ -1,0 +1,85 @@
+<{extends file='Admin/index.html'}>
+<{block name=bbb}>
+<script src="/views/dataTimeStyle/jquery.datetimepicker.js"></script>
+<link rel="stylesheet" href="/views/dataTimeStyle/jquery.datetimepicker.css" type="text/css" />
+<style>
+    .page_title{font-size: 14px;color: #438EB9;margin: 10px 0 0 0;height: 35px;line-height: 35px;background:#FAFAFA ;border: 1px solid #DEDEDE;border-radius: 6px;padding-left: 10px;}
+    .page_title span{font-size: 18px;color: #438EB9;padding-left: 10px;height: 40px;line-height: 40px;font-weight: bold}
+    .ReportData{box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);border: 1px solid #DEDEDE;border-radius: 5px;}
+    .showList{clear: both;height: 32px;margin-top: 10px;}
+    .showList_name{float: left;height: 30px;line-height: 30px;font-size: 12px;;text-align: right;width: 150px;}
+    .showList select{display: block;float: left;height: 30px;line-height: 30px;font-size: 12px;width: 150px;}
+    .showList span{display: block;float: left;height: 30px;line-height: 30px;font-size: 12px;width: 150px;}
+    .showList input{height: 30px;line-height: 30px;display: block;float: left;width: 300px;border: 1px solid #cccccc;font-size: 14px;}
+    .showList textarea{line-height: 30px;height: 60px;display: block;float: left;width: 600px;}
+    .selectDiv_submit{float: left;height: 28px;margin-top: 10px;margin-left: 20px;background:#438EB9;color: #ffffff;line-height: 30px;text-align: center;width: 100px;font-size: 12px;cursor: pointer}
+    .container_tt{height: 40px;line-height: 40px;font-size: 16px;background: transparent linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.1) 100%) repeat scroll 0% 0%}
+    .iconC1{width: 20px;height: 20px;background: url("/views/img/iconC.png") 0 0;float: left;margin: 12px 10px auto 10px;}
+    .ReportDataTitle_list{float: left;line-height: 40px;height: 40px;width: 150px;text-align: center;font-size: 14px;font-weight: 600}
+    .ReportDataCenter{background:#F5F5F5;border-bottom:1px solid #DEDEDE;height: 30px;}
+    .ReportDataCenter_list{float: left;line-height: 30px;height: 30px;width: 150px;text-align: center;font-size: 12px;}
+    .mSelect{float: left;position: relative}
+    .mSelect .mSelectShow{border: #cccccc 1px solid;height: 30px;line-height: 30px;width: 150px;cursor: pointer;font-size: 12px;padding-left: 5px;}
+    .mSelect .mSelectDown{border: #cccccc 1px solid;width: 150px;position: absolute;top:34px;box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);display: none;background:#cccccf}
+    .mSelect .mSelectDown .mSelectOption{line-height: 24px;height: 24px;font-size: 12px;padding-left: 10px;cursor: pointer}
+    .mSelect .mSelectDown .mSelectOption:hover{background:#438EB9;color: #ffffff }
+    input,select{border: 1px solid #DEDEDE; }
+</style>
+<div class="page_title"><span><{$objectName}></span> 平台->客服->ip控制操作</div>
+<div style="padding-top: 10px;">
+    <div class="ReportData">
+        <div class="container_tt"><div class="iconC1"></div>ip控制操作</div>
+        <div class="showList">
+            <div class="showList_name">服区*：</div>
+            <select class="serverIndex">
+                <option value="0">全区</option>
+                <{foreach $serverS as $vv}>
+                <option value="<{$vv['id']}>"><{$vv['ServerTitle']}></option>
+                <{/foreach}>
+            </select>
+        </div>
+        <div class="showList">
+            <div class="showList_name">ip地址*：</div>
+            <input type="text" class="roleS" style="width: 400px;">
+        </div>
+
+        <div class="showList">
+            <div class="showList_name">操作类型*：</div>
+            <select class="roleSType">
+                <option value="1">禁止链接</option>
+                <option value="2">解除禁止</option>
+            </select>
+        </div>
+        <div class="showList">
+            <div class="showList_name">备注：</div>
+            <input type="text" class="message" style="width: 400px;">
+        </div>
+
+        <div class="showList" style="height: 64px;">
+            <div class="selectDiv_submit" style="float:none;margin: 0 auto">提交</div>
+        </div>
+    </div>
+</div>
+</div>
+<script>
+    $(function(){
+        $(".selectDiv_submit").click(function(){
+            var serverIndex=$(".serverIndex").val();
+            var roleS=$(".roleS").val();
+            var roleSType=$(".roleSType").val();
+            var message=$(".message").val();
+            if(serverIndex && roleS && roleS!='' && roleSType){
+                $(this).html('发送中...');
+                $(this).css({"background":"#616161"});
+                $.get("/SlimitConnectionGet/",{"serverIndex":serverIndex,"ipUrl":roleS,'message':message,'setType':roleSType,"doingUnid":new Date().getTime()},function(data){
+                    var obj = jQuery.parseJSON(data);
+                    alert(obj.message);
+                    window.location.reload();
+                })
+            }else{
+                alert('参数不完整！');
+            }
+        });
+    });
+</script>
+<{/block}>

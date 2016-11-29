@@ -1,0 +1,166 @@
+<{extends file='From/index.html'}>
+<{block name=bbb}>
+<script src="/views/dataTimeStyle/jquery.datetimepicker.js"></script>
+<link rel="stylesheet" href="/views/dataTimeStyle/jquery.datetimepicker.css" type="text/css" />
+<style>
+    .page_title{font-size: 14px;color: #438EB9;margin: 10px 0 0 0;height: 35px;line-height: 35px;background:#FAFAFA ;border: 1px solid #DEDEDE;border-radius: 6px;padding-left: 10px;}
+    .page_title span{font-size: 18px;color: #438EB9;padding-left: 10px;height: 40px;line-height: 40px;font-weight: bold}
+    .container{width: 800px;height: 420px;box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);float: left;margin: 10px 5px 10px 5px;}
+    .container_tt{height: 40px;line-height: 40px;font-size: 16px;background: transparent linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.1) 100%) repeat scroll 0% 0%}
+    #container_cen{height: 380px;}
+    .iconC1{width: 20px;height: 20px;background: url("/views/img/iconC.png") 0 0;float: left;margin: 12px 10px auto 10px;}
+    #lineUser{height: 380px;}
+    .selectDiv{height: 50px;}
+    .selectDiv span{display: block;float: left;line-height: 50px;height: 50px;margin-left: 10px;}
+    .selectDiv select{display: block;float: left;margin-top: 10px;height: 30px;width: 150px;line-height: 30px;margin-left: 10px;}
+    .selectDiv input{display: block;float: left;height: 28px;width: 150px;margin: 10px 0 0 10px;}
+    .selectDiv_submit{float: left;height: 28px;margin-top: 10px;margin-left: 20px;background:#438EB9;color: #ffffff;line-height: 30px;text-align: center;width: 100px;font-size: 12px;cursor: pointer}
+    .payList{line-height: 30px;height: 30px;}
+    .payList span{color:#438EB9}
+    .containerPay{margin: 10px 0 0 10px;}
+    .sumdiv{clear: both}
+    .sumdivList{float:left;width: 300px;height: 100px;box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);padding-top: 10px;background: transparent linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.1) 100%) repeat scroll 0% 0%;margin:0 10px 0 5px;}
+    .sumdivList_icon{width: 30px;height: 30px;background: url("/views/img/iconS.png") -257px -260px;margin: 0 auto 0 auto;}
+    .sumdivList_tt{text-align: center;font-size: 18px;font-weight: 600;height: 40px;line-height: 40px;}
+    .sumdivList_int{font-weight: 600;font-size: 14px;color: #438EB9;text-align: center;line-height: 30px;height: 30px;}
+    .sumdivList_icon_ren{width: 30px;height: 30px;background: url("/views/img/iconS.png") -35px -160px;margin: 0 auto 0 auto;}
+    .ReportData{box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);border: 1px solid #DEDEDE;border-radius: 5px;padding-left: 10px;padding-right:10px; }
+    .ReportDataTitle{height: 40px;}
+    .ReportDataTitle_list{float: left;line-height: 40px;height: 40px;width: 150px;text-align: center;font-size: 14px;font-weight: 600}
+    .ReportDataCenter{background:#F5F5F5;border-bottom:1px solid #DEDEDE;height: 30px;}
+    .ReportDataCenter_list{float: left;line-height: 30px;height: 30px;width: 150px;text-align: center;font-size: 12px;}
+    .pageInt{width: 30px;height: 30px;border-radius: 4px;background: #DEDEDE;float: left;line-height: 30px;text-align: center;margin: 5px 10px 0 0;cursor: pointer}
+    .pageInt:hover{background:#dbf8dc }
+    .pageInt_z{width: 28px;height: 28px;border-radius: 4px;border: 1px solid #DEDEDE;float: left;line-height: 28px;text-align: center;margin: 5px 10px 0 0;cursor: pointer}
+    input,select{border: 1px solid #DEDEDE; }
+    .roleKey{width: 90%;border: 1px solid #DEDEDE;height: 30px;line-height: 30px;border-radius:4px;margin: 0 auto}
+</style>
+
+<div class="page_title"><span><{$objectName}></span> 平台->运营数据->充值订单</div>
+<div style="padding-top: 10px;">
+    <div class="selectDiv">
+        <span>服区*</span>
+        <select class="serverIndex">
+            <option value="0" <{if $serverIndex==0}>selected<{/if}>>选择区服</option>
+            <{foreach $serverS as $vv}>
+            <option value="<{$vv['id']}>" <{if $serverIndex==$vv['id']}>selected<{/if}>><{$vv['ServerTitle']}></option>
+            <{/foreach}>
+        </select>
+        <div class="selectDiv_submit">提交</div>
+    </div>
+    <div class="ReportData">
+        <div class="ReportDataTitle">
+            <div class="ReportDataTitle_list" style="width: 240px;">订单号</div>
+            <div class="ReportDataTitle_list" style="width: 200px;">账号</div>
+            <div class="ReportDataTitle_list">金额(元)</div>
+            <div class="ReportDataTitle_list">元宝</div>
+            <div class="ReportDataTitle_list">充值时间</div>
+            <div class="ReportDataTitle_list">是否提取</div>
+            <div class="ReportDataTitle_list">提取角色</div>
+        </div>
+        <div class="ReportDataTitle">
+            <div class="ReportDataTitle_list" style="width: 240px;"><input type="text" class="roleKey" value="<{if $roleKey0}><{$roleKey0}><{else}><{/if}>"></div>
+            <div class="ReportDataTitle_list" style="width: 200px;"><input type="text" class="roleKey" value="<{if $roleKey1}><{$roleKey1}><{else}><{/if}>"></div>
+
+        </div>
+        <{if $data}>
+        <{foreach $data as $kk=>$vv}>
+
+        <div class="ReportDataCenter" <{if $kk > ($pagelength-1)}> style="display: none"<{/if}>>
+        <div class="ReportDataCenter_list" style="width: 240px;"><{$vv['sPayId']}></div>
+        <div class="ReportDataCenter_list" style="width: 200px;"><{$vv['UserId']}></div>
+        <div class="ReportDataCenter_list"><{$vv['amount']}></div>
+        <div class="ReportDataCenter_list"><{$vv['nNumber']}></div>
+        <div class="ReportDataCenter_list"><{$vv['CTime']}></div>
+        <div class="ReportDataCenter_list"><{if $vv['drawout']==1}>是<{else}>未<{/if}></div>
+        <div class="ReportDataCenter_list"><{$vv['sChrName']}></div>
+    </div>
+    <{/foreach}>
+    <{else}>
+    <div class="ReportDataCenter">没有数据！</div>
+    <{/if}>
+
+    <div class="ReportDataTitle">
+        <{if $pageSum>=2 && $pageSum<=11}>
+        <{for $i=1 to  $pageSum step 1}>
+        <div <{if $showPageInt==$i}>class="pageInt_z"<{else}>class="pageInt"<{/if}> pageInt="<{$i}>"><{$i}></div>
+    <{/for}>
+    <{elseif  $pageSum > 11}>
+    <{if $showPageInt <=5}>
+    <{for $i=1 to  11 step 1}>
+    <div <{if $showPageInt==$i}>class="pageInt_z"<{else}>class="pageInt"<{/if}> pageInt="<{$i}>"><{$i}></div>
+<{/for}>
+<div class="pageInt_z">...</div>
+<{elseif  $showPageInt > 5 && $showPageInt <= $pageSum-5}>
+<div class="pageInt_z">...</div>
+<{for $i=$showPageIntS5 to $showPageIntA5  step 1}>
+<div <{if $showPageInt==$i}>class="pageInt_z"<{else}>class="pageInt"<{/if}> pageInt="<{$i}>"><{$i}></div>
+<{/for}>
+<div class="pageInt_z">...</div>
+<{elseif $showPageInt > $pageSumTo5}>
+<div class="pageInt_z">...</div>
+<{for $i=$pageSumTo11 to  $pageSum step 1}>
+<div <{if $showPageInt==$i}>class="pageInt_z"<{else}>class="pageInt"<{/if}> pageInt="<{$i}>"><{$i}></div>
+<{/for}>
+<{/if}>
+<{/if}>
+</div>
+
+</div>
+</div>
+<script>
+    $(function(){
+        var className='<{$className}>';
+        var pageSum=<{$pageSum}>;
+        var showPage=1;
+        var showPageLength=<{$pagelength}>;
+        $('.startDay').datetimepicker({
+            lang:"ch",           //语言选择中文
+            format:"Y-m-d",      //格式化日期
+            timepicker:false,    //关闭时间选项
+            yearStart:2000,     //设置最小年份
+            yearEnd:2050,        //设置最大年份
+            todayButton:false    //关闭选择今天按钮
+        });
+        $('.endDay').datetimepicker({
+            lang:"ch",           //语言选择中文
+            format:"Y-m-d",      //格式化日期
+            timepicker:false,    //关闭时间选项
+            yearStart:2000,     //设置最小年份
+            yearEnd:2050,        //设置最大年份
+            todayButton:false    //关闭选择今天按钮
+        });
+        $(".selectDiv_submit").click(function(){
+            var serverIndex=$(".serverIndex").val();
+            var roleKey0=$(".roleKey").eq(0).val();
+            var roleKey1=$(".roleKey").eq(1).val();
+            if(serverIndex){
+                $(this).html('发送中...');
+                $(this).css({"background":"#616161"});
+                $.get("/FPayListSelectGet/",{"serverIndex":serverIndex,"class":className,"roleKey0":roleKey0,"roleKey1":roleKey1},function(data){
+                    var obj = jQuery.parseJSON(data);
+                    if(obj.status!=2000){
+                        alert(obj.message)
+                    }
+                    window.location.reload();
+                })
+            }else{
+                alert("填写必须参数！")
+            }
+
+        });
+        $(".pageInt").each(function(){
+            $(this).click(function(){
+                var pageInt=$(this).attr("pageInt");
+                $.get("/ShowPageGet/",{"class":className,"pageInt":pageInt},function(data){
+                    var obj = jQuery.parseJSON(data);
+                    if(obj.status==2000){
+                        window.location.reload();
+                    }
+                })
+            })
+        });
+    });
+
+</script>
+<{/block}>

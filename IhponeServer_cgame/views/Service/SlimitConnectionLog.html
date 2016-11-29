@@ -1,0 +1,102 @@
+<{extends file='Admin/index.html'}>
+<{block name=bbb}>
+<script src="/views/dataTimeStyle/jquery.datetimepicker.js"></script>
+<link rel="stylesheet" href="/views/dataTimeStyle/jquery.datetimepicker.css" type="text/css" />
+<style>
+    .page_title{font-size: 14px;color: #438EB9;margin: 10px 0 0 0;height: 35px;line-height: 35px;background:#FAFAFA ;border: 1px solid #DEDEDE;border-radius: 6px;padding-left: 10px;}
+    .page_title span{font-size: 18px;color: #438EB9;padding-left: 10px;height: 40px;line-height: 40px;font-weight: bold}
+    .ReportData{box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);border: 1px solid #DEDEDE;border-radius: 5px;}
+    .showList{clear: both;height: 32px;margin-top: 10px;}
+    .showList_name{float: left;height: 30px;line-height: 30px;font-size: 12px;;text-align: right;width: 150px;}
+    .showList select{display: block;float: left;height: 30px;line-height: 30px;font-size: 12px;width: 150px;}
+    .showList span{display: block;float: left;height: 30px;line-height: 30px;font-size: 12px;width: 150px;}
+    .showList input{height: 30px;line-height: 30px;display: block;float: left;width: 300px;border: 1px solid #cccccc;font-size: 14px;}
+    .showList textarea{line-height: 30px;height: 60px;display: block;float: left;width: 600px;}
+    .selectDiv_submit{float: left;height: 28px;margin-top: 10px;margin-left: 20px;background:#438EB9;color: #ffffff;line-height: 30px;text-align: center;width: 100px;font-size: 12px;cursor: pointer}
+    .container_tt{height: 40px;line-height: 40px;font-size: 16px;background: transparent linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.1) 100%) repeat scroll 0% 0%}
+    .iconC1{width: 20px;height: 20px;background: url("/views/img/iconC.png") 0 0;float: left;margin: 12px 10px auto 10px;}
+    .ReportDataTitle_list{float: left;line-height: 40px;height: 40px;width: 150px;text-align: center;font-size: 14px;font-weight: 600}
+    .ReportDataCenter{background:#F5F5F5;border-bottom:1px solid #DEDEDE;height: 30px;}
+    .ReportDataCenter_list{float: left;line-height: 30px;height: 30px;width: 150px;text-align: center;font-size: 12px;}
+    .pageInt{width: 30px;height: 30px;border-radius: 4px;background: #DEDEDE;float: left;line-height: 30px;text-align: center;margin: 5px 10px 0 0;}
+    .pageInt_z{width: 28px;height: 28px;border-radius: 4px;border: 1px solid #DEDEDE;float: left;line-height: 28px;text-align: center;margin: 5px 10px 0 0;}
+
+
+</style>
+<div class="page_title"><span><{$objectName}></span> 平台->客服->ip控制操作日志</div>
+<div style="padding-top: 10px;">
+    <div class="ReportData" style="margin-top: 10px;">
+        <div class="container_tt"><div class="iconC1"></div>操作记录</div>
+            <{if $data}>
+            <div class="ReportDataTitle" style="height: 40px;">
+                <div class="ReportDataTitle_list">ip地址</div>
+                <div class="ReportDataTitle_list">区服</div>
+                <div class="ReportDataTitle_list">类型</div>
+                <div class="ReportDataTitle_list">操作时间</div>
+                <div class="ReportDataTitle_list">操作人</div>
+                <div class="ReportDataTitle_list">发送状态</div>
+                <div class="ReportDataTitle_list">备注</div>
+            </div>
+            <{foreach $data as $vv}>
+                <div class="ReportDataCenter">
+                    <div class="ReportDataCenter_list"><{$vv['ipUrl']}></div>
+                    <div class="ReportDataCenter_list"><{$vv['serverIndex']}></div>
+                    <div class="ReportDataCenter_list"><{if $vv['setType']==1}>禁止<{else}>解禁<{/if}></div>
+                    <div class="ReportDataCenter_list"><{$vv['CTime']}></div>
+                    <div class="ReportDataCenter_list"><{$vv['userName']}></div>
+                    <div class="ReportDataCenter_list"><{if $vv['sendStatus']==0}>成功<{else}>失败<{/if}></div>
+                    <div class="ReportDataCenter_list" style="width: 300px;overflow:hidden"><{$vv['message']}></div>
+
+                </div>
+            <{/foreach}>
+            <{else}>
+                没有数据！
+            <{/if}>
+
+        <div class="ReportDataTitle" style="height: 40px;padding-left: 30px;">
+        <{if $pageSum>=2 && $pageSum<=11}>
+        <{for $i=1 to  $pageSum step 1}>
+        <div <{if $showPageInt==$i}>class="pageInt_z"<{else}>class="pageInt"<{/if}> pageInt="<{$i}>"><{$i}></div>
+        <{/for}>
+        <{elseif  $pageSum > 11}>
+        <{if $showPageInt <=5}>
+        <{for $i=1 to  11 step 1}>
+        <div <{if $showPageInt==$i}>class="pageInt_z"<{else}>class="pageInt"<{/if}> pageInt="<{$i}>"><{$i}></div>
+        <{/for}>
+        <div class="pageInt_z">...</div>
+        <{elseif  $showPageInt > 5 && $showPageInt <= $pageSum-5}>
+        <div class="pageInt_z">...</div>
+        <{for $i=$showPageIntS5 to $showPageIntA5  step 1}>
+        <div <{if $showPageInt==$i}>class="pageInt_z"<{else}>class="pageInt"<{/if}> pageInt="<{$i}>"><{$i}></div>
+        <{/for}>
+        <div class="pageInt_z">...</div>
+        <{elseif $showPageInt > $pageSumTo5}>
+        <div class="pageInt_z">...</div>
+        <{for $i=$pageSumTo11 to  $pageSum step 1}>
+        <div <{if $showPageInt==$i}>class="pageInt_z"<{else}>class="pageInt"<{/if}> pageInt="<{$i}>"><{$i}></div>
+        <{/for}>
+        <{/if}>
+
+        <{/if}>
+        </div>
+    </div>
+</div>
+</div>
+<script>
+    $(function(){
+        var className='<{$className}>';
+        $(".pageInt").each(function(){
+            $(this).click(function(){
+                var pageInt=$(this).attr('pageInt');
+                $.get("/SUserControlLogChangePage/",{"showId":pageInt,'className':className,"doingUnid":new Date().getTime()},function(data){
+                    var obj = jQuery.parseJSON(data);
+                    if(obj.status!=2000){
+                        alert(obj.message)
+                    }
+                    window.location.reload();
+                })
+            })
+        });
+    });
+</script>
+<{/block}>

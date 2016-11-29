@@ -1,0 +1,118 @@
+<{extends file='Admin/index.html'}>
+<{block name=bbb}>
+<script src="/views/dataTimeStyle/jquery.datetimepicker.js"></script>
+<link rel="stylesheet" href="/views/dataTimeStyle/jquery.datetimepicker.css" type="text/css" />
+<style>
+    .page_title{font-size: 14px;color: #438EB9;margin: 10px 0 0 0;height: 35px;line-height: 35px;background:#FAFAFA ;border: 1px solid #DEDEDE;border-radius: 6px;padding-left: 10px;}
+    .page_title span{font-size: 18px;color: #438EB9;padding-left: 10px;height: 40px;line-height: 40px;font-weight: bold}
+    .selectDiv{height: 50px;}
+    .selectDiv span{display: block;float: left;line-height: 50px;height: 50px;margin-left: 10px;}
+    .selectDiv select{display: block;float: left;margin-top: 10px;height: 30px;width: 150px;line-height: 30px;margin-left: 10px;}
+    .selectDiv input{display: block;float: left;height: 28px;width: 150px;margin: 10px 0 0 10px;}
+    .selectDiv_submit{float: left;height: 28px;margin-top: 10px;margin-left: 20px;background:#438EB9;color: #ffffff;line-height: 30px;text-align: center;width: 100px;font-size: 12px;cursor: pointer}
+    .payList{line-height: 30px;height: 30px;}
+    .payList span{color:#438EB9}
+    .ReportData{box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);border: 1px solid #DEDEDE;border-radius: 5px;padding-left: 10px;padding-right:10px; }
+    .ReportDataTitle{height: 40px;}
+    .ReportDataTitle_list{float: left;line-height: 40px;height: 40px;width: 150px;text-align: center;font-size: 14px;font-weight: 600}
+    .ReportDataCenter{background:#F5F5F5;border-bottom:1px solid #DEDEDE;height: 30px;}
+    .ReportDataCenter_list{float: left;line-height: 30px;height: 30px;width: 150px;text-align: center;font-size: 12px;}
+</style>
+
+<div class="page_title"><span><{$objectName}></span> 平台->运营数据->登录活跃统计</div>
+<div style="padding-top: 10px;">
+    <div class="selectDiv">
+        <span>服区*</span>
+        <select class="serverIndex">
+            <option value="0" <{if $serverIndex==0}>selected<{/if}>>选择服区</option>
+            <{foreach $serverS as $vv}>
+            <option value="<{$vv['id']}>" <{if $serverIndex==$vv['id']}>selected<{/if}>><{$vv['ServerTitle']}></option>
+            <{/foreach}>
+        </select>
+        <span>日期*</span>
+        <span>从</span>
+        <input type="text" class="startDay" value="<{$startDay}>">
+        <span>到</span>
+        <input type="text" class="endDay" value="<{$endDay}>">
+        <div class="selectDiv_submit">提交</div>
+    </div>
+
+    <div class="ReportData">
+        <div class="ReportDataTitle">
+            <div class="ReportDataTitle_list">日期</div>
+            <div class="ReportDataTitle_list">新增账号数</div>
+            <div class="ReportDataTitle_list">活跃人数</div>
+            <div class="ReportDataTitle_list">用户总量</div>
+            <div class="ReportDataTitle_list">活跃率</div>
+            <div class="ReportDataTitle_list">当天充值人数</div>
+            <div class="ReportDataTitle_list">当天充值率</div>
+            <div class="ReportDataTitle_list">充值总人数</div>
+            <div class="ReportDataTitle_list">总充值率</div>
+        </div>
+        <{if $data}>
+            <{foreach $data as $key=>$vv}>
+            <div class="ReportDataCenter">
+                <div class="ReportDataCenter_list"><{$key}></div>
+                <div class="ReportDataCenter_list"><{$vv['dayNewUser']}></div>
+                <div class="ReportDataCenter_list"><{$vv['loginSum']}></div>
+                <div class="ReportDataCenter_list"><{$vv['userSum']}></div>
+                <div class="ReportDataCenter_list"><{$vv['UserActiveLV']}></div>
+                <div class="ReportDataCenter_list"><{$vv['DayPayUserSum']}></div>
+                <div class="ReportDataCenter_list"><{$vv['DayPayUserLV']}></div>
+                <div class="ReportDataCenter_list"><{$vv['PayUserSum']}></div>
+                <div class="ReportDataCenter_list"><{$vv['PayUserLV']}></div>
+            </div>
+            <{/foreach}>
+        <{else}>
+        <div class="ReportDataCenter">没有数据！</div>
+        <{/if}>
+
+        <div class="ReportDataTitle">
+
+        </div>
+
+    </div>
+</div>
+<script>
+    var className='<{$className}>';
+    $(function(){
+        $('.startDay').datetimepicker({
+            lang:"ch",           //语言选择中文
+            format:"Y-m-d",      //格式化日期
+            timepicker:false,    //关闭时间选项
+            yearStart:2000,     //设置最小年份
+            yearEnd:2050,        //设置最大年份
+            todayButton:false    //关闭选择今天按钮
+        });
+        $('.endDay').datetimepicker({
+            lang:"ch",           //语言选择中文
+            format:"Y-m-d",      //格式化日期
+            timepicker:false,    //关闭时间选项
+            yearStart:2000,     //设置最小年份
+            yearEnd:2050,        //设置最大年份
+            todayButton:false    //关闭选择今天按钮
+        });
+        $(".selectDiv_submit").click(function(){
+            var serverIndex=$(".serverIndex").val();
+            var startDay=$(".startDay").val();
+            var endDay=$(".endDay").val();
+
+            if(serverIndex!='' && startDay!='' && endDay!=''){
+                $(this).html('发送中...');
+                $(this).css({"background":"#616161"});
+                $.get("/ActiveUsersGet/",{"serverIndex":serverIndex,"startDay":startDay,"endDay":endDay,"className":className,"doingUnid":new Date().getTime()},function(data){
+                    var obj = jQuery.parseJSON(data);
+                    if(obj.status!=2000){
+                        alert(obj.message)
+                    }
+                    window.location.reload();
+                })
+            }else{
+                alert("填写必须参数！")
+            }
+
+        })
+    });
+
+</script>
+<{/block}>

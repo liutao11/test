@@ -1,0 +1,280 @@
+<{extends file='Admin/index.html'}>
+<{block name=bbb}>
+<script src="/views/dataTimeStyle/jquery.datetimepicker.js"></script>
+<link rel="stylesheet" href="/views/dataTimeStyle/jquery.datetimepicker.css" type="text/css" />
+<style>
+    .page_title{font-size: 14px;color: #438EB9;margin: 10px 0 0 0;height: 35px;line-height: 35px;background:#FAFAFA ;border: 1px solid #DEDEDE;border-radius: 6px;padding-left: 10px;}
+    .page_title span{font-size: 18px;color: #438EB9;padding-left: 10px;height: 40px;line-height: 40px;font-weight: bold}
+    #container_cen{height: 380px;}
+    .selectDiv{height: 50px;}
+    .selectDiv span{display: block;float: left;line-height: 50px;height: 50px;margin-left: 10px;}
+    .selectDiv select{display: block;float: left;margin-top: 10px;height: 30px;width: 150px;line-height: 30px;margin-left: 10px;}
+    .selectDiv input{display: block;float: left;height: 28px;width: 150px;margin: 10px 0 0 10px;}
+    .selectDiv_submit{float: left;height: 28px;margin-top: 10px;margin-left: 20px;background:#438EB9;color: #ffffff;line-height: 30px;text-align: center;width: 100px;font-size: 12px;cursor: pointer}
+    .payList span{color:#438EB9}
+    .ReportData{box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);border: 1px solid #DEDEDE;border-radius: 5px;padding-left: 10px;padding-right:10px; }
+    .ReportDataTitle{height: 40px;}
+    .ReportDataTitle_list{float: left;line-height: 40px;height: 40px;width: 150px;text-align: center;font-size: 14px;font-weight: 600}
+    .ReportDataTitle_list span{width: 20px;height: 20px;}
+    .ReportDataCenter{background:#F5F5F5;border-bottom:1px solid #DEDEDE;height: 30px;}
+    .ReportDataCenter_list{float: left;line-height: 30px;height: 30px;width: 150px;text-align: center;font-size: 12px;}
+    .selectDataShow{height: 30px;width: 160px;float: left;margin: 8px 0 0 35px;}
+    .selectDataShow_div{float: left;width: 80px;height: 30px;text-align: center;line-height: 30px;background:#F8F8F8;cursor:pointer;box-shadow: inset 0 2px 4px rgba(0,0,0,.15), 0 1px 2px rgba(0,0,0,.05);}
+    .downloadExl{float: left;line-height: 30px;height: 30px;margin-top: 10px;font-size: 12px;width: 100px;text-align: center;cursor: pointer}
+    .downloadExl:hover{color:#438EB9}
+    .button_m{border-radius: 4px;background:#438EB9;color: #ffffff;font-size: 12px;text-align: center;width: 80px;height: 24px;line-height: 24px;margin: 3px auto 0 auto;cursor: pointer}
+    .ReportDataTitle_list_show{position: absolute;width: 150px;height: 200px;background:#438EB9;left: 1030px;top: 30px;line-height: 30px;color: #cccccc;z-index: 10;display: none;box-shadow: 0 4px 5px #438EB9;border-radius: 2px;overflow-y:scroll; }
+    .ReportDataTitle_list_show_str{color: #ffffff;cursor: pointer}
+    .ReportDataTitle_list_show2{position: absolute;top:30px;left: 1200px;width: 400px;background: #F5F5F5;line-height: 30px;height: 90px;border-radius: 4px;display: none;box-shadow: 0 4px 5px #cccccc;border: 1px solid #cccccc}
+    .ReportDataTitle_list_show2 span{color:#438EB9 }
+    .button_s{font-size: 12px;}
+</style>
+<script src="/views/echarts/echarts.min.js"></script>
+<div class="page_title"><span><{$objectName}></span> 平台->运营数据->等级流失率</div>
+<div style="padding-top: 10px;">
+    <div class="selectDiv">
+        <span>服区*</span>
+        <select class="serverIndex">
+            <option value="0" <{if $serverIndex==0}>selected<{/if}>>--选择区服--</option>
+            <{foreach $serverS as $vv}>
+            <option value="<{$vv['id']}>" <{if $serverIndex==$vv['id']}>selected<{/if}>><{$vv['ServerTitle']}></option>
+            <{/foreach}>
+        </select>
+        <span>日期*</span>
+        <input type="text" class="startDay" value="<{$startDay}>">
+        <span>日期*</span>
+        <input type="text" class="endDay" value="<{$endDay}>">
+        <div class="selectDiv_submit">提交</div>
+    </div>
+
+    <div class="ReportData">
+        <table class="ReportData_list">
+            <tr class="ReportDataTitle">
+                <td class="ReportDataTitle_list">等级数</td>
+                <td class="ReportDataTitle_list">服区</td>
+                <td class="ReportDataTitle_list">本等级人数 <span>&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+                <td class="ReportDataTitle_list">人数所占率</td>
+                <td class="ReportDataTitle_list">本级流失数 <span>&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+                <td class="ReportDataTitle_list">本级流失率</td>
+                <td class="ReportDataTitle_list">详细</td>
+                <td class="ReportDataTitle_list">列表展现</td>
+            </tr>
+            <{if $data}>
+            <{foreach $data as $kk=>$vv}>
+            <tr class="ReportDataCenter" style="position: relative;display: block">
+                <td class="ReportDataCenter_list"><{$vv['levelNum']}></td>
+                <td class="ReportDataCenter_list"><{$serverUnid}></td>
+                <td class="ReportDataCenter_list"><{$vv['levelSum']}></td>
+                <td class="ReportDataCenter_list"><{sprintf("%.4f",$vv['levelSum']/$sum)*100}>%</td>
+                <td class="ReportDataCenter_list"><{$vv['LostLevelSum']}></td>
+                <td class="ReportDataCenter_list"><{sprintf("%.4f",$vv['LostLevelSum']/$vv['levelSum'])*100}>%</td>
+                <td class="ReportDataCenter_list"><div class="button_m">详细</div></td>
+                <td class="ReportDataCenter_list"><a class="button_s" href="/LevelCountShowList/?serverIndex=<{$serverIndex}>&levelNum=<{$vv['levelNum']}>&startDay=<{$startDay}>&endDay=<{$endDay}>" target="_blank">列表展现</a></td>
+                <td class="ReportDataTitle_list_show">
+                    <{foreach $vv['roleArray'] as $key=>$value}>
+                    <span class="ReportDataTitle_list_show_str" valueIndex="<{$key}>" listIndex="<{$kk}>"><{$value}></span>,
+                    <{/foreach}>
+                </td>
+                <td class="ReportDataTitle_list_show2">
+                    查询中...
+                </td>
+            </tr>
+            <{/foreach}>
+            <{else}>
+            <div class="ReportDataCenter">没有数据！</div>
+            <{/if}>
+
+            <tr class="ReportDataTitle">
+                <td class="ReportDataTitle_list" style="width: 300px">汇总</td>
+                <td class="ReportDataTitle_list"><{$sum}></td>
+                <td class="ReportDataTitle_list"></td>
+                <td class="ReportDataTitle_list"><{$lostSum}></td>
+                <td class="ReportDataTitle_list"><{if $sum}><{sprintf("%.4f",$lostSum/$sum)*100}><{/if}></td>
+            </tr>
+        </table>
+        <div class="ReportData_list" style="">
+            <div id="container_cen">
+
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    Type='<{$type}>';
+    TypeValue='<{$typeValue}>';
+    $(function() {
+        var className="<{$className}>";
+        $('.startDay').datetimepicker({
+            lang: "ch",           //语言选择中文
+            format: "Y-m-d",      //格式化日期
+            timepicker: false,    //关闭时间选项
+            yearStart: 2000,     //设置最小年份
+            yearEnd: 2050,        //设置最大年份
+            todayButton: false    //关闭选择今天按钮
+        });
+        $('.endDay').datetimepicker({
+            lang: "ch",           //语言选择中文
+            format: "Y-m-d",      //格式化日期
+            timepicker: false,    //关闭时间选项
+            yearStart: 2000,     //设置最小年份
+            yearEnd: 2050,        //设置最大年份
+            todayButton: false    //关闭选择今天按钮
+        });
+        $(".selectDiv_submit").click(function () {
+            var serverIndex = $(".serverIndex").val();
+            var startDay=$(".startDay").val();
+            var endDay=$(".endDay").val();
+            if (serverIndex!='' && serverIndex!=0 && startDay!='' && endDay!='') {
+                $(this).html('发送中...');
+                $(this).css({"background":"#616161"});
+                $.get("/LevelCountGet/", {"serverIndex": serverIndex,"className":className,"startDay":startDay,"endDay":endDay,'doingunid':new Date().getTime()}, function (data) {
+                    var obj = jQuery.parseJSON(data);
+                    if (obj.status != 2000) {
+                        alert(obj.message)
+                    }
+                    window.location.reload();
+                })
+            } else {
+                alert("填写必须参数！")
+            }
+        });
+        $(".ReportDataTitle_list:eq(2)").mousemove(function(index){
+            if(Type==1 && TypeValue==1){
+                $(this).find('span').css({"background": 'url("/views/img/iconC.png") -285px -95px'});
+            }else {
+                $(this).find('span').css({"background": 'url("/views/img/iconC.png") -310px -95px'});
+            }
+        });
+        $(".ReportDataTitle_list:eq(2)").mouseout(function(index){
+            $(this).find('span').css({"background": ''});
+        });
+        $(".ReportDataTitle_list:eq(4)").mousemove(function(index){
+            if(Type==2 && TypeValue==1){
+                $(this).find('span').css({"background": 'url("/views/img/iconC.png") -285px -95px'});
+            }else {
+                $(this).find('span').css({"background": 'url("/views/img/iconC.png") -310px -95px'});
+            }
+        });
+        $(".ReportDataTitle_list:eq(4)").mouseout(function(index){
+            $(this).find('span').css({"background": ''});
+        });
+
+        $(".ReportDataTitle_list:eq(2)").click(function(){
+            $.get("/LevelCountSort/",{'type':"1",'doingunid':new Date().getTime()},function(data){
+                var obj = jQuery.parseJSON(data);
+                if (obj.status != 2000) {
+                    alert(obj.message)
+                }
+                window.location.reload();
+            })
+        });
+        $(".ReportDataTitle_list:eq(4)").click(function(){
+            $.get("/LevelCountSort/",{'type':"2",'doingunid':new Date().getTime()},function(data){
+                var obj = jQuery.parseJSON(data);
+                if (obj.status != 2000) {
+                    alert(obj.message)
+                }
+                window.location.reload();
+            })
+        });
+        $(".selectDataShow_div").each(function(index){
+            $(this).click(function(){
+                $(".selectDataShow_div").css({"background": "#F8F8F8"});
+                $(this).css({"background": "#E6E6E6"});
+                $(".ReportData_list").hide();
+                $(".ReportData_list:eq("+index+")").show();
+            })
+        });
+        $(".downloadExl").click(function(){
+            var dataJson=$(this).attr("data_json");
+            $.post("/downloadExlPost/",{"dataJson":dataJson,'doingunid':new Date().getTime()},function(data){
+                var obj = jQuery.parseJSON(data);
+                if (obj.status = 2000) {
+                    location.href="/downloadExl/?dataKey="+obj.dataKey;
+                }
+            })
+        });
+
+        var button_m_index=0;
+        var button_m_state=0;
+        $(".button_m").each(function(index){
+            $(this).click(function(){
+                if(button_m_index==index) {
+                    if (button_m_state == 0) {
+                        $(".ReportDataTitle_list_show").hide().eq(index).show();
+                        $(".ReportDataTitle_list_show2").hide();
+                        button_m_index = index;
+                        button_m_state = 1;
+                    } else {
+                        $(".ReportDataTitle_list_show").hide();
+                        $(".ReportDataTitle_list_show2").hide();
+                        button_m_index = 0;
+                        button_m_state = 0;
+                    }
+                }else{
+                    $(".ReportDataTitle_list_show").hide().eq(index).show();
+                    $(".ReportDataTitle_list_show2").hide();
+                    button_m_index = index;
+                    button_m_state = 1;
+                }
+            });
+        });
+
+        $(".ReportDataTitle_list_show_str").each(function(index){
+            $(this).click(function(){
+                var listIndex=$(this).attr("listIndex");
+                var valueIndex=$(this).attr("valueIndex");
+                $(".ReportDataTitle_list_show2").eq(button_m_index).show();
+                $.get("/LevelCountAjax/",{"valueIndex":valueIndex,'doingunid':new Date().getTime()},function(data){
+
+                    var obj = jQuery.parseJSON(data);
+
+                    if (obj.status == 2000) {
+                        var showStr="<span>角色名:</span>"+obj.data.sChrName+"&nbsp;";
+                        showStr+="<span>性别:</span>"+obj.data.btSex+"&nbsp;";
+                        showStr+="<span>等级:</span>"+obj.data.Level+"&nbsp;";
+                        showStr+="<span>创建时间:</span>"+obj.data.CreateDay+"&nbsp;";
+                        showStr+="<span>更新时间:</span>"+obj.data.UpdateDay+"&nbsp;";
+                        showStr+="<span>转生等级:</span>"+obj.data.btRelevel+"&nbsp;";
+                        showStr+="<span>金币:</span>"+obj.data.nGold+"&nbsp;";
+                        showStr+="<span>元宝:</span>"+obj.data.nGameGold+"&nbsp;";
+                        $(".ReportDataTitle_list_show2").eq(button_m_index).html(showStr);
+
+                    }else if(obj.status == 2001){
+                        $(".ReportDataTitle_list_show2").eq(listIndex).html("没有查到数据!");
+                    }else{
+                        alert("参数错误！");
+                    }
+                });
+            });
+        });
+    });
+</script>
+<script>
+    var myChart = echarts.init(document.getElementById('container_cen'));
+    var option = {
+                title: {text: '', subtext: ''},
+                legend: {data:['本级人数','本级流失量']},
+                toolbox: {show : false, feature : {dataZoom: {}, dataView: {readOnly: true}, magicType: {type: ['line', 'bar']}, restore: {}, saveAsImage: {}}},
+                tooltip : {
+                    trigger: 'axis', formatter: function(params) {return params[0].name + '<br/>' + params[0].seriesName + ' : ' + params[0].value + ' (人)<br/>' + params[1].seriesName + ' : ' + params[1].value + ' (人)';
+                    },
+                    axisPointer: {animation: false}
+                },
+                xAxis: {type: 'category', boundaryGap: false, splitLine: {show: false}, data: <{$data_level}>},
+            yAxis: {type: 'value',splitLine: {show: false}},
+    dataZoom: {type: 'inside'},
+    series: [
+        {name:'本级人数', type:'line', symbol: 'none', areaStyle: {normal: {}}, data:<{$data_levelSum}>},
+    {name:'本级流失量', type:'line', symbol: 'none', areaStyle: {normal: {}},data: <{$data_lostLevelSum}>}
+    ]
+    };
+    myChart.setOption(option);
+</script>
+<script>
+    $(function(){
+        $(".ReportData_list:gt(0)").hide();
+    })
+</script>
+
+<{/block}>

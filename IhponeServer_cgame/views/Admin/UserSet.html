@@ -1,0 +1,251 @@
+<{extends file='Admin/index.html'}>
+<{block name=bbb}>
+<script src="/views/datastyle/WdatePicker.js"></script>
+<script src="/views/dataTimeStyle/jquery.datetimepicker.js"></script>
+<link rel="stylesheet" href="/views/dataTimeStyle/jquery.datetimepicker.css" type="text/css" />
+<style>
+    .page_title{font-size: 14px;color: #438EB9;margin: 10px 0 0 0;height: 35px;line-height: 35px;background:#FAFAFA ;border: 1px solid #DEDEDE;border-radius: 6px;padding-left: 10px;}
+    .page_title span{font-size: 18px;color: #438EB9;padding-left: 10px;height: 40px;line-height: 40px;font-weight: bold}
+    .fisrtGet{box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);border: 1px solid #DEDEDE;border-radius: 5px;padding: 0 10px 0 10px}
+
+
+    .table_list{background:#F5F5F5;border-bottom:1px solid #DEDEDE;height: 30px;}
+    .table_tr{float: left;  height: 30px;line-height: 30px;width: 150px;font-size: 12px;text-align: center;overflow: hidden}
+    .table_name{float: left;line-height: 30px;height: 30px;}
+    .noticeAdd{float: left;}
+    .add_div{float: left;line-height: 30px;height: 30px;}
+    .show_div{background: url('/views/img/bg_cc.png');width: 100%;height: 100%;position: fixed;z-index: 3;display: none;top:0;left: 0}
+    .show_center{width: 1000px;margin: 200px auto 0 auto;background: #ffffff}
+    .showList{clear: both;height: 32px;margin-top: 10px;}
+    .showList_name{float: left;height: 30px;line-height: 30px;font-size: 12px;;text-align: right;width: 150px;}
+    .showList select{display: block;float: left;height: 30px;line-height: 30px;font-size: 12px;width: 150px;}
+    .showList span{display: block;float: left;height: 30px;line-height: 30px;font-size: 12px;width: 50px;text-align: right;}
+    .showList input{height: 30px;line-height: 30px;display: block;float: left;width: 300px;border: 1px solid #cccccc;font-size: 14px;}
+    .close_show_title{font-size: 18px;color: #438EB9;line-height: 40px;height: 40px;float: left}
+    .showList textarea{line-height: 30px;height: 60px;display: block;float: left;width: 600px;}
+    .close_show_div{float: right;font-size: 14px;height: 40px;line-height: 40px;margin-right: 30px;}
+    .showList_submit{width: 120px;height: 25px;line-height: 25px;font-size: 14px;text-align: center;border: 1px solid  #cccccc;cursor: pointer}
+    .exeIng{width: 70px ;color: #438EB9;font-size: 12px;line-height: 30px;height: 30px;text-align: center;float: left;cursor: pointer}
+    .exeIng:hover{color: #cccccc}
+    .changeIng{width: 70px ;color: #438EB9;font-size: 12px;line-height: 30px;height: 30px;text-align: center;float: left;cursor: pointer}
+    .changeIng:hover{color: #cccccc}
+    .table_tt_list{clear: both;height: 40px;}
+    .table_tt_tr{float: left;line-height: 40px;height: 40px;width: 150px;text-align: center;font-size: 14px;font-weight: 600}
+    .roleDiv{float: left;width: 300px;height: 40px;}
+</style>
+<div class="conten">
+    <div class="page_title">用户管理</div>
+    <div style="padding-left: 10px;padding-top: 10px;">
+        <div style="margin-top: 10px;" class="queryShow">
+            <div style="font-size: 14px ;height: 30px;line-height: 30px;">
+                <div class="table_name">用户列表：</div>
+                <div class="noticeAdd">
+                    <div class="icon_add"></div>
+                    <div class="add_div">增加用户</div>
+                </div>
+            </div>
+            <div class="fisrtGet">
+                <div class="table_tt_list">
+                    <div class="table_tt_tr">用户ID</div>
+                    <div class="table_tt_tr">用户名</div>
+                    <div class="table_tt_tr">姓名</div>
+                    <div class="table_tt_tr">身份</div>
+                    <div class="table_tt_tr">所属平台</div>
+                    <div class="table_tt_tr">操作</div>
+                </div>
+                <{if $data}>
+                    <{foreach $data as $kk=>$vv}>
+                    <div class="table_list">
+                        <div class="table_tr"><{$vv['id']}></div>
+                        <div class="table_tr"><{$vv['userName']}></div>
+                        <div class="table_tr"><{$vv['chinaName']}></div>
+                        <div class="table_tr"><{$roleS[$vv['groundId']]}></div>
+                        <div class="table_tr"><{if $vv['objectGround']}><{$objectS_b[$vv['objectGround']]}><{else}>全平台<{/if}></div>
+                        <div class="table_tr">
+                            <{if $vv['userName']!='root'}>
+                                <div class="exeIng"  UserId="<{$vv['id']}>" DBtype="<{$vv['type']}>"><{if $vv['type']==1}>关闭<{else}><span style="color: green;font-size: 12px;">开启</span><{/if}></div>
+                                <div class="changeIng"  UserId="<{$vv['id']}>" userName="<{$vv['userName']}>"  chinaName="<{$vv['chinaName']}>" groundId="<{$vv['groundId']}>" objectGround="<{$vv['objectGround']}>"  DBtype="<{$vv['type']}>">修改</div>
+                            <{/if}>
+                        </div>
+                    </div>
+                    <{/foreach}>
+                <{/if}>
+                <div class="table_tt_list"></div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="show_div">
+    <div class="show_center">
+        <div class="page_title"><div  class="close_show_title" >增加用户</div><div class="close_show_div">关闭</div></div>
+        <div class="showList">
+            <div class="showList_name">用户名：</div>
+            <input type="text" class="userName">
+        </div>
+        <div class="showList">
+            <div class="showList_name">密码：</div>
+            <input type="text" class="password">
+        </div>
+        <div class="showList">
+            <div class="showList_name">姓名：</div>
+            <input type="text" class="chinaName">
+        </div>
+
+        <div class="showList">
+            <div class="showList_name">平台：</div>
+            <select class="ObjectId">
+                <option value="0">--选择平台--</option>
+                <{foreach $objectS as $vv}>
+                <option value="<{$vv['id']}>"><{$vv['title']}></option>
+                <{/foreach}>
+            </select>
+        </div>
+        <div class="showList">
+            <div class="showList_name">身份：</div>
+            <select class="roleSId">
+                <option value="0">--选择身份--</option>
+                <{foreach $roleS as $kk=>$vv}>
+                <option value="<{$kk}>"><{$vv}></option>
+                <{/foreach}>
+            </select>
+        </div>
+
+        <div class="showList" style="display: none">
+            <div class="showList_name">主渠道：</div>
+            <select class="fromIdmId">
+                <option value="0">--主渠道--</option>
+                <{foreach $fromInfo as $vv}>
+                <option value="<{$vv['fromInfoId']}>"><{$vv['fromInfoName']}></option>
+                <{/foreach}>
+            </select>
+        </div>
+
+        <div class="showList" style="display: none">
+            <div class="showList_name">副渠道：</div>
+            <select class="fromIdsId">
+                <option value="0">--副渠道--</option>
+                <{if $YJSKIDArray!=''}>
+                    <{foreach $YJSKIDArray as $vv}>
+                    <option value="<{$vv['SKID']}>"><{$vv['SKID_NAME']}></option>
+                    <{/foreach}>
+                <{/if}>
+            </select>
+        </div>
+        <div class="showList" style="height: 64px;">
+            <div class="showList_submit" style="margin: 0 auto">提交</div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function(){
+        var roleJson=<{$rolesJson}>;
+        var objectJson=<{$object_b_json}>;
+        var conten_x=$(".conten").width();
+        isModify=1;                                //判断是否是修改模式
+        UserId=0;                                //修改的id
+        if(conten_x <=1600){
+            $(".conten").css({"width":"1600px"});
+        }
+        $(".noticeAdd").each(function(index){
+            $(this).click(function(){
+                isModify=1;
+                $(".show_div").show();
+            })
+        });
+        $(".close_show_div").click(function(){
+            $(".show_div").hide();
+            isModify=1;
+        });
+        $(".showList_submit").click(function(){
+            $(".show_div").hide();
+            var userName=$(".userName").val();
+            var password=$(".password").val();
+            var chinaName=$(".chinaName").val();
+            var roleSId=$(".roleSId").val();
+            var ObjectId=$(".ObjectId").val();
+            var fromIdmId=$(".fromIdmId").val();
+            var fromIdsId=$(".fromIdsId").val();
+            if(ObjectId && userName  && chinaName && roleSId){
+                $(this).html('发送中...');
+                $(this).css({"background":"#616161"});
+                $.get("/UserSetGet/",{"isModify":isModify, "ObjectId":ObjectId, "userName":userName, "password":password, "chinaName":chinaName, "roleSId":roleSId, "fromIdmId":fromIdmId, "fromIdsId":fromIdsId, "UserId":UserId},function(data){
+                    var obj = jQuery.parseJSON(data);
+                    if(obj.status!=2000){
+                        alert(obj.message)
+                    }else{
+                        alert("ok");
+                    }
+                    window.location.reload();
+                });
+            }else{
+                alert("填写错误");
+            }
+        });
+        $(".exeIng").click(function(){
+            var UserId=$(this).attr("UserId");
+            var DBtype=$(this).attr("DBtype");
+            $.post("/ChangeUserSet/",{"DBtype":DBtype,"UserId":UserId},function(data){
+                var obj = jQuery.parseJSON(data);
+                if(obj.status!=2000){
+                    alert(obj.message)
+                }else{
+                    alert("ok");
+                }
+                window.location.reload();
+            });
+        });
+        $(".roleSId").change(function(){
+
+            var roleSIdkey=$(this).val();
+            if(roleSIdkey==6){
+                $(".showList").eq(5).show().eq(6).hide();
+            }else{
+                $(".showList").eq(5).hide().eq(6).hide();
+            }
+        });
+
+        $(".changeIng").each(function(index){
+            $(this).click(function(){
+                UserId=$(this).attr("UserId");
+                var userName=$(this).attr("userName");
+                $(".userName").val(userName);
+                var chinaName=$(this).attr("chinaName");
+                $(".chinaName").val(chinaName);
+                var groundId=$(this).attr("groundId");
+                var roleSIdindex='<select class="roleSId">';
+                $.each(roleJson,function(key,value){
+                    if(key==groundId) {
+                        roleSIdindex += '<option value="' + key + '" selected>' + value + '</option>'
+                    }else{
+                        roleSIdindex += '<option value="' + key + '">' + value + '</option>'
+                    }
+                });
+                roleSIdindex+='</select>';
+                $("#roleDiv").html(roleSIdindex);
+                var objectGround=$(this).attr("objectGround");
+                var objectIndex='<select class="ObjectId">';
+                $.each(objectJson,function(key,value){
+                    if(key==objectGround) {
+                        objectIndex += '<option value="' + key + '" selected>' + value + '</option>'
+                    }
+                });
+                objectIndex +='</select>';
+                $("#objectDiv").html(objectIndex);
+                $(".password").attr("placeholder","当不修改该用户密码时，请继续为空").val('');
+                isModify=2;
+                $(".show_div").show();
+            });
+        });
+
+        /*$(".fromIdmId").change(function(){
+            var  fromIdmId=$(this).val();
+            if(fromIdmId==1){
+                $(".showList").eq(6).show();
+            }else{
+                $(".showList").eq(6).hide();
+            }
+        });*/
+    });
+</script>
+<{/block}>

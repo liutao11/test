@@ -1,0 +1,65 @@
+<{extends file='Admin/index.html'}>
+<{block name=bbb}>
+<style>
+    .page_title{font-size: 14px;color: #438EB9;margin: 10px 0 0 0;height: 35px;line-height: 35px;background:#FAFAFA ;border: 1px solid #DEDEDE;border-radius: 6px;padding-left: 10px;}
+    .page_title span{font-size: 18px;color: #438EB9;padding-left: 10px;height: 40px;line-height: 40px;font-weight: bold}
+    .ReportData{box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);border: 1px solid #DEDEDE;border-radius: 5px;}
+    .showList{clear: both;height: 32px;margin-top: 10px;}
+    .showList_s{clear: both;height: 32px;margin-top: 10px;}
+    .showList_name{float: left;height: 30px;line-height: 30px;font-size: 12px;;text-align: right;width: 150px;}
+    .showList_message{float: left;height: 30px;width: 500px;line-height: 30px;}
+    .showList_message span {color: #DEDEDE;font-size: 12px;line-height: 30px;height: 30px;}
+    .showList_message_select{float: left;width: 120px;line-height: 30px;height: 30px;text-align: center;font-size: 12px;background:#438EB9;color: #ffffff;border-radius: 4px;margin-right: 10px;cursor: pointer }
+    .showList select{display: block;float: left;height: 30px;line-height: 30px;font-size: 12px;width: 150px;}
+    .showList span{display: block;float: left;height: 30px;line-height: 30px;font-size: 12px;width: 150px;}
+    .showList_s span{display: block;float: left;height: 30px;line-height: 30px;font-size: 12px;width: 150px;}
+    .showList input{height: 30px;line-height: 30px;display: block;float: left;font-size: 14px;}
+    .showList_s input{height: 30px;line-height: 30px;display: block;float: left;width: 300px;border: 1px solid #cccccc;font-size: 14px;}
+    .showList textarea{line-height: 30px;height: 90px;display: block;float: left;width: 700px;}
+    .showList_submit{width: 120px;height: 30px;line-height: 30px;font-size: 14px;text-align: center;background: #438EB9;cursor: pointer;color: #ffffff;font-weight: 600}
+    .container_tt{height: 40px;line-height: 40px;font-size: 16px;background: transparent linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.1) 100%) repeat scroll 0% 0%}
+    .iconC1{width: 20px;height: 20px;background: url("/views/img/iconC.png") 0 0;float: left;margin: 12px 10px auto 10px;}
+    .roleS{display: block;float: left}
+    .userTest{width: 120px;height: 32px;border-radius: 4px;text-align: center;background:#438EB9;cursor: pointer;float: left;line-height: 32px;color: #ffffff;margin-left: 10px;}
+    .addPropList{width: 120px;height: 32px;border-radius: 4px;text-align: center;background:#438EB9;cursor: pointer;float: left;line-height: 32px;color: #ffffff;margin-left: 10px;}
+    .addPropList_in_select{position: absolute;width: 180px;height: 200px;top: 35px;left: 300px;box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);border: 1px solid #DEDEDE;border-radius: 5px;background: #DEDEDE;display: none;overflow-y: scroll;overflow-x: hidden}
+    .addPropList_in_select_list{padding-left: 10px;font-size: 12px;line-height: 22px;height: 22px;}
+    .addPropList_in_select_list:hover{background: #ffffff}
+    .addPropListSelectList{width: 280px;height: 30px;background:  #438EB9 ;border-radius: 4px;float: left;margin-right: 10px;margin-bottom: 10px;}
+    .addPropListSelectList span{display: block;float: left;text-align: center;width: 120px;font-size: 12px;line-height: 30px;height: 30px}
+    .addPropListSelectList input{display: block;float: left;height: 20px;line-height: 20px;width:40px;border-radius: 4px;background: #ffffff;margin-top: 4px;}
+    .addPropListSelectListDel{float: left;margin: 4px 0 0 5px;;width: 20px;height: 20px;border-radius: 4px;cursor: pointer;background: url("/views/img/select2.png") -43px 5px no-repeat #ffffff;border: 1px solid #DEDEDE}
+    .searchBut{width: 120px;height: 32px;border-radius: 4px;text-align: center;background:#438EB9;cursor: pointer;float: left;line-height: 32px;color: #ffffff;margin-left: 10px;}
+    .serverSelectListTitle{float: left;width: 90px;height: 30px;line-height: 30px;}
+    .serverSelectListDel{float: left;margin: 4px 0 0 5px;;width: 20px;height: 20px;border-radius: 4px;cursor: pointer;background: url("/views/img/select2.png") -43px 5px no-repeat #ffffff;border: 1px solid #DEDEDE}
+    input[type="radio"]{border: none}
+    .shamInput{border: 1px solid #DEDEDE;float: left;height: 28px;width: 150px;line-height: 28px;text-align: center;cursor: pointer}
+    .shamInput:hover{background: #DEDEDE}
+    .shamInputDown{box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);border: 1px solid #DEDEDE;background: #ffffff;width: 150px;top: 30px;position: absolute;left: 150px;display: none}
+    .shamOption{line-height: 30px;height: 30px;font-size: 12px;padding-left: 10px;}
+    .shamOption:hover{background: #c8e5f6}
+</style>
+<script src="/views/dataTimeStyle/jquery.datetimepicker.js"></script>
+<link rel="stylesheet" href="/views/dataTimeStyle/jquery.datetimepicker.css" type="text/css" />
+<div class="page_title"><span><{$objectName}></span> 平台->运维->道具列表上传</div>
+<div style="padding-top: 10px;">
+    <div class="ReportData">
+        <div class="container_tt"><div class="iconC1"></div>道具列表上传</div>
+        <form action="/SendPropListPost/" method="post" enctype="multipart/form-data">
+            <div class="showList" style="height: 70px">
+                <div class="showList_name">选择文件*：</div>
+                <input type="file" name="PropFileName">
+                <span style="width: 400px;">1、必须是json格式文件; 2、文件如果包含中文就必须以"utf-8"字符集;</span>
+            </div>
+            <div class="showList" style="height: 64px;">
+                <div class="showList_name"></div>
+                <input class="showList_submit" style="margin: 0 auto" value="上传" type="submit"/>
+            </div>
+        </form>
+    </div>
+</div>
+</div>
+<script>
+
+</script>
+<{/block}>

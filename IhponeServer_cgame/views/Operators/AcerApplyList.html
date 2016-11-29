@@ -1,0 +1,184 @@
+<{extends file='Admin/index.html'}>
+<{block name=bbb}>
+<script src="/views/dataTimeStyle/jquery.datetimepicker.js"></script>
+<link rel="stylesheet" href="/views/dataTimeStyle/jquery.datetimepicker.css" type="text/css" />
+<style>
+    .page_title{font-size: 14px;color: #438EB9;margin: 10px 0 0 0;height: 35px;line-height: 35px;background:#FAFAFA ;border: 1px solid #DEDEDE;border-radius: 6px;padding-left: 10px;}
+    .page_title span{font-size: 18px;color: #438EB9;padding-left: 10px;height: 40px;line-height: 40px;font-weight: bold}
+    .ReportData{box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);border: 1px solid #DEDEDE;border-radius: 5px;}
+
+    .ReportDataTitle{height: 40px;}
+    .ReportDataTitle_list{float: left;line-height: 40px;height: 40px;width: 150px;text-align: center;font-size: 14px;font-weight: 600}
+    .ReportDataCenter{background:#F5F5F5;border-bottom:1px solid #DEDEDE;height: 30px;}
+    .ReportDataCenter_list{float: left;line-height: 30px;height: 30px;width: 150px;text-align: center;font-size: 12px;}
+    .drop_down{width: 20px;height: 20px;margin-left: 10px;margin-top: 10px;background: url("/views/img/iconC.png") -310px -115px #F5F5F5;}
+
+    .showList{clear: both;height: 32px;margin-top: 10px;}
+    .showList_name{float: left;height: 30px;line-height: 30px;font-size: 12px;;text-align: right;width: 150px;}
+    .showList select{display: block;float: left;height: 30px;line-height: 30px;font-size: 12px;width: 150px;}
+    .showList span{display: block;float: left;height: 30px;line-height: 30px;font-size: 12px;width: 150px;}
+    .showList input{height: 30px;line-height: 30px;display: block;float: left;width: 300px;border: 1px solid #cccccc;font-size: 14px;}
+    .showList textarea{line-height: 30px;height: 60px;display: block;float: left;width: 600px;}
+    .showList_submit{width: 120px;height: 25px;line-height: 25px;font-size: 14px;text-align: center;border: 1px solid  #cccccc}
+    .container_tt{height: 40px;line-height: 40px;font-size: 16px;background: transparent linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.1) 100%) repeat scroll 0% 0%}
+    .iconC1{width: 20px;height: 20px;background: url("/views/img/iconC.png") 0 0;float: left;margin: 12px 10px auto 10px;}
+    .selectDiv{height: 50px;position: relative}
+    .selectDiv span{display: block;float: left;line-height: 50px;height: 50px;margin-left: 10px;}
+    .selectDiv select{display: block;float: left;margin-top: 10px;height: 30px;width: 150px;line-height: 30px;margin-left: 10px;}
+    .selectDiv input{display: block;float: left;height: 28px;width: 150px;margin: 10px 0 0 10px;}
+    .selectDiv_submit{float: left;height: 28px;margin-top: 10px;margin-left: 20px;background:#438EB9;color: #ffffff;line-height: 30px;text-align: center;width: 100px;font-size: 12px;cursor: pointer}
+    .roleKey{width: 90%;border: 1px solid #DEDEDE;height: 30px;line-height: 30px;border-radius:4px;margin: 0 auto}
+</style>
+<div class="page_title"><span><{$objectName}></span> 平台->运营数据->元宝申请列表</div>
+<div style="padding-top: 10px;">
+
+    <div class="selectDiv">
+        <span>服区*</span>
+        <select class="serverIndex">
+            <option value="0" <{if $serverIndex==0}>selected<{/if}>>全服务</option>
+            <{foreach $serverS as $vv}>
+            <option value="<{$vv['id']}>" <{if $serverIndex==$vv['id']}>selected<{/if}>><{$vv['GameServerUnid']}></option>
+            <{/foreach}>
+        </select>
+        <span>日期*</span>
+        <input type="text" class="startDay" value="<{$startDay}>">
+        <span>到</span>
+        <input type="text" class="endDay" value="<{$endDay}>">
+        <div class="selectDiv_submit">提交</div>
+    </div>
+    <div class="ReportData">
+        <div class="container_tt"><div class="iconC1"></div>元宝申请记录</div>
+        <div class="ReportDataTitle">
+            <div class="ReportDataTitle_list" style="width: 60px;">服区</div>
+            <div class="ReportDataTitle_list" style="width: 80px;">状态</div>
+            <div class="ReportDataTitle_list" style="width: 400px;">角色名</div>
+            <div class="ReportDataTitle_list" style="width: 60px;">元宝数量</div>
+            <div class="ReportDataTitle_list" style="width: 100px;">是否充值奖励</div>
+            <div class="ReportDataTitle_list" style="width: 200px;">申请时间</div>
+            <div class="ReportDataTitle_list" >备注</div>
+            <div class="ReportDataTitle_list" >申请人</div>
+            <div class="ReportDataTitle_list" >审核人</div>
+            <div class="ReportDataTitle_list" style="width: 200px;">审核时间</div>
+        </div>
+        <div class="ReportDataTitle">
+            <div class="ReportDataTitle_list" style="width: 60px;"></div>
+            <div class="ReportDataTitle_list" style="width: 80px;">
+                <select class="roleKey">
+                    <option value="0" >全部</option>
+                    <option value="1" <{if $index==1 && $value==1}>selected<{/if}> >未审核</option>
+                    <option value="2" <{if $index==1 && $value==2}>selected<{/if}>>通过</option>
+                    <option value="3" <{if $index==1 && $value==3}>selected<{/if}>>未通过</option>
+                </select>
+            </div>
+            <div class="ReportDataTitle_list" style="width: 400px;"><input type="text" class="roleKey" value="<{if $index==2}><{$value}><{else}><{/if}>"></div>
+            <div class="ReportDataTitle_list" style="width: 60px;"><input type="text" class="roleKey" value="<{if $index==3}><{$value}><{else}><{/if}>"></div>
+            <div class="ReportDataTitle_list" style="width: 80px;">
+                <select class="roleKey">
+                    <option value="0">全部</option>
+                    <option value="1" <{if $index==4 && $value==1}>selected<{/if}> >是</option>
+                    <option value="2" <{if $index==4 && $value==2}>selected<{/if}> >否</option>
+                </select>
+            </div>
+            <div class="ReportDataTitle_list" style="width: 200px;"></div>
+            <div class="ReportDataTitle_list"></div>
+            <div class="ReportDataTitle_list"><input type="text" class="roleKey" value="<{if $index==5}><{$value}><{else}><{/if}>"></div>
+            <div class="ReportDataTitle_list"><input type="text" class="roleKey" value="<{if $index==6}><{$value}><{else}><{/if}>"></div>
+        </div>
+        <{if $data}>
+            <{foreach $data as $kk=>$vv}>
+            <div class="ReportDataCenter" <{if $kk > ($pagelength-1)}> style="display: none"<{/if}>>
+                <div class="ReportDataCenter_list" style="width: 60px;"><{$vv['serverUnid']}></div>
+                <div class="ReportDataCenter_list" style="width: 100px;"><{if $vv['state']==1}>未审核<{else if $vv['state']==2}>通过<{else if $vv['stata']==3}>未通过<{else}>未知状态<{/if}></div>
+                <div class="ReportDataCenter_list" style="width: 400px;"><{$vv['roleS']}></div>
+                <div class="ReportDataCenter_list" style="width: 60px;"><{$vv['number']}></div>
+                <div class="ReportDataCenter_list" style="width: 80px;"><{if $vv['isReward']==1}>是<{elseif $vv['isReward']==2}>否<{/if}></div>
+                <div class="ReportDataCenter_list" style="width: 200px;"><{date("Y-m-d H:i:s",$vv['ApplyTime'])}></div>
+                <div class="ReportDataCenter_list" ><{$vv['message']}></div>
+                <div class="ReportDataCenter_list" ><{$vv['ApplyName']}></div>
+                <div class="ReportDataCenter_list" ><{$vv['inspectName']}></div>
+                <div class="ReportDataCenter_list" style="width: 200px;"><{if $vv['inspectTime']}><{date("Y-m-d H:i:s",$vv['inspectTime'])}><{/if}></div>
+                <div class="ReportDataCenter_list" style="width: 80px"></div>
+            </div>
+        <{/foreach}>
+    <{else}>
+    <div class="ReportDataCenter">没有数据！</div>
+    <{/if}>
+    <div class="ReportDataTitle">
+        <{if $pageSum>=2}>
+        <div class="drop_down"></div>
+        <{/if}>
+    </div>
+
+</div>
+<script>
+    $(function(){
+        var pageSum=<{$pageSum}>;
+        var showPage=1;
+        var showPageLength=<{$pagelength}>;
+        $('.startDay').datetimepicker({
+            lang:"ch",           //语言选择中文
+            format:"Y-m-d 00:00:00",      //格式化日期
+            timepicker:false,    //关闭时间选项
+            yearStart:2000,     //设置最小年份
+            yearEnd:2050,        //设置最大年份
+            todayButton:false    //关闭选择今天按钮
+        });
+        $('.endDay').datetimepicker({
+            lang:"ch",           //语言选择中文
+            format:"Y-m-d 23:59:59",      //格式化日期
+            timepicker:false,    //关闭时间选项
+            yearStart:2000,     //设置最小年份
+            yearEnd:2050,        //设置最大年份
+            todayButton:false    //关闭选择今天按钮
+        });
+        $(".selectDiv_submit").click(function(){
+            var serverIndex=$(".serverIndex").val();
+            var startDay=$(".startDay").val();
+            var endDay=$(".endDay").val();
+            $(this).html('发送中...');
+            $(this).css({"background":"#616161"});
+            if(startDay && endDay){
+                $.get("/AcerApplyListGet/",{"serverIndex":serverIndex,"endDay":endDay,"startDay":startDay,"doingUnid":new Date().getTime()},function(data){
+                    var obj = jQuery.parseJSON(data);
+                    if(obj.status!=2000){
+                        alert(obj.message)
+                    }else {
+                        window.location.reload();
+                    }
+                })
+            }else{
+                alert("填写必须参数！")
+            }
+        });
+        $(".roleKey").each(function(index){
+            $(this).blur(function (){
+                var value=$(this).val();
+                var indexs=index+1;
+                if( indexs) {
+                    $.get("/AcerApplyListBlur/",{"index":indexs,"value":value,"doingUnid":new Date().getTime()},function(data){
+                        var obj = jQuery.parseJSON(data);
+                        if(obj.status!=2000){
+                            alert(obj.message)
+                        } else {
+                            window.location.reload();
+                        }
+                    })
+                }
+            });
+        });
+        $(".drop_down").click(function(){
+            if(pageSum>showPage){
+                var link=showPage*showPageLength-1;
+                for(var i=1;i<=showPageLength;i++){
+                    $(".ReportDataCenter:eq("+link+")").show();
+                    link++;
+                }
+                showPage++;
+                if(showPage==pageSum){
+                    $(this).hide();
+                }
+            }
+        });
+    });
+</script>
+<{/block}>

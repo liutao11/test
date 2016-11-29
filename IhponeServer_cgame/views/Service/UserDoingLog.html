@@ -1,0 +1,262 @@
+<{extends file='Admin/index.html'}>
+<{block name=bbb}>
+<script src="/views/dataTimeStyle/jquery.datetimepicker.js"></script>
+<link rel="stylesheet" href="/views/dataTimeStyle/jquery.datetimepicker.css" type="text/css" />
+<style>
+    .page_title{font-size: 14px;color: #438EB9;margin: 10px 0 0 0;height: 35px;line-height: 35px;background:#FAFAFA ;border: 1px solid #DEDEDE;border-radius: 6px;padding-left: 10px;}
+    .page_title span{font-size: 18px;color: #438EB9;padding-left: 10px;height: 40px;line-height: 40px;font-weight: bold}
+    .container{width: 800px;height: 420px;box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);float: left;margin: 10px 5px 10px 5px;}
+    .container_tt{height: 40px;line-height: 40px;font-size: 16px;background: transparent linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.1) 100%) repeat scroll 0% 0%}
+    #container_cen{height: 380px;}
+    .iconC1{width: 20px;height: 20px;background: url("/views/img/iconC.png") 0 0;float: left;margin: 12px 10px auto 10px;}
+    #lineUser{height: 380px;}
+    .selectDiv{height: 50px;position: relative}
+    .selectDiv span{display: block;float: left;line-height: 50px;height: 50px;margin-left: 10px;}
+    .selectDiv select{display: block;float: left;margin-top: 10px;height: 30px;width: 150px;line-height: 30px;margin-left: 10px;}
+    .selectDiv input{display: block;float: left;height: 28px;width: 150px;margin: 10px 0 0 10px;}
+    .selectDiv_submit{float: left;height: 28px;margin-top: 10px;margin-left: 20px;background:#438EB9;color: #ffffff;line-height: 30px;text-align: center;width: 100px;font-size: 12px;cursor: pointer}
+    .payList{line-height: 30px;height: 30px;}
+    .payList span{color:#438EB9}
+    .containerPay{margin: 10px 0 0 10px;}
+    .sumdiv{clear: both}
+    .sumdivList{float:left;width: 300px;height: 100px;box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);padding-top: 10px;background: transparent linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.1) 100%) repeat scroll 0% 0%;margin:0 10px 0 5px;}
+    .sumdivList_icon{width: 30px;height: 30px;background: url("/views/img/iconS.png") -257px -260px;margin: 0 auto 0 auto;}
+    .sumdivList_tt{text-align: center;font-size: 18px;font-weight: 600;height: 40px;line-height: 40px;}
+    .sumdivList_int{font-weight: 600;font-size: 14px;color: #438EB9;text-align: center;line-height: 30px;height: 30px;}
+    .sumdivList_icon_ren{width: 30px;height: 30px;background: url("/views/img/iconS.png") -35px -160px;margin: 0 auto 0 auto;}
+    .ReportData{box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);border: 1px solid #DEDEDE;border-radius: 5px;padding-left: 10px;padding-right:10px; }
+    .ReportDataTitle{height: 40px;}
+    .ReportDataTitle_list{float: left;line-height: 40px;height: 40px;width: 150px;text-align: center;font-size: 14px;font-weight: 600}
+    .roleKey{width: 90%;border: 1px solid #DEDEDE;height: 30px;line-height: 30px;border-radius:4px;margin: 0 auto}
+    .ReportDataCenter{background:#F5F5F5;border-bottom:1px solid #DEDEDE;height: 30px;}
+    .ReportDataCenter_list{float: left;line-height: 30px;height: 30px;width: 150px;text-align: center;font-size: 12px;}
+    .drop_down{width: 20px;height: 20px;margin-left: 10px;margin-top: 10px;background: url("/views/img/iconC.png") -310px -115px #F5F5F5;}
+    .myselfInput{float: left;height: 28px;width: 150px;margin: 10px 0 0 10px;border: 1px solid #DEDEDE;line-height: 28px;}
+    .myselfSelect{background: #ffffff;display:none;position: absolute;top: 40px ;left: 648px;border: 1px solid #DEDEDE;box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);height: 230px;width: 150px;overflow-y: scroll;z-index: 3;}
+    .myselfSelectOption{padding-left: 10px;height: 20px;font-size: 12px;line-height: 20px;}
+    .pageInt{width: 30px;height: 30px;border-radius: 4px;background: #DEDEDE;float: left;line-height: 30px;text-align: center;margin: 5px 10px 0 0;cursor: pointer}
+    .pageInt:hover{background:#c8e5f6}
+    .pageInt_z{width: 28px;height: 28px;border-radius: 4px;border: 1px solid #DEDEDE;float: left;line-height: 28px;text-align: center;margin: 5px 10px 0 0;}
+    .PlayerDoingSelset{border-radius: 6px;height: 32px;border: 1px solid #DEDEDE;line-height: 32px;width: 100%}
+    .PlayerDoingSelset option{height: 20px;line-height: 20px;font-size: 12px;padding-left: 5px;}
+
+    .PlayerDoingSelset:hover{cursor: pointer}
+
+
+    .selectDiv select,.selectDiv input{border-radius: 6px;height: 32px;border: 1px solid #DEDEDE;line-height: 32px;cursor: pointer}
+    .selectDiv select option{height: 20px;line-height: 20px;font-size: 12px;padding-left: 5px;}
+</style>
+<div class="page_title"><span><{$objectName}></span> 平台->运营数据->动作记录</div>
+<div style="padding-top: 10px;">
+    <div class="selectDiv">
+        <span>服区*</span>
+        <select class="serverIndex">
+            <option value="0" <{if $serverIndex==0}>selected<{/if}>>选择服区</option>
+            <{foreach $serverS as $vv}>
+            <option value="<{$vv['id']}>" <{if $serverIndex==$vv['id']}>selected<{/if}>><{$vv['ServerTitle']}></option>
+            <{/foreach}>
+        </select>
+        <span>日期*</span>
+        <input type="text" class="startDay" value="<{$startDay}>">
+        <div class="selectDiv_submit">提交</div>
+
+        <div class="myselfSelect">
+            <{foreach $doingTypeList as $kk=>$vv}>
+            <div class="myselfSelectOption" value="<{$kk}>"><{$vv}></div>
+            <{/foreach}>
+        </div>
+    </div>
+
+    <div class="ReportData">
+        <div class="ReportDataTitle">
+            <div class="ReportDataTitle_list" style="width: 100px;">服务</div>
+            <div class="ReportDataTitle_list" style="width: 170px;">玩家动作ID</div>
+            <div class="ReportDataTitle_list">地图名</div>
+            <div class="ReportDataTitle_list">角色名</div>
+            <div class="ReportDataTitle_list">玩家坐标（X,Y）</div>
+            <div class="ReportDataTitle_list">Actions</div>
+            <div class="ReportDataTitle_list">value1</div>
+            <div class="ReportDataTitle_list">value2</div>
+            <div class="ReportDataTitle_list">funcName</div>
+            <div class="ReportDataTitle_list">操作时间</div>
+        </div>
+        <{if $data}>
+        <div class="ReportDataTitle">
+            <div class="ReportDataTitle_list" style="width: 100px;"></div>
+            <div class="ReportDataTitle_list" style="width: 170px;">
+                <select class="PlayerDoingSelset">
+                    <{foreach $PlayerDoing as $kk=>$vv}>
+                    <option value="<{$kk}>" <{if $kk==$PlayerDoingSelset}>selected <{/if}> ><{$vv}></option>
+                    <{/foreach}>
+                </select>
+            </div>
+            <div class="ReportDataTitle_list"><input type="text" class="roleKey" value="<{if $roleKey0}><{$roleKey0}><{else}><{/if}>"></div>
+            <div class="ReportDataTitle_list"><input type="text" class="roleKey" value="<{if $roleKey1}><{$roleKey1}><{else}><{/if}>"></div>
+            <div class="ReportDataTitle_list"></div>
+            <div class="ReportDataTitle_list"><input type="text" class="roleKey" value="<{if $roleKey2}><{$roleKey2}><{else}><{/if}>"></div>
+            <div class="ReportDataTitle_list"><input type="text" class="roleKey" value="<{if $roleKey3}><{$roleKey3}><{else}><{/if}>"></div>
+            <div class="ReportDataTitle_list"><input type="text" class="roleKey" value="<{if $roleKey4}><{$roleKey4}><{else}><{/if}>"></div>
+            <div class="ReportDataTitle_list"><input type="text" class="roleKey" value="<{if $roleKey5}><{$roleKey5}><{else}><{/if}>"></div>
+        </div>
+        <{foreach $data as $kk=>$vv}>
+            <div class="ReportDataCenter">
+                <div class="ReportDataCenter_list" style="width: 100px;"><{$vv['GameServerUnid']}></div>
+                <div class="ReportDataCenter_list" style="width: 170px;"><{$vv['MsgID']}></div>
+                <div class="ReportDataCenter_list"><{$vv['MapName']}></div>
+                <div class="ReportDataCenter_list"><{$vv['PlayerName']}></div>
+                <div class="ReportDataCenter_list">(<{$vv['PlayerX']}>,<{$vv['PlayerY']}>)</div>
+                <div class="ReportDataCenter_list"><{$vv['Actions']}></div>
+                <div class="ReportDataCenter_list" ><{$vv['Value1']}></div>
+                <div class="ReportDataCenter_list" ><{$vv['Value2']}></div>
+                <div class="ReportDataCenter_list" ><{$vv['FuncName']}></div>
+                <div class="ReportDataCenter_list"><{$vv['SendTime']}></div>
+            </div>
+        <{/foreach}>
+        <{else}>
+        <div class="ReportDataCenter">没有数据！</div>
+        <{/if}>
+        <div class="ReportDataTitle">
+            <{if $pageSum>=2 && $pageSum<=11}>
+            <{for $i=1 to  $pageSum step 1}>
+            <div <{if $showPageInt==$i}>class="pageInt_z"<{else}>class="pageInt"<{/if}> pageInt="<{$i}>"><{$i}></div>
+            <{/for}>
+            <{elseif  $pageSum > 11}>
+            <{if $showPageInt <=5}>
+            <{for $i=1 to  11 step 1}>
+            <div <{if $showPageInt==$i}>class="pageInt_z"<{else}>class="pageInt"<{/if}> pageInt="<{$i}>"><{$i}></div>
+            <{/for}>
+            <div class="pageInt_z">...</div>
+            <{elseif  $showPageInt > 5 && $showPageInt <= $pageSum-5}>
+            <div class="pageInt_z">...</div>
+            <{for $i=$showPageIntS5 to $showPageIntA5  step 1}>
+            <div <{if $showPageInt==$i}>class="pageInt_z"<{else}>class="pageInt"<{/if}> pageInt="<{$i}>"><{$i}></div>
+            <{/for}>
+            <div class="pageInt_z">...</div>
+            <{elseif $showPageInt > $pageSumTo5}>
+            <div class="pageInt_z">...</div>
+            <{for $i=$pageSumTo11 to  $pageSum step 1}>
+            <div <{if $showPageInt==$i}>class="pageInt_z"<{else}>class="pageInt"<{/if}> pageInt="<{$i}>"><{$i}></div>
+            <{/for}>
+            <{/if}>
+            <{/if}>
+        </div>
+     </div>
+</div>
+<script>
+    $(function(){
+        var pageSum=<{$pageSum}>;
+        var showPage=1;
+        var showPageLength=<{$pagelength}>;
+        var className='<{$className}>';
+        $('.startDay').datetimepicker({
+            lang:"ch",           //语言选择中文
+            format:"Y-m-d",      //格式化日期
+            timepicker:false,    //关闭时间选项
+            yearStart:2000,     //设置最小年份
+            yearEnd:2050,        //设置最大年份
+            todayButton:false    //关闭选择今天按钮
+        });
+        $('.endDay').datetimepicker({
+            lang:"ch",           //语言选择中文
+            format:"Y-m-d H:00:00",      //格式化日期
+            timepicker:true,    //关闭时间选项
+            yearStart:2000,     //设置最小年份
+            yearEnd:2050,        //设置最大年份
+            todayButton:false    //关闭选择今天按钮
+        });
+        $(".selectDiv_submit").click(function(){
+            var serverIndex=$(".serverIndex").val();
+            var startDay=$(".startDay").val();
+            var PlayerDoingSelset=$(".PlayerDoingSelset").val();
+            var roleKey0=$(".roleKey:eq(0)").val();
+            var roleKey1=$(".roleKey:eq(1)").val();
+            var roleKey2=$(".roleKey:eq(2)").val();
+            var roleKey3=$(".roleKey:eq(3)").val();
+            var roleKey4=$(".roleKey:eq(4)").val();
+            var roleKey5=$(".roleKey:eq(5)").val();
+
+            var myselfInputIndex=$(".myselfInput").attr("values");
+            if(startDay && serverIndex){
+                $(this).html('发送中...');
+                $(this).css({"background":"#616161"});
+                $.get("/UserDoingLogGet/",{"serverIndex":serverIndex,"startDay":startDay,"myselfInputIndex":myselfInputIndex,'className':className,"PlayerDoingSelset":PlayerDoingSelset,"roleKey0":roleKey0,"roleKey1":roleKey1,"roleKey2":roleKey2,"roleKey3":roleKey3,"roleKey4":roleKey4,"roleKey5":roleKey5,"doingUnid":new Date().getTime()},function(data){
+                    var obj = jQuery.parseJSON(data);
+                    if(obj.status!=2000){
+                        alert(obj.message)
+                    }
+                    window.location.reload();
+                })
+            }else{
+                alert("填写必须参数！")
+            }
+
+        });
+
+        $(".drop_down").click(function(){
+            if(pageSum>showPage){
+                var link=showPage*showPageLength-1;
+                for(var i=1;i<=showPageLength;i++){
+                    $(".ReportDataCenter:eq("+link+")").show();
+                    link++;
+                }
+                showPage++;
+                if(showPage==pageSum){
+                    $(this).hide();
+                }
+            }
+        });
+        $(".myselfInput").click(function(){
+            $(".myselfSelect").show();
+        });
+        $(".myselfSelectOption").each(function(index){
+            $(this).click(function(){
+                var value=$(this).attr("value");
+                var htmlString=$(this).html();
+                $(".myselfInput").html(htmlString);
+                $(".myselfInput").attr({"values":value});
+                $(".myselfSelect").hide();
+            });
+            $(this).mouseover(function(){
+                $(".myselfSelectOption").css({"background":"#ffffff"});
+                $(this).css({"background":"#DEDEDE"});
+            })
+        });
+        $(".pageInt").each(function(){
+            $(this).click(function(){
+                var pageInt=$(this).attr('pageInt');
+                $.get("/pageIntChangePage/",{"showId":pageInt,'className':className,"doingUnid":new Date().getTime()},function(data){
+                    var obj = jQuery.parseJSON(data);
+                    if(obj.status!=2000){
+                        alert(obj.message)
+                    }
+                    window.location.reload();
+                })
+            })
+        });
+        /*var roleKeyStatus=1;
+         $(".roleKey").each(function(index){
+         $(this).blur(function (){
+         var classUNID=$(this).attr("classUNID");
+         var value=$(this).val();
+         $(".roleKey").not($(".roleKey").eq(index)).val('');
+         if(roleKeyStatus==1) {
+         roleKeyStatus=0;
+         $.get("/UserDoingLogBlur/", {"classUNID": classUNID, "value": value,"className":className}, function (data) {
+         var obj = jQuery.parseJSON(data);
+         if (obj.status != 2000) {
+         alert(obj.message)
+         } else {
+         window.location.reload();
+         }
+         roleKeyStatus=1;
+         })
+         }
+         });
+
+         });*/
+
+
+    });
+
+</script>
+<{/block}>

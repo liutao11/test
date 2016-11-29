@@ -1,0 +1,137 @@
+<{extends file='Admin/index.html'}>
+<{block name=bbb}>
+<style>
+    .page_title{font-size: 14px;color: #438EB9;margin: 10px 0 0 0;height: 35px;line-height: 35px;background:#FAFAFA ;border: 1px solid #DEDEDE;border-radius: 6px;padding-left: 10px;}
+    .page_title span{font-size: 18px;color: #438EB9;padding-left: 10px;height: 40px;line-height: 40px;font-weight: bold}
+    .container{width: 795px;height: 420px;box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);float: left;margin: 10px 5px 10px 5px;}
+    .container_tt{height: 40px;line-height: 40px;font-size: 16px;background: transparent linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.1) 100%) repeat scroll 0% 0%}
+    #container_cen{height: 380px; width: 1600px;}
+    .iconC1{width: 20px;height: 20px;background: url("/views/img/iconC.png") 0 0;float: left;margin: 12px 10px auto 10px;}
+    #lineUser{height: 380px;}
+    .selectDiv{height: 50px;}
+    .selectDiv span{display: block;float: left;line-height: 50px;height: 50px;margin-left: 10px;}
+    .selectDiv select{display: block;float: left;margin-top: 10px;height: 30px;width: 150px;line-height: 30px;margin-left: 10px;}
+    .selectDiv input{display: block;float: left;height: 28px;width: 150px;margin: 10px 0 0 10px;}
+    .selectDiv_submit{float: left;height: 28px;margin-top: 10px;margin-left: 20px;background:#438EB9;color: #ffffff;line-height: 30px;text-align: center;width: 100px;font-size: 12px;cursor: pointer}
+    .payList{line-height: 30px;height: 30px;background:#F5F5F5;border-bottom:1px solid #DEDEDE;}
+    .payList span{color:#438EB9;width: 120px;}
+    .containerPay{margin: 10px 10px 0 10px;}
+    .sumdiv{clear: both}
+    .sumdivList{border: 1px solid #DEDEDE;float:left;width: 300px;height: 100px;box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);padding-top: 10px;background: transparent linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.1) 100%) repeat scroll 0% 0%;margin:0 10px 0 5px;}
+    .sumdivList_icon{width: 30px;height: 30px;background: url("/views/img/iconS.png") -257px -260px;margin: 0 auto 0 auto;}
+    .sumdivList_tt{text-align: center;font-size: 18px;font-weight: 600;height: 40px;line-height: 40px;}
+    .sumdivList_int{font-weight: 600;font-size: 14px;color: #438EB9;text-align: center;line-height: 30px;height: 30px;}
+    .sumdivList_icon_ren{width: 30px;height: 30px;background: url("/views/img/iconS.png") -35px -160px;margin: 0 auto 0 auto;}
+    .container{border: 1px solid #DEDEDE;width: 1600px;}
+</style>
+<script src="/views/dataTimeStyle/jquery.datetimepicker.js"></script>
+<link rel="stylesheet" href="/views/dataTimeStyle/jquery.datetimepicker.css" type="text/css" />
+
+<script src="/views/echarts/echarts.min.js"></script>
+<div class="page_title"><span><{$objectName}></span> 平台->全服报表</div>
+<div style="padding-top: 10px;">
+    <div class="selectDiv">
+        <span>日期*</span>
+        <input type="text" class="startDay" value="<{$startDay}>">
+        <span>日期*</span>
+        <input type="text" class="endDay" value="<{$endDay}>">
+        <div class="selectDiv_submit">提交</div>
+    </div>
+    <div class="sumdiv">
+        <div class="sumdivList">
+            <div class="sumdivList_icon"></div>
+            <div class="sumdivList_tt">充值总数</div>
+            <div class="sumdivList_int"><{$PayMonet}></div>
+        </div>
+        <div class="sumdivList">
+            <div class="sumdivList_icon_ren"></div>
+            <div class="sumdivList_tt">当在线人数</div>
+            <div class="sumdivList_int"><{$nowOnline}></div>
+        </div>
+    </div>
+    <div class="sumdiv">
+        <div class="container">
+            <div class="container_tt"><div class="iconC1"></div>充值金额</div>
+            <div id="container_cen"></div>
+        </div>
+
+    </div>
+    <div class="sumdiv">
+        <div class="container">
+            <div class="container_tt"><div class="iconC1"></div>在线人数</div>
+            <div id="lineUser"></div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        var className="<{$className}>";
+        $('.startDay').datetimepicker({
+            lang:"ch",           //语言选择中文
+            format:"Y-m-d",      //格式化日期
+            timepicker:false,    //关闭时间选项
+            yearStart:2000,     //设置最小年份
+            yearEnd:2050,        //设置最大年份
+            todayButton:false    //关闭选择今天按钮
+        });
+        $('.endDay').datetimepicker({
+            lang:"ch",           //语言选择中文
+            format:"Y-m-d",      //格式化日期
+            timepicker:false,    //关闭时间选项
+            yearStart:2000,     //设置最小年份
+            yearEnd:2050,        //设置最大年份
+            todayButton:false    //关闭选择今天按钮
+        });
+        $(".selectDiv_submit").click(function(){
+            var startDay=$(".startDay").val();
+            var endDay=$(".endDay").val();
+            if(startDay && endDay) {
+                $(this).html('发送中...');
+                $(this).css({"background": "#616161"});
+                $.get("/AllServerReportGet/", {
+                    "startDay": startDay,
+                    "endDay": endDay,
+                    "className":className,
+                    "doingnuid":new Date().getTime()
+                }, function (data) {
+                    var obj = jQuery.parseJSON(data);
+                    if (obj.status != 2000) {
+                        alert(obj.message)
+                    }
+                    window.location.reload();
+                })
+            }else{
+                alert("填写完整参数！");
+            }
+        });
+    });
+
+    var myChart1 = echarts.init(document.getElementById('container_cen'));
+    var option1 = {
+        title: {x: 'center', text: ''},
+        legend: {top: 'bottom', data:['充值金额']},
+        toolbox: {show: false, feature: {mark: {show: true}, dataView: {show: true, readOnly: false}, magicType: {show: true, type: ['line', 'bar', 'stack', 'tiled']}, restore: {show: true}, saveAsImage: {show: true}}},
+        tooltip : {trigger: 'axis', formatter: function(params) {return params[0].name + '<br/>' + params[0].seriesName + ' : ' + params[0].value + ' (元/小时)<br/>';},axisPointer: {animation: false}},
+        yAxis: [{type: 'value'}],
+        dataZoom: {type: 'inside'},
+        xAxis: [{type: 'category', boundaryGap: false, data: <{$PayKey_js}>}],
+        series: [{name:'充值金额',type:'line',smooth:false, symbol: 'none', stack: 'a', areaStyle: {normal: {}}, data: <{$PayValue_js}>}]
+    };
+    myChart1.setOption(option1);
+
+    var myChart2 = echarts.init(document.getElementById('lineUser'));
+    var option2 = {
+        title: {x: 'center', text: ''},
+        legend: {top: 'bottom', data:['在线人数']},
+        toolbox: {show: false, feature: {mark: {show: true}, dataView: {show: true, readOnly: false}, magicType: {show: true, type: ['line', 'bar', 'stack', 'tiled']}, restore: {show: true}, saveAsImage: {show: true}}},
+        tooltip : {trigger: 'axis', formatter: function(params) {return params[0].name + '<br/>' + params[0].seriesName + ' : ' + params[0].value + ' (人/小时)<br/>';},axisPointer: {animation: false}},
+        yAxis: [{type: 'value'}],
+        dataZoom: {type: 'inside'},
+        xAxis: [{type: 'category', boundaryGap: false, data: <{$OnlineKey_js}>}],
+    series: [{name:'在线人数',type:'line',smooth:false, symbol: 'none', stack: 'a', areaStyle: {normal: {}}, data: <{$OnlineValue_js}>}]
+    };
+    myChart2.setOption(option2);
+
+
+</script>
+<{/block}>

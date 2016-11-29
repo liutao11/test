@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        .ReportDataTitle{height: 40px;}
+        .ReportDataCenter{background:#F5F5F5;border-bottom:1px solid #DEDEDE;height: 30px;}
+        .ReportDataCenter_list{float: left;line-height: 30px;height: 30px;width: 150px;text-align: center;font-size: 12px;}
+        .ReportDataTitle_list{float: left;line-height: 40px;height: 40px;width: 150px;text-align: center;font-size: 14px;font-weight: 600}
+    </style>
+</head>
+<body>
+<table>
+    <tr class="ReportDataTitle">
+        <td class="ReportDataTitle_list">角色名</td>
+        <td class="ReportDataTitle_list">账号</td>
+        <td class="ReportDataTitle_list">性别</td>
+        <td class="ReportDataTitle_list">等级</td>
+        <td class="ReportDataTitle_list">创建时间</td>
+        <td class="ReportDataTitle_list">更新时间</td>
+        <td class="ReportDataTitle_list">转身等级</td>
+        <td class="ReportDataTitle_list">金币</td>
+        <td class="ReportDataTitle_list">元宝</td>
+    </tr>
+<{foreach $data as $vv}>
+    <tr class="ReportDataCenter">
+        <td class="ReportDataCenter_list"><{$vv['sChrName']}></td>
+        <td class="ReportDataCenter_list"><{$vv['sAccount']}></td>
+        <td class="ReportDataCenter_list"><{$vv['btSex']}></td>
+        <td class="ReportDataCenter_list"><{$vv['Level']}></td>
+        <td class="ReportDataCenter_list"><{$vv['CreateDay']}></td>
+        <td class="ReportDataCenter_list"><{$vv['UpdateDay']}></td>
+        <td class="ReportDataCenter_list"><{$vv['btRelevel']}></td>
+        <td class="ReportDataCenter_list"><{$vv['nGold']}></td>
+        <td class="ReportDataCenter_list"><{$vv['nGameGold']}></td>
+    </tr>
+<{/foreach}>
+
+</table>
+
+</body>
+</html>

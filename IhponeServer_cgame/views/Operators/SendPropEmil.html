@@ -1,0 +1,393 @@
+<{extends file='Admin/index.html'}>
+<{block name=bbb}>
+<style>
+    .page_title{font-size: 14px;color: #438EB9;margin: 10px 0 0 0;height: 35px;line-height: 35px;background:#FAFAFA ;border: 1px solid #DEDEDE;border-radius: 6px;padding-left: 10px;}
+    .page_title span{font-size: 18px;color: #438EB9;padding-left: 10px;height: 40px;line-height: 40px;font-weight: bold}
+    .ReportData{box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);border: 1px solid #DEDEDE;border-radius: 5px;}
+    .showList{clear: both;height: 32px;margin-top: 10px;}
+    .showList_s{clear: both;height: 32px;margin-top: 10px;}
+    .showList_name{float: left;height: 30px;line-height: 30px;font-size: 12px;;text-align: right;width: 150px;}
+    .showList_message{float: left;height: 30px;width: 500px;line-height: 30px;}
+    .showList_message span {color: #DEDEDE;font-size: 12px;line-height: 30px;height: 30px;}
+    .showList_message_select{float: left;width: 120px;line-height: 30px;height: 30px;text-align: center;font-size: 12px;background:#438EB9;color: #ffffff;border-radius: 4px;margin-right: 10px;cursor: pointer }
+    .showList select{display: block;float: left;height: 30px;line-height: 30px;font-size: 12px;width: 150px;}
+    .showList span{display: block;float: left;height: 30px;line-height: 30px;font-size: 12px;width: 150px;}
+    .showList_s span{display: block;float: left;height: 30px;line-height: 30px;font-size: 12px;width: 150px;}
+    .showList input{height: 30px;line-height: 30px;display: block;float: left;width: 300px;border: 1px solid #cccccc;font-size: 14px;}
+    .showList_s input{height: 30px;line-height: 30px;display: block;float: left;width: 300px;border: 1px solid #cccccc;font-size: 14px;}
+    .showList textarea{line-height: 30px;height: 90px;display: block;float: left;width: 700px;}
+    .showList_submit{width: 120px;height: 30px;line-height: 30px;font-size: 14px;text-align: center;background: #438EB9;cursor: pointer;color: #ffffff;font-weight: 600}
+    .container_tt{height: 40px;line-height: 40px;font-size: 16px;background: transparent linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.1) 100%) repeat scroll 0% 0%}
+    .iconC1{width: 20px;height: 20px;background: url("/views/img/iconC.png") 0 0;float: left;margin: 12px 10px auto 10px;}
+    .roleS{display: block;float: left}
+    .userTest{width: 120px;height: 32px;border-radius: 4px;text-align: center;background:#438EB9;cursor: pointer;float: left;line-height: 32px;color: #ffffff;margin-left: 10px;}
+    .addPropList{width: 120px;height: 32px;border-radius: 4px;text-align: center;background:#438EB9;cursor: pointer;float: left;line-height: 32px;color: #ffffff;margin-left: 10px;}
+    .addPropList_in_select{position: absolute;width: 180px;height: 200px;top: 35px;left: 300px;box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);border: 1px solid #DEDEDE;border-radius: 5px;background: #DEDEDE;display: none;overflow-y: scroll;overflow-x: hidden}
+    .addPropList_in_select_list{padding-left: 10px;font-size: 12px;line-height: 22px;height: 22px;}
+    .addPropList_in_select_list:hover{background: #ffffff}
+    .addPropListSelectList{width: 280px;height: 30px;background:  #438EB9 ;border-radius: 4px;float: left;margin-right: 10px;margin-bottom: 10px;}
+    .addPropListSelectList span{display: block;float: left;text-align: center;width: 120px;font-size: 12px;line-height: 30px;height: 30px}
+    .addPropListSelectList input{display: block;float: left;height: 20px;line-height: 20px;width:40px;border-radius: 4px;background: #ffffff;margin-top: 4px;}
+    .addPropListSelectListDel{float: left;margin: 4px 0 0 5px;;width: 20px;height: 20px;border-radius: 4px;cursor: pointer;background: url("/views/img/select2.png") -43px 5px no-repeat #ffffff;border: 1px solid #DEDEDE}
+    .searchBut{width: 120px;height: 32px;border-radius: 4px;text-align: center;background:#438EB9;cursor: pointer;float: left;line-height: 32px;color: #ffffff;margin-left: 10px;}
+    .serverSelectListTitle{float: left;width: 90px;height: 30px;line-height: 30px;}
+    .serverSelectListDel{float: left;margin: 4px 0 0 5px;;width: 20px;height: 20px;border-radius: 4px;cursor: pointer;background: url("/views/img/select2.png") -43px 5px no-repeat #ffffff;border: 1px solid #DEDEDE}
+    input[type="radio"]{border: none}
+    .shamInput{border: 1px solid #DEDEDE;float: left;height: 28px;width: 150px;line-height: 28px;text-align: center;cursor: pointer}
+    .shamInput:hover{background: #DEDEDE}
+    .shamInputDown{box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);border: 1px solid #DEDEDE;background: #ffffff;width: 150px;top: 30px;position: absolute;left: 150px;display: none}
+    .shamOption{line-height: 30px;height: 30px;font-size: 12px;padding-left: 10px;}
+    .shamOption:hover{background: #c8e5f6}
+</style>
+<script src="/views/dataTimeStyle/jquery.datetimepicker.js"></script>
+<link rel="stylesheet" href="/views/dataTimeStyle/jquery.datetimepicker.css" type="text/css" />
+<div class="page_title"><span><{$objectName}></span> 平台->运维->道具邮件发送</div>
+<div style="padding-top: 10px;">
+    <div class="ReportData">
+        <div class="container_tt"><div class="iconC1"></div>道具邮件发送</div>
+        <div class="showList" style="position: relative">
+            <div class="showList_name">服区*：</div>
+            <div class="shamInput">--选择服区--</div>
+            <div class="shamInputDown">
+                <{foreach $serverS as $vv}>
+                <div class="shamOption" valueInt="<{$vv['id']}>" ><{$vv['ServerTitle']}></div>
+                <{/foreach}>
+            </div>
+        </div>
+        <div class="showList">
+            <div class="showList_name">已经服区*：</div>
+            <div class="showList_message"><span>无</span></div>
+        </div>
+
+
+        <div class="showList_s">
+        </div>
+
+        <div class="showList">
+            <div class="showList_name">角色名*：</div>
+            <input type="text" class="roleS" style="width: 700px;">
+            <div class="userTest">检测用户</div>
+        </div>
+        <div class="showList" style="display: none">
+        </div>
+        <div class="showList">
+            <div class="showList_name"></div>
+            <div class="showList_message">以半角 ',' 分隔多个角色名。</div>
+        </div>
+
+        <div class="showList">
+            <div class="showList_name">是否定时发送*：</div>
+            <input type="radio" name="isSetupTime" style="width: 10px;" value="1">
+            <span>是</span>
+            <input type="radio" name="isSetupTime" style="width: 10px;" value="2" checked>
+            <span>否</span>
+        </div>
+        <div class="showList" style="display: none">
+            <div class="showList_name">发送时间*：</div>
+            <input type="text" class="setupTime" name="setupTime">
+        </div>
+        <div class="showList">
+            <div class="showList_name">标题*：</div>
+            <input type="text" class="message" name="title">
+        </div>
+        <div class="showList" style="height: 90px;">
+            <div class="showList_name">内容*：</div>
+            <textarea class="textarea" name="center"></textarea>
+        </div>
+        <div class="showList" style="position: relative">
+            <div class="showList_name">附件*：</div>
+            <div class="addPropList" style="margin: 0 10px 0 0">增加附件</div>
+            <input type="text" class="addPropList_in" name="title" style="margin-left: 20px;width: 180px;display: none">
+            <div class="searchBut" style="margin: 0 10px 0 30px;display: none">搜索</div>
+            <div class="addPropList_in_select"></div>
+        </div>
+
+        <div class="showList" style="height: 70px">
+            <div class="showList_name">已选择附件*：</div>
+            <div class="showList_message" style="overflow:hidden;width: 1400px;height: 120px;"></div>
+        </div>
+        <div class="showList" style="height: 64px;">
+            <div class="showList_submit" style="margin: 0 auto">提交</div>
+        </div>
+    </div>
+</div>
+</div>
+<script>
+    showList_submit_status=1;               //是否可以提交
+    rolesTesting=0;                          //用户名检测，0 未通过，1 通过
+    $(function(){
+        addPropList_in_statues=1;
+        $(".addPropList").click(function(){
+             if(addPropList_in_statues==1){
+                 $(".addPropList_in").show();
+
+                 $(".searchBut").show();
+                 addPropList_in_statues=2;
+             }else{
+                 $(".addPropList_in").hide();
+                 $(".searchBut").hide();
+                 addPropList_in_statues=1;
+             }
+            $('.addPropList_in_select').hide();
+        });
+        $(".searchBut").click(function(){
+            var values=$('.addPropList_in').val();
+            if(values) {
+                $.get("/SendPropEmilGet_Buffer/", {"doing": "PropSelect","values": values,'doingunid':new Date().getTime()}, function (data) {
+                    var obj = jQuery.parseJSON(data);
+                    if (obj.status == 2000) {
+
+                        var showString="";
+                        $.each(obj.data, function (index) {
+                            showString+='<div serverId="'+obj.data[index].id+'" class="addPropList_in_select_list"  onclick="addPropListSelect('+obj.data[index].id+',\''+obj.data[index].name+'\')">' + obj.data[index].name+'</div>';
+                        });
+                        $(".addPropList_in_select").show().html(showString);
+                    }
+                });
+            }
+        });
+        $(".addPropList_in_select_list").each(function(index){
+           $(this).click(function(){
+               alert(index);
+           })
+        });
+        //选择范围改变
+        $(".sendType").each(function(index){
+            $(this).click(function(){
+                if(index==0){
+                    $(".showList").eq(2).hide();
+                    $(".showList").eq(3).show();
+                }else{
+                    $(".showList").eq(3).hide();
+                    $(".showList").eq(2).show();
+                }
+            })
+        });
+
+        $('.setupTime').datetimepicker({
+            lang:"ch",           //语言选择中文
+            format:"Y-m-d H:00:00",      //格式化日期
+            timepicker:true,    //关闭时间选项
+            yearStart:2000,     //设置最小年份
+            yearEnd:2050,        //设置最大年份
+            todayButton:false    //关闭选择今天按钮
+        });
+        var shamInputStatus=1;
+        $(".shamInput").click(function(){
+            if(shamInputStatus==1){
+                $(".shamInputDown").show();
+                shamInputStatus=0;
+            }else{
+                $(".shamInputDown").hide();
+                shamInputStatus=1;
+            }
+        });
+        $(".shamOption").each(function(index){
+            $(this).click(function(){
+                $(".shamInputDown").hide();
+                shamInputStatus=1;
+                var serverId=$(this).attr('valueInt');
+                if(serverId) {
+                    $.get("/SendPropEmilGet_Buffer/", {"doing": "serverIdAddOnly", "serverId": serverId,'doingunid':new Date().getTime()}, function (data) {
+                        $(".serverIndex").find("option").eq(0).selected;
+                        var obj = jQuery.parseJSON(data);
+                        if (obj.status == 2000) {
+                            var dataLeng=0;
+                            var showString="";
+                            $.each(obj.data, function (index) {
+                                showString+='<div onclick="deleteServer(\''+obj.data[index].id+'\')" serverId="'+obj.data[index].id+'" class="showList_message_select"><div class="serverSelectListTitle">' + obj.data[index].GameServerUnid+'</div><div class="serverSelectListDel"></div></div>';
+                                dataLeng++;
+                            });
+                            $(".showList_message").eq(0).html(showString);
+                            if(dataLeng<=1){
+                                $(".showList").eq(2).show();
+                                $(".showList").eq(3).hide();
+                                $(".showList_message").eq(1).html("以半角 ',' 分隔多个角色名。");
+                                $(".showList_s").show();
+                                $(".sendType").eq(1).attr("checked",true);
+                                $(".sendType").eq(0).attr("checked",false);
+                                rolesTesting=0;
+                            }else{
+                                $(".showList").eq(3).show();
+                                $(".showList").eq(2).hide();
+                                $(".showList_s").hide();
+                                rolesTesting=1;
+
+                                $(".sendType").eq(0).attr("checked",true);
+                                $(".sendType").eq(1).attr("checked",false);
+                                $(".showList_message").eq(1).html("多服务器时，只能选择范围发送。");
+                            }
+                        }
+                    })
+                }
+            });
+        });
+        $("input[name='isSetupTime']").each(function(){
+            $(this).click(function(){
+                var isSetupTimeValue=$(this).val();
+                if(isSetupTimeValue==1){
+                    $('.showList').eq(6).show();
+                }else{
+                    $('.showList').eq(6).hide();
+                }
+            })
+        });
+
+        $(".roleS").change(function(){
+            $('.userTest').html('检测用户').css({"background": "#438EB9"});
+        });
+
+        $(".userTest").click(function(){
+            var roleS=$(".roleS").val();
+            if(roleS){
+                $(this).html('发送中...');
+                $(this).css({"background":"#616161"});
+                $.get("/SendPropEmilGet_Buffer/",{"doing": "roleSTest", "roleS": roleS,'doingunid':new Date().getTime()},function(data){
+                    var obj = jQuery.parseJSON(data);
+                    if (obj.status == 2000) {
+                        $('.userTest').html('检测用户').css({"background": "#dbf8dc"});
+                        rolesTesting=1;
+                    }else {
+                        alert(obj.message);
+                        $('.userTest').html('检测用户').css({"background": "#438EB9"});
+                    }
+                });
+            }else{
+                alert("空值不能提交！")
+            }
+        });
+        $(".showList_submit").click(function(){
+             if(showList_submit_status==1) {
+                 if(rolesTesting) {
+                     var roleS = $(".roleS").val();
+                     var userObject = $("input[name='userObject']:checked").val();
+                     var isSetupTime = $("input[name='isSetupTime']:checked").val();
+                     var sendType = $("input[name='sendType']:checked").val();
+                     var setupTime=$(".setupTime").val();
+                     var title=$("input[name='title']").val();
+                     var textarea=$(".textarea").val();
+                     if (isSetupTime && title && textarea ) {
+                         $(this).html('发送中...');
+                         $(this).css({"background": "#616161"});
+                         $.get("/SendPropEmilGet/", {"roleS": roleS,"sendType":sendType, "userObject":userObject, "isSetupTime": isSetupTime, "setupTime": setupTime, "title": title, "textarea":textarea,'doingunid':new Date().getTime()}, function (data) {
+                             var obj = jQuery.parseJSON(data);
+                             if (obj.status != 2000) {
+                                 alert(obj.message);
+                             } else {
+                                 alert(obj.message);
+                                 window.location.reload();
+                             }
+                             $(".showList_submit").html('提交').css({"background": "#438EB9"});
+                         });
+                     }else{
+                         alert("填写完整信息！")
+                     }
+                 }else{
+                     alert("角色名没有通过验证！")
+                 }
+             }else{
+                 alert("请等待服务返回...")
+             }
+        });
+    });
+    function deleteServer(serverId){
+        $.get("/SendPropEmilGet_Buffer/", {"doing": "serverIdDel", "serverId": serverId,'doingunid':new Date().getTime()}, function (data) {
+            var obj = jQuery.parseJSON(data);
+            if (obj.status == 2000) {
+                var showString="";
+                var dataLeng=0;
+                $.each(obj.data, function (index) {
+                    showString+='<div onclick="deleteServer(\''+obj.data[index].id+'\')" serverId="'+obj.data[index].id+'" class="showList_message_select">' + obj.data[index].GameServerUnid+'</div>';
+                    dataLeng++;
+                });
+                $(".showList_message").eq(0).html(showString);
+                if(dataLeng<=1){
+                    $(".showList").eq(2).show();
+                    $(".showList").eq(3).hide();
+                    $(".showList_message").eq(1).html("以半角 ',' 分隔多个角色名。");
+                    $(".showList_s").show();
+                    $(".sendType").eq(1).attr("checked",true);
+                    $(".sendType").eq(0).attr("checked",false);
+                }else{
+                    $(".showList").eq(3).show();
+                    $(".showList").eq(2).hide();
+                    $(".sendType").eq(0).attr("checked",true);
+                    $(".sendType").eq(1).attr("checked",false);
+                    $(".showList_message").eq(1).html("多服务器时，只能选择范围发送。");
+                    $(".showList_s").hide();
+                }
+            }
+        });
+    }
+    function addPropListSelect(id,title){
+        $.get("/SendPropEmilGet_Buffer/",{"doing": "AddPropDefault",'PropId':id,'PropNum':'1',"PropName":title,'doingunid':new Date().getTime()},function(data){
+            var obj = jQuery.parseJSON(data);
+            if(obj.status==2000) {
+                var showString="";
+                $.each(obj.data, function (index) {
+                    showString+="<div class='addPropListSelectList' id='addPropListSelectListId" + index + "'><span>" + obj.data[index].PropName + "</span><input type='text' value='"+obj.data[index].PropNum+"' name='Prop' id=\"addPropListSelectListInputId" + index + "\" onchange='PropNumber(" + index + ")' PropId='" + index + "'>" +
+                            "<select class='addPropListSelectList_lock' style='width: 60px;display: block;height:20px;margin-top: 5px;margin-left: 10px; ' id='addPropListSelectLisClock" + index + "' onchange='PropClock("+index+")' PropId='" + index + "'>" ;
+                    if(obj.data[index].PropClockValues==0) {
+                        showString+="<option style='height: 20px;font-size: 12px;' value='1' >绑定</option><option value='0' selected style='height: 20px;font-size: 12px;'>不绑定</option></select>";
+                    }else{
+                        showString+="<option style='height: 20px;font-size: 12px;' value='1' selected>绑定</option><option value='0'  style='height: 20px;font-size: 12px;'>不绑定</option></select>";
+                    }
+                    showString+="<div class=\"addPropListSelectListDel\" onclick=\'addPropListSelectListDel(" + index + ")\'></div></div>";
+
+                });
+                $(".showList_message").eq(2).html(showString);
+                $(".addPropList_in").hide();
+
+                $(".searchBut").hide();
+                $(".addPropList_in_select").hide();
+                addPropList_in_statues=1;
+            }else{
+                alert(obj.message)
+            }
+        });
+    }
+    function addPropListSelectListDel(id){
+        $("#addPropListSelectListId"+id).css({"background":"#cccccc"});
+        $.get("/SendPropEmilGet_Buffer/",{"doing":"AddPropDel","PropId":id,'doingunid':new Date().getTime()},function(data){
+            var obj = jQuery.parseJSON(data);
+            if(obj.status==2000) {
+                $("#addPropListSelectListId"+id).remove();
+            }
+        });
+    }
+    function PropNumber(id){
+        var values=$("#addPropListSelectListInputId"+id).val();
+        var PropId=$("#addPropListSelectListInputId"+id).attr("PropId");
+        if(values>0 && PropId!=''){
+            $(".showList_submit").css({"background":"#616161",'doingunid':new Date().getTime()}).html("等待服务响应...");
+            showList_submit_status=0;
+            $.get("/SendPropEmilGet_Buffer/",{"doing": "AddPropChange",'PropId':PropId,'PropNum':values,'doingunid':new Date().getTime()},function(data){
+                var obj = jQuery.parseJSON(data);
+                if(obj.status!=2000) {
+                }
+                showList_submit_status=1;
+                $(".showList_submit").css({"background":"#438EB9"}).html("提交");
+
+            });
+        }
+    }
+    //改变不是绑定或不绑定
+
+    function PropClock(id){
+        var  PropClockState=$("#addPropListSelectLisClock"+id).val();
+        if(PropClockState==0 || PropClockState==1){
+            $(".showList_submit").css({"background":"#616161",'doingunid':new Date().getTime()}).html("等待服务响应...");
+            showList_submit_status=0;
+            $.get("/SendPropEmilGet_Buffer/",{"doing": "PropClockChange",'PropId':id,'values':PropClockState,'doingunid':new Date().getTime()},function(data){
+                var obj = jQuery.parseJSON(data);
+                if(obj.status!=2000) {
+                }
+                showList_submit_status=1;
+                $(".showList_submit").css({"background":"#438EB9"}).html("提交");
+
+            });
+        }
+    }
+
+</script>
+<{/block}>

@@ -1,0 +1,288 @@
+<{extends file='Admin/index.html'}>
+<{block name=bbb}>
+<script src="/views/dataTimeStyle/jquery.datetimepicker.js"></script>
+<link rel="stylesheet" href="/views/dataTimeStyle/jquery.datetimepicker.css" type="text/css" />
+<style>
+    .page_title{font-size: 14px;color: #438EB9;margin: 10px 0 0 0;height: 35px;line-height: 35px;background:#FAFAFA ;border: 1px solid #DEDEDE;border-radius: 6px;padding-left: 10px;}
+    .page_title span{font-size: 18px;color: #438EB9;padding-left: 10px;height: 40px;line-height: 40px;font-weight: bold}
+    .container{width: 800px;height: 420px;box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);float: left;margin: 10px 5px 10px 5px;}
+    .container_tt{height: 40px;line-height: 40px;font-size: 16px;background: transparent linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.1) 100%) repeat scroll 0% 0%}
+    #container_cen{height: 380px;}
+    .iconC1{width: 20px;height: 20px;background: url("/views/img/iconC.png") 0 0;float: left;margin: 12px 10px auto 10px;}
+    #lineUser{height: 380px;}
+    .selectDiv{height: 50px;position: relative}
+    .selectDiv span{display: block;float: left;line-height: 50px;height: 50px;margin-left: 10px;}
+    .selectDiv select{display: block;float: left;margin-top: 10px;height: 30px;width: 150px;line-height: 30px;margin-left: 10px;}
+    .selectDiv input{display: block;float: left;height: 28px;width: 150px;margin: 10px 0 0 10px;}
+    .selectDiv_submit{float: left;height: 28px;margin-top: 10px;margin-left: 20px;background:#438EB9;color: #ffffff;line-height: 30px;text-align: center;width: 100px;font-size: 12px;cursor: pointer}
+    .payList{line-height: 30px;height: 30px;}
+    .payList span{color:#438EB9}
+    .containerPay{margin: 10px 0 0 10px;}
+    .sumdiv{clear: both}
+    .sumdivList{float:left;width: 300px;height: 100px;box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);padding-top: 10px;background: transparent linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.1) 100%) repeat scroll 0% 0%;margin:0 10px 0 5px;}
+    .sumdivList_icon{width: 30px;height: 30px;background: url("/views/img/iconS.png") -257px -260px;margin: 0 auto 0 auto;}
+    .sumdivList_tt{text-align: center;font-size: 18px;font-weight: 600;height: 40px;line-height: 40px;}
+    .sumdivList_int{font-weight: 600;font-size: 14px;color: #438EB9;text-align: center;line-height: 30px;height: 30px;}
+    .sumdivList_icon_ren{width: 30px;height: 30px;background: url("/views/img/iconS.png") -35px -160px;margin: 0 auto 0 auto;}
+    .ReportData{box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);border: 1px solid #DEDEDE;border-radius: 5px;padding-left: 10px;padding-right:10px; }
+    .ReportDataTitle{height: 40px;}
+    .ReportDataTitle_list{float: left;line-height: 40px;height: 40px;width: 150px;text-align: center;font-size: 14px;font-weight: 600}
+    .ReportDataCenter{background:#F5F5F5;border-bottom:1px solid #DEDEDE;height: 30px;}
+    .ReportDataCenter_list{float: left;line-height: 30px;height: 30px;width: 150px;text-align: center;font-size: 12px;}
+    .drop_down{width: 20px;height: 20px;margin-left: 10px;margin-top: 10px;background: url("/views/img/iconC.png") -310px -115px #F5F5F5;}
+    .myselfInput{float: left;height: 28px;width: 150px;margin: 10px 0 0 10px;border: 1px solid #DEDEDE;line-height: 28px;}
+    .myselfSelect{background: #ffffff;display:none;position: absolute;top: 40px ;left: 648px;border: 1px solid #DEDEDE;box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);height: 230px;width: 150px;overflow-y: scroll;z-index: 3;}
+    .myselfSelectOption{padding-left: 10px;height: 20px;font-size: 12px;line-height: 20px;}
+    .roleKey{width: 90%;border: 1px solid #DEDEDE;height: 30px;line-height: 30px;border-radius:4px;margin: 0 auto}
+    .pageInt{width: 30px;height: 30px;border-radius: 4px;background: #DEDEDE;float: left;line-height: 30px;text-align: center;margin: 5px 10px 0 0;cursor: pointer}
+    .pageInt:hover{background:#c8e5f6}
+    .pageInt_z{width: 28px;height: 28px;border-radius: 4px;border: 1px solid #DEDEDE;float: left;line-height: 28px;text-align: center;margin: 5px 10px 0 0;}
+
+
+    .sortDiv{float: right;width: 25px;height: 40px;}
+    .sortDiv_u{height: 20px;background: url("/views/img/iconC.png") -282px -118px;}
+    .sortDiv_d{height: 20px;background: url("/views/img/iconC.png") -307px -118px;}
+    .sortDiv_u:hover{background: url("/views/img/iconC.png") -282px -118px #cccccc;cursor: pointer}
+    .sortDiv_d:hover{background: url("/views/img/iconC.png") -307px -118px #cccccc;cursor: pointer}
+</style>
+<div class="page_title"><span><{$objectName}></span> 平台->运营数据->全服角色列表</div>
+<div style="padding-top: 10px;">
+    <div class="selectDiv">
+        <span>服区*</span>
+        <select class="serverIndex">
+            <{foreach $serverS as $vv}>
+            <option value="<{$vv['id']}>" <{if $serverIndex==$vv['id']}>selected<{/if}>><{$vv['GameServerUnid']}></option>
+            <{/foreach}>
+        </select>
+        <div class="selectDiv_submit">提交</div>
+    </div>
+
+    <div class="ReportData">
+        <div class="ReportDataTitle">
+            <div class="ReportDataTitle_list">角色名</div>
+            <div class="ReportDataTitle_list">账号</div>
+            <div class="ReportDataTitle_list" style="width: 50px;">性别</div>
+            <div class="ReportDataTitle_list" style="width: 50px;" >职业</div>
+            <div class="ReportDataTitle_list" style="width: 100px;" doing="sort">
+                等级
+                <div class="sortDiv">
+                    <div class="sortDiv_u" name="level" value="1" <{if $SortName=='level' && $SortValue==1}> style="border: #cccccc solid 1px;height: 18px;" <{/if}> ></div>
+                    <div class="sortDiv_d" name="level" value="2" <{if $SortName=='level' && $SortValue==2}> style="border: #cccccc solid 1px;height: 18px;" <{/if}>></div>
+                </div>
+            </div>
+            <div class="ReportDataTitle_list" style="width: 120px;" doing="sort">转生等级
+                <div class="sortDiv">
+                    <div class="sortDiv_u" name="liveLevel" value="1" <{if $SortName=='liveLevel' && $SortValue==1}> style="border: #cccccc solid 1px;height: 18px;" <{/if}>></div>
+                    <div class="sortDiv_d" name="liveLevel" value="2" <{if $SortName=='liveLevel' && $SortValue==2}> style="border: #cccccc solid 1px;height: 18px;" <{/if}>></div>
+                </div>
+            </div>
+            <div class="ReportDataTitle_list" style="width: 120px;" doing="sort">VIP等级
+                <div class="sortDiv">
+                    <div class="sortDiv_u" name="vipLevel" value="1"  <{if $SortName=='vipLevel' && $SortValue==1}> style="border: #cccccc solid 1px;height: 18px;" <{/if}>></div>
+                    <div class="sortDiv_d" name="vipLevel" value="2"  <{if $SortName=='vipLevel' && $SortValue==2}> style="border: #cccccc solid 1px;height: 18px;" <{/if}>></div>
+                </div>
+            </div>
+            <div class="ReportDataTitle_list" style="width: 100px;" doing="sort">金币
+                <div class="sortDiv">
+                    <div class="sortDiv_u" name="gold" value="1" <{if $SortName=='gold' && $SortValue==1}> style="border: #cccccc solid 1px;height: 18px;" <{/if}>></div>
+                    <div class="sortDiv_d" name="gold" value="2" <{if $SortName=='gold' && $SortValue==2}> style="border: #cccccc solid 1px;height: 18px;" <{/if}>></div>
+                </div>
+            </div>
+            <div class="ReportDataTitle_list" style="width: 120px;" doing="sort">绑定金币
+                <div class="sortDiv">
+                    <div class="sortDiv_u" name="BGold" value="1" <{if $SortName=='BGold' && $SortValue==1}> style="border: #cccccc solid 1px;height: 18px;" <{/if}>></div>
+                    <div class="sortDiv_d" name="BGold" value="2" <{if $SortName=='BGold' && $SortValue==2}> style="border: #cccccc solid 1px;height: 18px;" <{/if}>></div>
+                </div>
+            </div>
+            <div class="ReportDataTitle_list" style="width: 100px;" doing="sort">充值金额
+                <div class="sortDiv">
+                    <div class="sortDiv_u" name="Acer" value="1" <{if $SortName=='vipLevel' && $SortValue==1}> style="border: #cccccc solid 1px;height: 18px;" <{/if}>></div>
+                    <div class="sortDiv_d" name="Acer" value="2" <{if $SortName=='vipLevel' && $SortValue==2}> style="border: #cccccc solid 1px;height: 18px;" <{/if}>></div>
+                </div>
+            </div>
+            <div class="ReportDataTitle_list" style="width: 100px;" doing="sort">绑定元宝
+                <div class="sortDiv">
+                    <div class="sortDiv_u" name="Loyal" value="1" <{if $SortName=='Loyal' && $SortValue==1}> style="border: #cccccc solid 1px;height: 18px;" <{/if}>></div>
+                    <div class="sortDiv_d" name="Loyal" value="2" <{if $SortName=='Loyal' && $SortValue==2}> style="border: #cccccc solid 1px;height: 18px;" <{/if}>></div>
+                </div>
+            </div>
+            <div class="ReportDataTitle_list" style="width: 100px;" doing="sort">非绑定元宝
+                <div class="sortDiv">
+                    <div class="sortDiv_u" name="BLoyal" value="1" <{if $SortName=='BLoyal' && $SortValue==1}> style="border: #cccccc solid 1px;height: 18px;" <{/if}>></div>
+                    <div class="sortDiv_d" name="BLoyal" value="2" <{if $SortName=='BLoyal' && $SortValue==2}> style="border: #cccccc solid 1px;height: 18px;" <{/if}>></div>
+                </div>
+            </div>
+
+            <div class="ReportDataTitle_list" style="width: 200px;">创建时间</div>
+        </div>
+
+        <{if $data}>
+        <div class="ReportDataTitle">
+            <div class="ReportDataTitle_list"><input type="text" class="roleKey" value="<{if $index==1}><{$value}><{else}><{/if}>"></div>
+            <div class="ReportDataTitle_list"><input type="text" class="roleKey" value="<{if $index==2}><{$value}><{else}><{/if}>"></div>
+            <div class="ReportDataTitle_list" style="width: 50px;"><input type="text" class="roleKey" value="<{if $index==3}><{$value}><{else}><{/if}>"></div>
+            <div class="ReportDataTitle_list" style="width: 50px;"><input type="text" class="roleKey" value="<{if $index==4}><{$value}><{else}><{/if}>"></div>
+            <div class="ReportDataTitle_list" style="width: 100px;"><input type="text" class="roleKey" value="<{if $index==5}><{$value}><{else}><{/if}>"></div>
+            <div class="ReportDataTitle_list" style="width: 120px;"><input type="text" class="roleKey" value="<{if $index==6}><{$value}><{else}><{/if}>"></div>
+        </div>
+
+            <{foreach $data as $kk=>$vv}>
+            <div class="ReportDataCenter" <{if $kk > ($pagelength-1)}> style="display: none"<{/if}>>
+                <div class="ReportDataCenter_list"><{$vv['sChrName']}></div>
+                <div class="ReportDataCenter_list"><{$vv['sAccount']}></div>
+                <div class="ReportDataCenter_list" style="width: 50px;"><{if $vv['btSex']==0}>男<{else}>女<{/if}></div>
+                <div class="ReportDataCenter_list" style="width: 50px;"><{if $vv['btJob']==0}>战士<{elseif $vv['btJob']==1}>法师<{elseif $vv['btJob']==2}>道士<{else}><{/if}></div>
+                <div class="ReportDataCenter_list" style="width: 100px;"><{$vv['Level']}></div>
+                <div class="ReportDataCenter_list" style="width: 120px;"><{$vv['btRelevel']}></div>
+                <div class="ReportDataCenter_list" style="width: 120px;"><{$vv['vipLevel']}></div>
+                <div class="ReportDataCenter_list" style="width: 100px;"><{$vv['nGold']}></div>
+                <div class="ReportDataCenter_list" style="width: 120px;"><{$vv['nGameGird']}></div>
+                <div class="ReportDataCenter_list" style="width: 100px;"><{$vv['moneyInt']}></div>
+                <div class="ReportDataCenter_list" style="width: 100px;"><{$vv['nLoyal']}></div>
+                <div class="ReportDataCenter_list" style="width: 100px;"><{$vv['nGameGold']}></div>
+                <div class="ReportDataCenter_list" style="width: 200px;"><{$vv['dCreateDate']}></div>
+            </div>
+            <{/foreach}>
+        <{else}>
+        <div class="ReportDataCenter">没有数据！</div>
+        <{/if}>
+        <div class="ReportDataTitle">
+            <{if $showPageInt!=1}>
+                <div class="pageInt" pageInt="1" style="width: 60px;">第一页</div>
+                <div class="pageInt" pageInt="<{$showPageInt-1}>" style="width: 60px;">上页</div>
+            <{/if}>
+            <{if $pageSum>=2 && $pageSum<=11}>
+                <{for $i=1 to  $pageSum step 1}>
+                <div <{if $showPageInt==$i}>class="pageInt_z"<{else}>class="pageInt"<{/if}> pageInt="<{$i}>"><{$i}></div>
+                <{/for}>
+                <{elseif  $pageSum > 11}>
+                <{if $showPageInt <=5}>
+                <{for $i=1 to  11 step 1}>
+                <div <{if $showPageInt==$i}>class="pageInt_z"<{else}>class="pageInt"<{/if}> pageInt="<{$i}>"><{$i}></div>
+                <{/for}>
+                <div class="pageInt_z">...</div>
+                <{elseif  $showPageInt > 5 && $showPageInt <= $pageSum-5}>
+                <div class="pageInt_z">...</div>
+                <{for $i=$showPageIntS5 to $showPageIntA5  step 1}>
+                <div <{if $showPageInt==$i}>class="pageInt_z"<{else}>class="pageInt"<{/if}> pageInt="<{$i}>"><{$i}></div>
+                <{/for}>
+                <div class="pageInt_z">...</div>
+                <{elseif $showPageInt > $pageSumTo5}>
+                <div class="pageInt_z">...</div>
+                <{for $i=$pageSumTo11 to  $pageSum step 1}>
+                <div <{if $showPageInt==$i}>class="pageInt_z"<{else}>class="pageInt"<{/if}> pageInt="<{$i}>"><{$i}></div>
+                <{/for}>
+                <{/if}>
+            <{/if}>
+            <{if $showPageInt!=$pageSum}>
+                <div class="pageInt" pageInt="<{$showPageInt+1}>" style="width: 60px;">下页</div>
+                <div class="pageInt" pageInt="<{$pageSum}>" style="width: 60px;">最后一页</div>
+            <{/if}>
+        </div>
+    </div>
+</div>
+<script>
+    $(function(){
+        var pageSum=<{$pageSum}>;
+        var showPage=1;
+        var showPageLength=<{$pagelength}>;
+
+        var className='<{$className}>';
+
+        $('.startDay').datetimepicker({
+            lang:"ch",           //语言选择中文
+            format:"Y-m-d",      //格式化日期
+            timepicker:false,    //关闭时间选项
+            yearStart:2000,     //设置最小年份
+            yearEnd:2050,        //设置最大年份
+            todayButton:false    //关闭选择今天按钮
+        });
+        $('.endDay').datetimepicker({
+            lang:"ch",           //语言选择中文
+            format:"Y-m-d",      //格式化日期
+            timepicker:false,    //关闭时间选项
+            yearStart:2000,     //设置最小年份
+            yearEnd:2050,        //设置最大年份
+            todayButton:false    //关闭选择今天按钮
+        });
+        $(".selectDiv_submit").click(function(){
+            var serverIndex=$(".serverIndex").val();
+
+            if(serverIndex!=''){
+                $(this).html('发送中...');
+                $(this).css({"background":"#616161"});
+                $.get("/UserRoleListGet/",{"doing":"submit_all","serverIndex":serverIndex,'className':className,'doingunid':new Date().getTime()},function(data){
+                    var obj = jQuery.parseJSON(data);
+                    if(obj.status!=2000){
+                        alert(obj.message)
+                    }else {
+                        window.location.reload();
+                    }
+                })
+            }else{
+                alert("填写必须参数！")
+            }
+        });
+
+        $(".drop_down").click(function(){
+            if(pageSum>showPage){
+                var link=showPage*showPageLength-1;
+                for(var i=1;i<=showPageLength;i++){
+                    $(".ReportDataCenter:eq("+link+")").show();
+                    link++;
+                }
+                showPage++;
+                if(showPage==pageSum){
+                    $(this).hide();
+                }
+            }
+        });
+        $(".myselfInput").click(function(){
+            $(".myselfSelect").show();
+        });
+
+        $(".roleKey").each(function(index){
+           $(this).blur(function (){
+               var value=$(this).val();
+                   $.get("/UserRoleListBlur/",{"index":index,"value":value,'doingunid':new Date().getTime()},function(data){
+                       var obj = jQuery.parseJSON(data);
+                       if(obj.status!=2000){
+                           alert(obj.message)
+                       } else {
+                           window.location.reload();
+                       }
+                   })
+           });
+
+        });
+
+        $(".pageInt").each(function(){
+            $(this).click(function(){
+                var pageInt=$(this).attr('pageInt');
+                $.get("/pageIntChangePage/",{"showId":pageInt,'className':className,'doingunid':new Date().getTime()},function(data){
+                    var obj = jQuery.parseJSON(data);
+                    if(obj.status!=2000){
+                        alert(obj.message)
+                    }
+                    window.location.reload();
+                })
+            })
+        });
+        $(".sortDiv_u,.sortDiv_d").each(function(index){
+            $(this).click(function(){
+                 var name=$(this).attr("name");
+                 var value=$(this).attr("value");
+                $.get("/UserRoleListGet/",{"doing":"sort","name":name,"value":value,'className':className,'doingunid':new Date().getTime()},function(data){
+                    var obj = jQuery.parseJSON(data);
+                    if(obj.status!=2000){
+                        alert(obj.message)
+                    }
+                    window.location.reload();
+                })
+            })
+        });
+
+    });
+
+</script>
+<{/block}>

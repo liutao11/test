@@ -1,0 +1,197 @@
+<{extends file='Admin/index.html'}>
+<{block name=bbb}>
+<script src="/views/dataTimeStyle/jquery.datetimepicker.js"></script>
+<link rel="stylesheet" href="/views/dataTimeStyle/jquery.datetimepicker.css" type="text/css" />
+<style>
+    .page_title{font-size: 14px;color: #438EB9;margin: 10px 0 0 0;height: 35px;line-height: 35px;background:#FAFAFA ;border: 1px solid #DEDEDE;border-radius: 6px;padding-left: 10px;}
+    .page_title span{font-size: 18px;color: #438EB9;padding-left: 10px;height: 40px;line-height: 40px;font-weight: bold}
+    .selectDiv{height: 50px;}
+    .selectDiv span{display: block;float: left;line-height: 50px;height: 50px;margin-left: 10px;}
+    .selectDiv select{display: block;float: left;margin-top: 10px;height: 30px;width: 150px;line-height: 30px;margin-left: 10px;}
+    .selectDiv input{display: block;float: left;height: 28px;width: 150px;margin: 10px 0 0 10px;}
+    .selectDiv_submit{float: left;height: 28px;margin-top: 10px;margin-left: 20px;background:#438EB9;color: #ffffff;line-height: 30px;text-align: center;width: 100px;font-size: 12px;cursor: pointer}
+    .payList span{color:#438EB9}
+    .ReportData{box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);border: 1px solid #DEDEDE;border-radius: 5px;padding-left: 10px;padding-right:10px; }
+    .ReportDataTitle{height: 40px;}
+    .ReportDataTitle_list{float: left;line-height: 40px;height: 40px;width: 150px;text-align: center;font-size: 14px;font-weight: 600}
+    .ReportDataCenter{background:#F5F5F5;border-bottom:1px solid #DEDEDE;height: 30px;position: relative}
+    .ReportDataCenter_list{float: left;line-height: 30px;height: 30px;width: 150px;text-align: center;font-size: 12px;}
+    .drop_down{width: 20px;height: 20px;margin-left: 10px;margin-top: 10px;background: url("/views/img/iconC.png") -310px -115px #F5F5F5;}
+    #container_cen{width: 1200px;height: 600px;}
+    .container_tt{height: 40px;line-height: 40px;font-size: 16px;background: transparent linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.1) 100%) repeat scroll 0% 0%}
+    .iconC1{width: 20px;height: 20px;background: url("/views/img/iconC.png") 0 0;float: left;margin: 12px 10px auto 10px;}
+    .button_m{border-radius: 4px;background:#438EB9;color: #ffffff;font-size: 12px;text-align: center;width: 80px;height: 24px;line-height: 24px;margin: 3px auto 0 auto;cursor: pointer}
+    .ReportDataTitle_list_show{position: absolute;width: 150px;height: 200px;background:#438EB9;left: 1050px;top: 30px;line-height: 30px;color: #ffffff;z-index: 10;display: none;box-shadow: 0 4px 5px #438EB9;border-radius: 2px}
+    .button_sm{border-radius: 4px;background:#438EB9;color: #ffffff;font-size: 12px;text-align: center;width: 80px;height: 24px;line-height: 24px;margin: 3px auto 0 auto;cursor: pointer}
+    .ReportDataTitle_list_show_s{position: absolute;width: 150px;height: 200px;background:#438EB9;left: 1050px;top: 30px;line-height: 30px;color: #ffffff;z-index: 10;display: none;box-shadow: 0 4px 5px #438EB9;border-radius: 2px}
+</style>
+<script src="/views/echarts/echarts.min.js"></script>
+<div class="page_title"><span><{$objectName}></span> 平台->运营数据->全服充值报表</div>
+<div style="padding-top: 10px;">
+    <div class="selectDiv">
+        <span>服区*</span>
+        <select class="serverIndex">
+            <option value="0" selected>全部服区</option>
+        </select>
+        <span>日期*</span>
+        <input type="text" class="startDay" value="<{$startDay}>">
+        <span>到</span>
+        <input type="text" class="endDay" value="<{$endDay}>">
+        <div class="selectDiv_submit">提交</div>
+
+
+    </div>
+
+    <div class="ReportData">
+        <table>
+        <tr class="ReportDataTitle">
+            <td class="ReportDataTitle_list">服务</td>
+            <td class="ReportDataTitle_list">充值金额</td>
+            <td class="ReportDataTitle_list">充值笔数</td>
+            <td class="ReportDataTitle_list">充值人数</td>
+            <td class="ReportDataTitle_list">新增充值人数</td>
+            <td class="ReportDataTitle_list">登入人数</td>
+            <td class="ReportDataTitle_list">ARPU</td>
+            <td class="ReportDataTitle_list">充值来源</td>
+        </tr>
+
+        <{if $data}>
+
+            <{foreach $data as $kk=>$vv}>
+            <tr class="ReportDataCenter">
+                <td class="ReportDataCenter_list"><{$vv['serverTitle']}></td>
+                <td class="ReportDataCenter_list"><{$vv['moneySum']}>元</td>
+                <td class="ReportDataCenter_list"><{$vv['TimeSum']}></td>
+                <td class="ReportDataCenter_list"><{$vv['UsersSum']}></td>
+                <td class="ReportDataCenter_list"><{if $vv['newUsersSum']}><{$vv['newUsersSum']}><{else}>0<{/if}></td>
+                <td class="ReportDataCenter_list"><{$vv['joinSum']}></td>
+                <td class="ReportDataCenter_list"><{if $vv['joinSum'] !=0}> <{ceil($vv['moneySum']/$vv['joinSum'])}> <{else}> 0 <{/if}>元</td>
+                <td class="ReportDataCenter_list"><div class="button_m">详细</div></td>
+                <td class="ReportDataTitle_list_show">
+                    <{foreach $vv['PayFromInfo'] as $fromXJ}>
+                    <div class="ReportDataTitle_list_show_list">
+                        <span><{$fromXJ['name']}>:</span>
+                        <span style="font-weight: 600"><{$fromXJ['amount']}></span>
+                        <span>元;</span>
+                    </div>
+                    <{/foreach}>
+                </td>
+            </tr>
+            <{/foreach}>
+
+        <{else}>
+        <div class="ReportDataCenter">没有数据！</div>
+        <{/if}>
+
+        <tr class="ReportDataTitle" style="position: relative">
+            <{if $data}>
+                <td class="ReportDataTitle_list">合计</td>
+                <td class="ReportDataTitle_list"><{$data_sum['amountSum']}>元</td>
+                <td class="ReportDataTitle_list"><{$data_sum['numberSum']}></td>
+                <td class="ReportDataTitle_list"><{$data_sum['userSum']}></td>
+                <td class="ReportDataTitle_list"><{$data_sum['newUsersSum']}></td>
+                <td class="ReportDataTitle_list"><{$data_sum['joinSum']}></td>
+                <td class="ReportDataTitle_list"><{$data_sum['ARPU']}>元</td>
+                <td class="ReportDataCenter_list"><div class="button_sm">详细</div></td>
+                <td class="ReportDataTitle_list_show_s">
+                    <{foreach $data_sum['PayFromInfo'] as $fromXJ}>
+                    <div class="ReportDataTitle_list_show_list">
+                        <span><{$fromXJ['name']}>:</span>
+                        <span style="font-weight: 600"><{$fromXJ['amount']}></span>
+                        <span>元;</span>
+                    </div>
+                    <{/foreach}>
+                </td>
+            <{/if}>
+        </tr>
+        </table>
+    </div>
+<!--    <div class="ReportData"  style="margin: 30px 0 0 0 ;">
+        <div class="container_tt"><div class="iconC1"></div>充值报告</div>
+        <div id="container_cen"></div>
+    </div>-->
+
+
+</div>
+<script>
+    $(function(){
+
+        $('.startDay').datetimepicker({
+            lang:"ch",           //语言选择中文
+            format:"Y-m-d",      //格式化日期
+            timepicker:false,    //关闭时间选项
+            yearStart:2000,     //设置最小年份
+            yearEnd:2050,        //设置最大年份
+            todayButton:false    //关闭选择今天按钮
+        });
+        $('.endDay').datetimepicker({
+            lang:"ch",           //语言选择中文
+            format:"Y-m-d",      //格式化日期
+            timepicker:false,    //关闭时间选项
+            yearStart:2000,     //设置最小年份
+            yearEnd:2050,        //设置最大年份
+            todayButton:false    //关闭选择今天按钮
+        });
+        $(".selectDiv_submit").click(function(){
+            var serverIndex=$(".serverIndex").val();
+            var startDay=$(".startDay").val();
+            var endDay=$(".endDay").val();
+            $(this).html('发送中...');
+            $(this).css({"background":"#616161"});
+            if(startDay && endDay){
+                $.get("/DayReportGet/",{"serverIndex":serverIndex,"startDay":startDay,"endDay":endDay,"doingUnid":new Date().getTime()},function(data){
+                    var obj = jQuery.parseJSON(data);
+                    if(obj.status!=2000){
+                        alert(obj.message)
+                    }
+                    window.location.reload();
+                })
+            }else{
+                alert("填写必须参数！")
+            }
+        });
+    });
+
+    $(".button_m").each(function(index){
+        $(this).mousemove(function(){
+            $(".ReportDataTitle_list_show").eq(index).show();
+        }).mouseout(function(){
+            $(".ReportDataTitle_list_show").eq(index).hide();
+        })
+    });
+
+    $(".button_sm").each(function(index){
+        $(this).mousemove(function(){
+            $(".ReportDataTitle_list_show_s").eq(index).show();
+        }).mouseout(function(){
+            $(".ReportDataTitle_list_show_s").eq(index).hide();
+        })
+    });
+/*    var myChart1 = echarts.init(document.getElementById('container_cen'));
+    var option1 =  {
+        title : {text: ''},
+        tooltip : {trigger: 'axis'},
+        legend: {data:['充值量总数',
+        <{foreach $data_day_server as $key=>$vv}>
+           '<{$vv['serverName']}>',
+        <{/foreach}>
+        ]},
+        toolbox: {show : false,
+            feature : {mark : {show: false}, dataView : {show: false, readOnly:false}, magicType : {show: false, type: ['line', 'bar']}, restore : {show: false}, saveAsImage : {show: false}}
+        },
+        calculable : true,
+        xAxis : [
+            {type : 'category', boundaryGap : false, splitLine: {show: false}, data :<{$data_day_key}>}
+        ],
+        yAxis : [{splitLine: {show: false}, type : 'value'}],
+        series : [
+            {name:'充值量总数',type:'line',smooth:true,itemStyle: {normal: {areaStyle: {type: 'default'}}},data:<{$data_day_values}> },
+            <{foreach $data_day_server as $key=>$vv}>
+                {name:'<{$vv['serverName']}>',type:'line',smooth:true,itemStyle: {normal: {areaStyle: {type: 'default'}}},data:<{json_encode(array_values($vv['data']))}> },
+            <{/foreach}>
+        ]
+    };
+    myChart1.setOption(option1);*/
+
+</script>
+<{/block}>

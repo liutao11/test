@@ -1,0 +1,215 @@
+<{extends file='Admin/index.html'}>
+<{block name=bbb}>
+<script src="/views/dataTimeStyle/jquery.datetimepicker.js"></script>
+<link rel="stylesheet" href="/views/dataTimeStyle/jquery.datetimepicker.css" type="text/css" />
+<style>
+    .page_title{font-size: 14px;color: #438EB9;margin: 10px 0 0 0;height: 35px;line-height: 35px;background:#FAFAFA ;border: 1px solid #DEDEDE;border-radius: 6px;padding-left: 10px;}
+    .page_title span{font-size: 18px;color: #438EB9;padding-left: 10px;height: 40px;line-height: 40px;font-weight: bold}
+    .selectDiv{height: 50px;}
+    .selectDiv span{display: block;float: left;line-height: 50px;height: 50px;margin-left: 10px;}
+    .selectDiv select{display: block;float: left;margin-top: 10px;height: 30px;width: 150px;line-height: 30px;margin-left: 10px;}
+    .selectDiv input{display: block;float: left;height: 28px;width: 150px;margin: 10px 0 0 10px;}
+    .selectDiv_submit{float: left;height: 28px;margin-top: 10px;margin-left: 20px;background:#438EB9;color: #ffffff;line-height: 30px;text-align: center;width: 100px;font-size: 12px;cursor: pointer}
+    .ReportData{box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);border: 1px solid #DEDEDE;border-radius: 5px;padding-left: 10px;padding-right:10px; }
+    .ReportDataTitle{height: 40px;}
+    .ReportDataTitle_list{float: left;line-height: 40px;height: 40px;width: 120px;text-align: center;font-size: 14px;font-weight: 600}
+    .ReportDataCenter{background:#F5F5F5;border-bottom:1px solid #DEDEDE;height: 30px;position: relative}
+    .ReportDataCenter_list{float: left;line-height: 30px;height: 30px;width: 120px;text-align: center;font-size: 12px;}
+    .selectDataShow{height: 30px;width: 160px;float: left;margin: 8px 0 0 35px;}
+    .selectDataShow_div{float: left;width: 80px;height: 30px;text-align: center;line-height: 30px;background:#F8F8F8;cursor:pointer;box-shadow: inset 0 2px 4px rgba(0,0,0,.15), 0 1px 2px rgba(0,0,0,.05);}
+    input,select{border: 1px solid #DEDEDE; }
+    .button_m{border-radius: 4px;background:#438EB9;color: #ffffff;font-size: 12px;text-align: center;width: 80px;height: 24px;line-height: 24px;margin: 3px auto 0 auto;cursor: pointer}
+    .ReportDataTitle_list_show{position: absolute;width: 150px;height: 200px;background:#438EB9;left: 1050px;top: 30px;line-height: 30px;color: #ffffff;z-index: 10;display: none;box-shadow: 0 4px 5px #438EB9;border-radius: 2px}
+    .ReportDataTitle_list_show_list{line-height: 22px;height: 22px;margin-left: 10px;}
+    .ReportDataTitle_list_show_list span{color: #ffffff}
+    .button_sm{border-radius: 4px;background:#438EB9;color: #ffffff;font-size: 12px;text-align: center;width: 80px;height: 24px;line-height: 24px;margin: 3px auto 0 auto;cursor: pointer}
+    .ReportDataTitle_list_show_s{position: absolute;width: 150px;height: 200px;background:#438EB9;left: 1050px;top: 30px;line-height: 30px;color: #ffffff;z-index: 10;display: none;box-shadow: 0 4px 5px #438EB9;border-radius: 2px}
+</style>
+
+<script src="/views/echarts/echarts.min.js"></script>
+<div class="page_title"><span><{$objectName}></span> 平台->运营数据->充值分日报表</div>
+<div style="padding-top: 10px;">
+    <div class="selectDiv">
+        <span>服区*</span>
+        <select class="serverIndex">
+            <option value="0" <{if $serverIndex==0}>selected<{/if}>>选择服区</option>
+            <{foreach $serverS as $vv}>
+            <option value="<{$vv['id']}>" <{if $serverIndex==$vv['id']}>selected<{/if}>><{$vv['ServerTitle']}></option>
+            <{/foreach}>
+        </select>
+        <span>日期*</span>
+        <input type="text" class="startDay" value="<{$StartDay}>">
+        <span>到</span>
+        <input type="text" class="endDay" value="<{$EndDay}>">
+        <div class="selectDiv_submit">提交</div>
+
+        <div class="selectDataShow">
+            <div class="selectDataShow_div" style="border-radius: 5px 0 0 5px; background: #E6E6E6">表格</div>
+            <div class="selectDataShow_div" style="border-radius:0 5px 5px 0;">图形</div>
+        </div>
+    </div>
+
+    <div class="ReportData">
+        <table class="ReportData_list">
+            <tr class="ReportDataTitle">
+                <td class="ReportDataTitle_list">服务</td>
+                <td class="ReportDataTitle_list">日期</td>
+                <td class="ReportDataTitle_list">充值金额</td>
+                <td class="ReportDataTitle_list">充值笔数</td>
+                <td class="ReportDataTitle_list">充值人数</td>
+                <td class="ReportDataTitle_list">新增充值人数</td>
+                <td class="ReportDataTitle_list">渠道新充值人</td>
+                <td class="ReportDataTitle_list">登入玩家</td>
+                <td class="ReportDataTitle_list">ARPU</td>
+                <td class="ReportDataTitle_list">ARPPU</td>
+                <td class="ReportDataTitle_list">付费率</td>
+                <td class="ReportDataTitle_list">来源渠道分布</td>
+            </tr>
+            <{if $data}>
+                <{foreach $data as $kk=>$vv}>
+                    <tr class="ReportDataCenter">
+                        <td class="ReportDataCenter_list"><{$serverUnid}></td>
+                        <td class="ReportDataCenter_list" ><{$vv['day']}></td>
+                        <td class="ReportDataCenter_list"><{$vv['payNumberSum']/$ExchangeRate}>元<{if $vv['type']==1}><span style="color: red">+<{$vv['lv']}>%</span><{elseif $vv['type']==2}><span style="color: green">-<{$vv['lv']}>%</span><{else}><{/if}></td>
+                        <td class="ReportDataCenter_list"><{$vv['payTimeSum']}></td>
+                        <td class="ReportDataCenter_list"><{$vv['payUserSum']}></td>
+                        <td class="ReportDataCenter_list"><{$vv['NewPayUserSum']}></td>
+                        <td class="ReportDataCenter_list"><{$vv['objectNewPayUserSum']}></td>
+                        <td class="ReportDataCenter_list"><{$vv['PlayerSum']}></td>
+                        <td class="ReportDataCenter_list"><{$vv['ARPU']}>元</td>
+                        <td class="ReportDataCenter_list"><{$vv['ARPPU']}>元</td>
+                        <td class="ReportDataCenter_list"><{$vv['PayLv']}>%</td>
+                        <td class="ReportDataCenter_list"><div class="button_m">详细</div></td>
+                        <td class="ReportDataTitle_list_show">
+                            <{foreach $vv['fromIdm'] as $fromXJ}>
+                               <div class="ReportDataTitle_list_show_list">
+                                   <span><{$fromXJ['name']}>:</span>
+                                   <span style="font-weight: 600"><{$fromXJ['amount']}></span>
+                                   <span>元;</span>
+                               </div>
+                            <{/foreach}>
+                        </td>
+                    </tr>
+                <{/foreach}>
+            <{else}>
+            <tr class="ReportDataCenter"><td>没有数据！</td></tr>
+            <{/if}>
+            <tr class="ReportDataTitle" style="position: relative">
+                <{if $data}>
+                    <td class="ReportDataTitle_list">合计</td>
+                    <td class="ReportDataTitle_list"></td>
+                    <td class="ReportDataTitle_list"><{$data_sum['amountSum']}>元</td>
+                    <td class="ReportDataTitle_list"><{$data_sum['payNumberSum']}></td>
+                    <td class="ReportDataTitle_list"><{$data_sum['payUserSumSum']}></td>
+                    <td class="ReportDataTitle_list"><{$data_sum['NewPayUserSumSum']}></td>
+                    <td class="ReportDataTitle_list"><{$data_sum['objectNewPayUserSum']}></td>
+                    <td class="ReportDataTitle_list"><{$data_sum['PlayerSumSum']}></td>
+                    <td class="ReportDataTitle_list"><{$data_sum['ARPUSUM']}>元</td>
+                    <td class="ReportDataTitle_list"><{$data_sum['ARPPUSUM']}>元</td>
+                    <td class="ReportDataTitle_list"><{$data_sum['PaylvSUM']}></td>
+                    <td class="ReportDataCenter_list"><div class="button_sm">详细</div></td>
+                    <td class="ReportDataTitle_list_show_s">
+                        <{foreach $data_sum['fromInfoSum'] as $fromXJ}>
+                        <div class="ReportDataTitle_list_show_list">
+                            <span><{$fromXJ['name']}>:</span>
+                            <span style="font-weight: 600"><{$fromXJ['amount']}></span>
+                            <span>元;</span>
+                        </div>
+                        <{/foreach}>
+                    </td>
+                <{/if}>
+            </tr>
+        </table>
+        <div class="ReportData_list">
+            <div id="container_cen" style="height: 300px;">
+
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function(){
+        $(".button_m").each(function(index){
+            $(this).mousemove(function(){
+                $(".ReportDataTitle_list_show").eq(index).show();
+            }).mouseout(function(){
+                $(".ReportDataTitle_list_show").eq(index).hide();
+            })
+        });
+        $(".button_sm").each(function(index){
+            $(this).mousemove(function(){
+                $(".ReportDataTitle_list_show_s").eq(index).show();
+            }).mouseout(function(){
+                $(".ReportDataTitle_list_show_s").eq(index).hide();
+            })
+        });
+        $('.startDay').datetimepicker({
+            lang:"ch",           //语言选择中文
+            format:"Y-m-d",      //格式化日期
+            timepicker:false,    //关闭时间选项
+            yearStart:2000,     //设置最小年份
+            yearEnd:2050,        //设置最大年份
+            todayButton:false    //关闭选择今天按钮
+        });
+        $('.endDay').datetimepicker({
+            lang:"ch",           //语言选择中文
+            format:"Y-m-d",      //格式化日期
+            timepicker:false,    //关闭时间选项
+            yearStart:2000,     //设置最小年份
+            yearEnd:2050,        //设置最大年份
+            todayButton:false    //关闭选择今天按钮
+        });
+        $(".selectDiv_submit").click(function(){
+            var serverIndex=$(".serverIndex").val();
+            var startDay=$(".startDay").val();
+            var endDay=$(".endDay").val();
+
+            if(startDay && endDay){
+                $(this).html('发送中...');
+                $(this).css({"background":"#616161"});
+                $.get("/DayReportGet/",{"serverIndex":serverIndex,"startDay":startDay,"endDay":endDay,"class":"PayDayReport","doingUnid":new Date().getTime()},function(data){
+                    var obj = jQuery.parseJSON(data);
+                    if(obj.status!=2000){
+                        alert(obj.message)
+                    }
+                    window.location.reload();
+                })
+            }else{
+                alert("填写必须参数！")
+            }
+
+        });
+        $(".selectDataShow_div").each(function(index){
+            $(this).click(function(){
+                $(".selectDataShow_div").css({"background": "#F8F8F8"});
+                $(this).css({"background": "#E6E6E6"});
+                $(".ReportData_list").hide();
+                $(".ReportData_list:eq("+index+")").show();
+            })
+        })
+    });
+
+</script>
+
+
+<script>
+   var myChart = echarts.init(document.getElementById('container_cen'));
+    var option = {
+        title : {text: '', subtext: ''},
+        tooltip : {trigger: 'axis'},
+        legend: {data:['充值金额','充值人数']},
+        calculable : true,
+        xAxis : {type : 'category',data : <{$data_payDay}>},
+        yAxis : [{type : 'value'}],
+        series : [
+            {name:'充值金额', type:'bar', data:<{$data_payNumberSum}>},
+            {name:'充值人数', type:'line', symbol: 'none',data:<{$data_payUserSum}>}
+        ]
+    };
+    myChart.setOption(option);
+    $(function(){
+        $(".ReportData_list:gt(0)").hide();
+    })
+</script>
+
+<{/block}>

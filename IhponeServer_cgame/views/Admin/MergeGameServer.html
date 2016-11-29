@@ -1,0 +1,167 @@
+<{extends file='Admin/index.html'}>
+<{block name=bbb}>
+<style>
+    .page_title{font-size: 14px;color: #438EB9;margin: 10px 0 0 0;height: 35px;line-height: 35px;background:#FAFAFA ;border: 1px solid #DEDEDE;border-radius: 6px;padding-left: 10px;}
+    .page_title span{font-size: 18px;color: #438EB9;padding-left: 10px;height: 40px;line-height: 40px;font-weight: bold}
+    .ReportData{box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);border: 1px solid #DEDEDE;border-radius: 5px;}
+    .showList{clear: both;height: 32px;margin-top: 10px;}
+    .showList_name{float: left;height: 30px;line-height: 30px;font-size: 12px;;text-align: right;width: 150px;}
+    .showList select{display: block;float: left;height: 30px;line-height: 30px;font-size: 12px;width: 150px;}
+    .showList span{display: block;float: left;height: 30px;line-height: 30px;font-size: 12px;width: 150px;}
+    .showList input{height: 30px;line-height: 30px;display: block;float: left;width: 300px;border: 1px solid #cccccc;font-size: 14px;}
+    .showList textarea{line-height: 30px;height: 60px;display: block;float: left;width: 600px;}
+    .showList_submit{width: 120px;height: 25px;line-height: 25px;font-size: 14px;text-align: center;border: 1px solid  #cccccc;cursor: pointer}
+    .container_tt{height: 40px;line-height: 40px;font-size: 16px;background: transparent linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.1) 100%) repeat scroll 0% 0%}
+    .iconC1{width: 20px;height: 20px;background: url("/views/img/iconC.png") 0 0;float: left;margin: 12px 10px auto 10px;}
+    .serverShow{height: 30px;line-height: 30px;border: 1px solid #CCCCCC;width: 150px;float: left}
+    .serverShowList{position: absolute;z-index: 3;box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);border: 1px solid #DEDEDE;left: 150px;top: 30px;height: 90px;overflow-y: scroll;width: 150px;background: #ffffff}
+    .serverSelectDiv{height: 26px;width: 100px;background: #FAFAFA;float: left;margin-right: 10px;line-height: 26px;}
+    .serverList{float: left}
+    .serverShowS{height: 30px;line-height: 30px;border: 1px solid #CCCCCC;width: 150px;float: left}
+    .serverShowListS{position: absolute;z-index: 3;box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);border: 1px solid #DEDEDE;left: 150px;top: 30px;height: 90px;overflow-y: scroll;width: 150px;background: #ffffff}
+    .objectShow{height: 30px;line-height: 30px;border: 1px solid #CCCCCC;width: 150px;float: left}
+    .objectShowList{position: absolute;z-index: 3;box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);border: 1px solid #DEDEDE;left: 150px;top: 30px;height: 90px;overflow-y: scroll;width: 150px;background: #ffffff}
+    .objectShowListDiv{height: 26px;line-height: 26px;font-size: 12px;padding-left: 10px;}
+    .serverListDiv{height: 26px;line-height: 26px;font-size: 12px;padding-left: 10px;}
+</style>
+<div class="page_title"><span><{$objectName}></span> 平台->运营数据->合并服务区</div>
+<div style="padding-left: 10px;padding-top: 10px;">
+    <div class="ReportData">
+        <div class="container_tt"><div class="iconC1"></div>合并区服</div>
+        <div class="showList" style="position: relative">
+            <div class="showList_name">平台*：</div>
+            <div class="objectShow">--选择平台--</div>
+            <div class="objectShowList" style="display: none">
+                <{foreach $objectS as $kk=>$vv}>
+                <div value="<{$vv['id']}>"  class="objectShowListDiv" serverUnid="<{$vv['title']}>"><{$vv['title']}></div>
+                <{/foreach}>
+            </div>
+        </div>
+
+
+        <div class="showList" style="position: relative">
+            <div class="showList_name">需要合并区服*：</div>
+            <div class="serverShow">--选择服务区--</div>
+            <div class="serverShowList" style="display: none"></div>
+        </div>
+        <div class="showList">
+            <div class="showList_name"></div>
+            <div class="serverList"></div>
+        </div>
+        <div class="showList" style="position: relative">
+            <div class="showList_name">主区*：</div>
+            <div class="serverShowS">--选择服务区--</div>
+            <div class="serverShowListS" style="display: none"></div>
+        </div>
+
+        <div class="showList" style="height: 64px;">
+            <div class="showList_submit" style="margin: 0 auto">提交</div>
+        </div>
+    </div>
+</div>
+</div>
+<script>
+    AddServer=[];         //增加服务器
+    AddSum=0;
+    DeleteServer=[];      //删除的服区
+    masterIndex=0;        //主服务器索引
+    $(function(){
+        $(".objectShow").click(function(){
+            $(".objectShowList").show();
+            AddServer=[];
+            AddSum=0;
+            DeleteServer=[];
+            masterIndex=0;
+            $(".serverList").html('');
+            $(".serverShowList").hide();
+            $(".serverShowListS").hide();
+        });
+
+        $(".objectShowListDiv").each(function(number){
+            $(this).click(function (){
+                var values=$(this).attr("value");
+                var serverUnid=$(this).attr("serverUnid");
+                $(".objectShow").html(serverUnid);
+
+                if(values) {
+                    $.get("/ChangeObjectGet/",{"values":values,"doingUnid":new Date().getTime()},function(data){
+                        var obj = jQuery.parseJSON(data);
+                        if(obj.state==2000){
+                            var string='';
+                            var stringS='';
+                            for(var key in obj.data){
+                                string+="<div class='serverListDiv' onclick='serverIndex("+obj.data[key].id+",\""+obj.data[key].GameServerUnid+"\")'>"+obj.data[key].GameServerUnid+"</div>";
+                                stringS+="<div class='serverListDiv' onclick='serverIndexS("+obj.data[key].id+",\""+obj.data[key].GameServerUnid+"\")'>"+obj.data[key].GameServerUnid+"</div>"
+                            }
+                            $(".serverShowList").html(string);
+                            $(".serverShowListS").html(stringS);
+                        }
+                    });
+                }
+                $(".objectShowList").hide();
+            });
+            $(this).mousemove(function(){
+                $(".objectShowListDiv").css({"background":"#ffffff"});
+                $(this).css({"background":"#FAFAFA"});
+            })
+
+        });
+
+        $(".showList_submit").click(function(){
+
+            if(AddServer.length!=0 && masterIndex){
+                var AddServerJson='';
+                for(var cc in AddServer){
+                   AddServerJson+=AddServer[cc]+',';
+                }
+                var DeleteServerJson='';
+                if(DeleteServer.length!=0) {
+                    for (var cc in DeleteServer) {
+                        DeleteServerJson+=DeleteServer[cc]+','
+                    }
+                }else{
+                    DeleteServerJson=0;
+                }
+                $(this).html('发送中...');
+                $(this).css({"background":"#616161"});
+                $.get("/MergeGameServerGet/",{"AddServerJson":AddServerJson,"DeleteServerJson":DeleteServerJson,"masterIndex":masterIndex,"doingUnid":new Date().getTime()},function(data){
+                    var obj = jQuery.parseJSON(data);
+                    if(obj.status!=2000){
+                        alert(obj.message);
+                    }else{
+                        alert(obj.message);
+                        window.location.reload();
+                    }
+
+                })
+            }
+        });
+        $(".serverShow").click(function(){
+            $(".serverShowList").show();
+        });
+
+        $(".serverShowS").click(function(){
+            $(".serverShowListS").show();
+        });
+    });
+
+    function serverIndex(index,serverUnid){
+        $(".serverShowList").hide();
+        $(".serverList").append("<div class='serverSelectDiv' onclick='deleteSelect("+index+","+AddSum+")'>"+serverUnid+"</div>");
+        AddServer.push(index);
+        AddSum++;
+    }
+
+    function deleteSelect(index,AddSum){
+        DeleteServer.push(index);
+        $(".serverSelectDiv:eq("+AddSum+")").hide();
+    }
+    function serverIndexS(index,serverUnid){
+        $(".serverShowListS").hide();
+        $(".serverShowS").html(serverUnid);
+
+        masterIndex=index;
+    }
+
+</script>
+<{/block}>

@@ -1,0 +1,92 @@
+<{extends file='Admin/index.html'}>
+<{block name=bbb}>
+<style>
+    .page_title{font-size: 14px;color: #438EB9;margin: 10px 0 0 0;height: 35px;line-height: 35px;background:#FAFAFA ;border: 1px solid #DEDEDE;border-radius: 6px;padding-left: 10px;}
+    .page_title span{font-size: 18px;color: #438EB9;padding-left: 10px;height: 40px;line-height: 40px;font-weight: bold}
+    .ReportData{box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);border: 1px solid #DEDEDE;border-radius: 5px;}
+    .showList{clear: both;height: 32px;margin-top: 10px;}
+    .showList_name{float: left;height: 30px;line-height: 30px;font-size: 12px;;text-align: right;width: 150px;}
+    .showList select{display: block;float: left;height: 30px;line-height: 30px;font-size: 12px;width: 150px;}
+    .showList span{display: block;float: left;height: 30px;line-height: 30px;font-size: 12px;width: 150px;}
+    .showList input{height: 30px;line-height: 30px;display: block;float: left;width: 300px;border: 1px solid #cccccc;font-size: 14px;}
+    .showList textarea{line-height: 30px;height: 60px;display: block;float: left;width: 600px;}
+    .showList_submit{width: 120px;height: 25px;line-height: 25px;font-size: 14px;text-align: center;border: 1px solid  #cccccc;cursor: pointer}
+    .container_tt{height: 40px;line-height: 40px;font-size: 16px;background: transparent linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.1) 100%) repeat scroll 0% 0%}
+    .iconC1{width: 20px;height: 20px;background: url("/views/img/iconC.png") 0 0;float: left;margin: 12px 10px auto 10px;}
+</style>
+<div class="page_title"><span><{$objectName}></span> 平台->运营数据->元宝申请</div>
+<div style="padding-top: 10px;">
+    <div class="ReportData">
+        <div class="container_tt"><div class="iconC1"></div>元宝申请</div>
+        <div class="showList">
+            <div class="showList_name">服区*：</div>
+            <select class="serverIndex">
+                <option value="0">--选择服区--</option>
+                <{foreach $serverS as $vv}>
+                <option value="<{$vv['id']}>" <{if $serverIndex==$vv['id']}>selected<{/if}>><{$vv['ServerTitle']}></option>
+                <{/foreach}>
+            </select>
+        </div>
+        <div class="showList">
+            <div class="showList_name">角色*：</div>
+            <input type="text" class="roleS" style="width: 700px;">
+        </div>
+        <div class="showList">
+            <div class="showList_name"></div>
+            <div>以半角 , 分隔多个角色名。</div>
+        </div>
+        <div class="showList">
+            <div class="showList_name">备注*：</div>
+            <input type="text" class="message" style="width: 700px;">
+        </div>
+        <div class="showList">
+            <div class="showList_name">元宝数量*：</div>
+            <input type="text" class="number">
+        </div>
+        <div class="showList">
+            <div class="showList_name">元宝类型*：</div>
+            <input type="radio" name="isBind" style="width: 50px;" value="1">
+            <span>绑定</span>
+            <input type="radio" name="isBind" style="width: 50px;" value="2">
+            <span>非绑定</span>
+        </div>
+        <div class="showList">
+            <div class="showList_name">是否充值奖励*：</div>
+            <input type="radio" name="isReward" style="width: 50px;" value="1">
+            <span>是</span>
+            <input type="radio" name="isReward" style="width: 50px;" value="2">
+            <span>否</span>
+        </div>
+        <div class="showList" style="height: 64px;">
+            <div class="showList_submit" style="margin: 0 auto">提交</div>
+        </div>
+    </div>
+</div>
+</div>
+<script>
+    $(function(){
+        $(".showList_submit").click(function(){
+            var serverIndex=$(".serverIndex").val();
+            var roleS=$(".roleS").val();
+            var message=$(".message").val();
+            var number=$(".number").val();
+            var isBind=$("input[name='isBind']:checked").val();
+            var isReward=$("input[name='isReward']:checked").val();
+            $(this).html('发送中...');
+            $(this).css({"background":"#616161"});
+            if(serverIndex && roleS && message && number && isBind && isReward){
+                $.get("/AcerApplyGet/",{"serverIndex":serverIndex,"roleS":roleS,"message":message,"number":number,"isBind":isBind,"isReward":isReward,"doingUnid":new Date().getTime()},function(data){
+                    var obj = jQuery.parseJSON(data);
+                    if(obj.status!=2000){
+                        alert(obj.message);
+                    }else{
+                        alert(obj.message);
+                        window.location.reload();
+                    }
+
+                })
+            }
+        })
+    });
+</script>
+<{/block}>

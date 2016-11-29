@@ -1,0 +1,116 @@
+<{extends file='Admin/index.html'}>
+<{block name=bbb}>
+<script src="/views/dataTimeStyle/jquery.datetimepicker.js"></script>
+<link rel="stylesheet" href="/views/dataTimeStyle/jquery.datetimepicker.css" type="text/css" />
+<style>
+    .page_title{font-size: 14px;color: #438EB9;margin: 10px 0 0 0;height: 35px;line-height: 35px;background:#FAFAFA ;border: 1px solid #DEDEDE;border-radius: 6px;padding-left: 10px;}
+    .page_title span{font-size: 18px;color: #438EB9;padding-left: 10px;height: 40px;line-height: 40px;font-weight: bold}
+    .ReportData{box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);border: 1px solid #DEDEDE;border-radius: 5px;}
+    .showList{clear: both;height: 32px;margin-top: 10px;}
+    .showList_name{float: left;height: 30px;line-height: 30px;font-size: 12px;;text-align: right;width: 150px;}
+    .showList select{display: block;float: left;height: 30px;line-height: 30px;font-size: 12px;width: 150px;border: solid 1px #cccccc}
+    .showList span{display: block;float: left;height: 30px;line-height: 30px;font-size: 12px;width: 150px;}
+    .showList input{height: 30px;line-height: 30px;display: block;float: left;width: 300px;border: 1px solid #cccccc;font-size: 14px;padding-left: 5px}
+    .showList textarea{line-height: 30px;height: 60px;display: block;float: left;width: 600px;}
+    .selectDiv_submit{height: 28px;margin-top: 10px;margin-left: 20px;background:#438EB9;color: #ffffff;line-height: 30px;text-align: center;width: 100px;font-size: 12px;cursor: pointer}
+    .container_tt{height: 40px;line-height: 40px;font-size: 16px;background: transparent linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.1) 100%) repeat scroll 0% 0%}
+    .iconC1{width: 20px;height: 20px;background: url("/views/img/iconC.png") 0 0;float: left;margin: 12px 10px auto 10px;}
+    .ReportDataTitle_list{float: left;line-height: 40px;height: 40px;width: 150px;text-align: center;font-size: 14px;font-weight: 600}
+
+    .ReportDataCenter{background:#F5F5F5;border-bottom:1px solid #DEDEDE;height: 30px;}
+    .ReportDataCenter_list{float: left;line-height: 30px;height: 30px;width: 150px;text-align: center;font-size: 12px;}
+
+</style>
+<div class="page_title"><span><{$objectName}></span> 平台->客服->充值订单查询</div>
+<div style="padding-top: 10px;">
+    <div class="ReportData">
+        <div class="container_tt"><div class="iconC1"></div>充值订单查询</div>
+        <div class="showList">
+            <div class="showList_name">服区*：</div>
+            <select class="serverIndex">
+                <option value="0">--选择服区--</option>
+                <{foreach $serverS as $vv}>
+                <option value="<{$vv['id']}>"><{$vv['ServerTitle']}></option>
+                <{/foreach}>
+            </select>
+        </div>
+        <div class="showList">
+            <div class="showList_name">角色或账号*：</div>
+            <input type="text" class="roleS" style="width: 200px;">
+        </div>
+        <div class="showList">
+            <div class="showList_name">类型*：</div>
+            <select class="keyStyle">
+                <option value="0">--选择类型--</option>
+                <option value="1" selected>角色</option>
+                <option value="2">账号</option>
+            </select>
+        </div>
+        <div class="showList" style="height: 64px;">
+            <div class="selectDiv_submit" style="margin: 0 auto">提交</div>
+        </div>
+    </div>
+    <div class="ReportData" style="margin-top: 10px;">
+        <div class="container_tt"><div class="iconC1"></div>查询结果</div>
+
+        <table>
+            <tr class="ReportDataTitle" style="height: 40px;">
+                <td class="ReportDataTitle_list">账号</td>
+                <td class="ReportDataTitle_list">支付编号</td>
+                <td class="ReportDataTitle_list">金额(元)</td>
+                <td class="ReportDataTitle_list" style="width: 180px;">支付时间</td>
+                <td class="ReportDataTitle_list" style="width: 180px;">提取时间</td>
+                <td class="ReportDataTitle_list">角色名</td>
+
+            </tr>
+        </table>
+        <div class="selectList">
+
+        </div>
+        <div class="ReportDataTitle" style="height: 40px;"></div>
+    </div>
+</div>
+</div>
+<script>
+    ExchangeRate=<{$ExchangeRate}>;
+    $(function(){
+        $(".selectDiv_submit").click(function(){
+            var serverIndex=$(".serverIndex").val();
+            var roleS=$(".roleS").val();
+            var keyStyle=$(".keyStyle").val();
+            if(serverIndex && roleS && keyStyle){
+                $(this).html('发送中...');
+                $(this).css({"background":"#616161"});
+                $.get("/SUerPaySelectGet/",{"serverIndex":serverIndex,"roleS":roleS,"keyStyle":keyStyle,"doingUnid":new Date().getTime()},function(data){
+                    var obj = jQuery.parseJSON(data);
+                    if(obj.status!=2000){
+                        alert(obj.message);
+                    }else{
+                        if(obj.data){
+                            var htmlString='<table>';
+                            $.each(obj.data,function(id){
+                                htmlString+='<tr class="ReportDataCenter">'+'<td class="ReportDataCenter_list">'+obj.data[id].UserID+'</td>'+'<td class="ReportDataCenter_list">'+obj.data[id].sPayId+'</td>'+'<td class="ReportDataCenter_list">'+(obj.data[id].nNumber)/ExchangeRate+'</td><td class="ReportDataCenter_list" style="width: 180px;">'+obj.data[id].createTimes+'</td><td class="ReportDataCenter_list" style="width: 180px;">'+obj.data[id].drawouttime+'</td><td class="ReportDataCenter_list">'+obj.data[id].sChrName+'</td></tr>';
+                            });
+                            htmlString+="</table>";
+                            $(".selectList").html(htmlString);
+                        }else{
+                            $(".selectList").html('没有数据！');
+                        }
+                        $(".selectDiv_submit").html('提交').css({"background":"#438EB9"});
+                    }
+                })
+            }else{
+                alert('参数不完整!')
+            }
+        });
+        $('.time').datetimepicker({
+            lang:"ch",           //语言选择中文
+            format:"Y-m-d H:i:s",      //格式化日期
+            timepicker:true,    //关闭时间选项
+            yearStart:2000,     //设置最小年份
+            yearEnd:2050,        //设置最大年份
+            todayButton:false    //关闭选择今天按钮
+        });
+    });
+</script>
+<{/block}>

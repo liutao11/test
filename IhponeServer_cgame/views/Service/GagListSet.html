@@ -1,0 +1,145 @@
+<{extends file='Admin/index.html'}>
+<{block name=bbb}>
+<style>
+    .page_title{font-size: 14px;padding-left: 10px;border-bottom: 2px solid #438EB9;height: 40px;line-height: 40px;}
+    .page_title span{font-size: 18px;color: #438EB9;padding-left: 10px;height: 40px;line-height: 40px;font-weight: bold}
+    .ReportData{box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);border: 1px solid #DEDEDE;border-radius: 5px;}
+    .showList{clear: both;height: 32px;margin-top: 10px;}
+    .showList_name{float: left;height: 30px;line-height: 30px;font-size: 12px;;text-align: right;width: 150px;}
+    .showList select{display: block;float: left;height: 30px;line-height: 30px;font-size: 12px;width: 150px;}
+    .showList span{display: block;float: left;height: 30px;line-height: 30px;font-size: 12px;width: 150px;}
+    .showList input{height: 30px;line-height: 30px;display: block;float: left;width: 300px;border: 1px solid #cccccc;font-size: 14px;}
+    .showList textarea{line-height: 30px;height: 60px;display: block;float: left;width: 600px;}
+    .showList_submit{width: 120px;height: 25px;line-height: 25px;font-size: 14px;text-align: center;border: 1px solid  #cccccc}
+    .container_tt{height: 40px;line-height: 40px;font-size: 16px;background: transparent linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.1) 100%) repeat scroll 0% 0%}
+    .iconC1{width: 20px;height: 20px;background: url("/views/img/iconC.png") 0 0;float: left;margin: 12px 10px auto 10px;}
+
+    .selectDiv{height: 50px;}
+    .selectDiv span{display: block;float: left;line-height: 50px;height: 50px;margin-left: 10px;}
+    .selectDiv select{display: block;float: left;margin-top: 10px;height: 30px;width: 150px;line-height: 30px;margin-left: 10px;}
+    .selectDiv input{display: block;float: left;height: 28px;width: 150px;margin: 10px 0 0 10px;}
+    .selectDiv_submit{float: left;height: 28px;margin-top: 10px;margin-left: 20px;background:#438EB9;color: #ffffff;line-height: 30px;text-align: center;width: 100px;font-size: 12px;cursor: pointer}
+    .ReportDataTitle{height: 40px;}
+    .ReportDataTitle_list{float: left;line-height: 40px;height: 40px;width: 150px;text-align: center;font-size: 14px;font-weight: 600}
+    .ReportDataCenter{background:#F5F5F5;border-bottom:1px solid #DEDEDE;height: 30px;}
+    .ReportDataCenter_list{float: left;line-height: 30px;height: 30px;width: 150px;text-align: center;font-size: 12px;overflow: hidden}
+    .roleKey{width: 90%;border: 1px solid #DEDEDE;height: 30px;line-height: 30px;border-radius:4px;margin: 0 auto}
+    .release{font-size: 12px;color: #438EB9}
+</style>
+<div class="page_title"><span><{$objectName}></span> 平台->运营数据->禁言记录</div>
+<div style="padding-left: 10px;padding-top: 10px;">
+    <div class="selectDiv">
+        <span>服区*</span>
+        <select class="serverIndex">
+            <option value="0" <{if $serverIndex==0}>selected<{/if}>>全部服区</option>
+            <{foreach $serverS as $vv}>
+            <option value="<{$vv['id']}>" <{if $serverIndex==$vv['id']}>selected<{/if}>><{$vv['GameServerUnid']}></option>
+            <{/foreach}>
+        </select>
+        <div class="selectDiv_submit">提交</div>
+    </div>
+    <div class="ReportData">
+        <div class="container_tt"><div class="iconC1"></div>禁言记录</div>
+        <div class="ReportDataTitle">
+            <div class="ReportDataTitle_list">服务</div>
+            <div class="ReportDataTitle_list">角色名</div>
+            <div class="ReportDataTitle_list">操作时间</div>
+            <div class="ReportDataTitle_list">备注</div>
+            <div class="ReportDataTitle_list">处理人</div>
+            <div class="ReportDataTitle_list">禁言时间</div>
+            <div class="ReportDataTitle_list"></div>
+        </div>
+        <div class="ReportDataTitle">
+            <div class="ReportDataTitle_list"></div>
+            <div class="ReportDataTitle_list"><input type="text" class="roleKey" value="<{if $index==1}><{$value}><{else}><{/if}>"></div>
+            <div class="ReportDataTitle_list"></div>
+            <div class="ReportDataTitle_list"><input type="text" class="roleKey" value="<{if $index==2}><{$value}><{else}><{/if}>"></div>
+            <div class="ReportDataTitle_list"><input type="text" class="roleKey" value="<{if $index==3}><{$value}><{else}><{/if}>"></div>
+        </div>
+    <{if $data}>
+        <{foreach $data as $kk=>$vv}>
+        <div class="ReportDataCenter" <{if $kk > ($pagelength-1)}> style="display: none"<{/if}>>
+            <div class="ReportDataCenter_list"><{$vv['serverUnid']}></div>
+            <div class="ReportDataCenter_list"><{$vv['roleS']}></div>
+            <div class="ReportDataCenter_list"><{date("Y-m-d H:i:s",$vv['CTime'])}></div>
+            <div class="ReportDataCenter_list"><{$vv['message']}></div>
+            <div class="ReportDataCenter_list"><{$vv['userName']}></div>
+            <div class="ReportDataCenter_list"><{$vv['time']}></div>
+            <div class="ReportDataCenter_list"><{if $vv['GagState']==1}><div thisId="<{$vv['id']}>" thisRoleS="<{$vv['roleS']}>" class="release">解除</div><{/if}></div>
+        </div>
+        <{/foreach}>
+    <{else}>
+        <div class="ReportDataCenter">没有数据！</div>
+    <{/if}>
+        <div class="ReportDataTitle">
+            <{if $pageSum>=2}>
+            <div class="drop_down"></div>
+            <{/if}>
+        </div>
+    </div>
+</div>
+<script>
+    $(function(){
+        $(".selectDiv_submit").click(function(){
+            var serverIndex=$(".serverIndex").val();
+            if(serverIndex){
+                $(this).html('发送中...');
+                $(this).css({"background":"#616161"});
+                $.get("/GagListSetGet/",{"serverIndex":serverIndex,"doingUnid":new Date().getTime()},function(data){
+                    var obj = jQuery.parseJSON(data);
+                    if(obj.status!=2000){
+                        alert(obj.message);
+                    }else{
+                        window.location.reload();
+                    }
+
+                })
+            }
+        });
+        $(".drop_down").click(function(){
+            if(pageSum>showPage){
+                var link=showPage*showPageLength-1;
+                for(var i=1;i<=showPageLength;i++){
+                    $(".ReportDataCenter:eq("+link+")").show();
+                    link++;
+                }
+                showPage++;
+                if(showPage==pageSum){
+                    $(this).hide();
+                }
+            }
+        });
+        $(".roleKey").each(function(index){
+            $(this).blur(function (){
+                var value=$(this).val();
+                $.get("/GagListSetBlur/",{"index":index,"value":value,"doingUnid":new Date().getTime()},function(data){
+                    var obj = jQuery.parseJSON(data);
+                    if(obj.status!=2000){
+                        alert(obj.message)
+                    } else {
+                        window.location.reload();
+                    }
+                })
+            });
+        });
+        $(".release").each(function(){
+            $(this).click(function(){
+                var id=$(this).attr("thisId");
+                var roleS=$(this).attr("thisRoleS");
+                if(id && roleS){
+                    $.get("/GagReleaseGet/",{"id":id,"roleS":roleS,"doingUnid":new Date().getTime()},function(data){
+                        var obj = jQuery.parseJSON(data);
+                        if(obj.status!=2000){
+                            alert(obj.message)
+                        } else {
+                            alert(obj.message);
+                            window.location.reload();
+                        }
+                    })
+                }
+            })
+        })
+
+    });
+</script>
+<{/block}>

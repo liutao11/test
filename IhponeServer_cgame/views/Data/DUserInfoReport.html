@@ -1,0 +1,213 @@
+<{extends file='Admin/index.html'}>
+<{block name=bbb}>
+<script src="/views/dataTimeStyle/jquery.datetimepicker.js"></script>
+<link rel="stylesheet" href="/views/dataTimeStyle/jquery.datetimepicker.css" type="text/css" />
+<style>
+    .page_title{font-size: 14px;color: #438EB9;margin: 10px 0 0 0;height: 35px;line-height: 35px;background:#FAFAFA ;border: 1px solid #DEDEDE;border-radius: 6px;padding-left: 10px;}
+    .page_title span{font-size: 18px;color: #438EB9;padding-left: 10px;height: 40px;line-height: 40px;font-weight: bold}
+    .container{width: 800px;height: 420px;box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);float: left;margin: 10px 5px 10px 5px;}
+    .container_tt{height: 40px;line-height: 40px;font-size: 16px;background: transparent linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.1) 100%) repeat scroll 0% 0%}
+    #container_cen{height: 380px;}
+    .iconC1{width: 20px;height: 20px;background: url("/views/img/iconC.png") 0 0;float: left;margin: 12px 10px auto 10px;}
+    #lineUser{height: 380px;}
+    .selectDiv{height: 50px;}
+    .selectDiv span{display: block;float: left;line-height: 50px;height: 50px;margin-left: 10px;}
+    .selectDiv select{display: block;float: left;margin-top: 10px;height: 30px;width: 150px;line-height: 30px;margin-left: 10px;}
+    .selectDiv input{display: block;float: left;height: 28px;width: 150px;margin: 10px 0 0 10px;}
+    .selectDiv_submit{float: left;height: 28px;margin-top: 10px;margin-left: 20px;background:#438EB9;color: #ffffff;line-height: 30px;text-align: center;width: 100px;font-size: 12px;cursor: pointer}
+    .payList{line-height: 30px;height: 30px;}
+    .payList span{color:#438EB9}
+    .containerPay{margin: 10px 0 0 10px;}
+    .sumdiv{clear: both}
+    .sumdivList{float:left;width: 300px;height: 100px;box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);padding-top: 10px;background: transparent linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.1) 100%) repeat scroll 0% 0%;margin:0 10px 0 5px;}
+    .sumdivList_icon{width: 30px;height: 30px;background: url("/views/img/iconS.png") -257px -260px;margin: 0 auto 0 auto;}
+    .sumdivList_tt{text-align: center;font-size: 18px;font-weight: 600;height: 40px;line-height: 40px;}
+    .sumdivList_int{font-weight: 600;font-size: 14px;color: #438EB9;text-align: center;line-height: 30px;height: 30px;}
+    .sumdivList_icon_ren{width: 30px;height: 30px;background: url("/views/img/iconS.png") -35px -160px;margin: 0 auto 0 auto;}
+    .ReportData{box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);border: 1px solid #DEDEDE;border-radius: 5px;padding-left: 10px;padding-right:10px; }
+    .ReportDataTitle{height: 40px;}
+    .ReportDataTitle_list{float: left;line-height: 40px;height: 40px;width: 100px;text-align: center;font-size: 14px;font-weight: 600}
+    .ReportDataCenter{background:#F5F5F5;border-bottom:1px solid #DEDEDE;height: 30px;position: relative}
+    .ReportDataCenter_list{float: left;line-height: 30px;height: 30px;width: 100px;text-align: center;font-size: 12px;}
+    .button_m{border-radius: 4px;background:#438EB9;color: #ffffff;font-size: 12px;text-align: center;width: 80px;height: 24px;line-height: 24px;margin: 3px auto 0 auto;cursor: pointer}
+    .ReportDataTitle_list_show{position: absolute;width: 150px;height: 200px;background:#438EB9;left: 700px;top: 30px;line-height: 30px;color: #ffffff;z-index: 10;box-shadow: 0 4px 5px #438EB9;border-radius: 2px;display: none}
+    .ReportDataTitle_list_show_list{line-height: 22px;height: 22px;margin-left: 10px;}
+    .ReportDataTitle_list_show_list span{color: #ffffff}
+
+</style>
+
+<div class="page_title"><span><{$objectName}></span> 平台->运营数据->玩家数据统计</div>
+<div style="padding-top: 10px;">
+    <div class="selectDiv">
+        <span>服区*</span>
+        <select class="serverIndex">
+            <option value="0" <{if $serverIndex==0}>selected<{/if}>>选择区服</option>
+            <{foreach $serverS as $vv}>
+            <option value="<{$vv['id']}>" <{if $serverIndex==$vv['id']}>selected<{/if}>><{$vv['ServerTitle']}></option>
+            <{/foreach}>
+        </select>
+
+        <span>类型*</span>
+        <select class="stayId">
+            <option value="0" <{if $stayId==0}>selected<{/if}>>选择类型</option>
+            <option value="1" <{if $stayId==1}>selected<{/if}>>职业分布</option>
+            <option value="2" <{if $stayId==2}>selected<{/if}>>等级分布</option>
+            <option value="3" <{if $stayId==3}>selected<{/if}>>VIP分布</option>
+        </select>
+        <span>日期*</span>
+        <input type="text" class="startDay" value="<{$startDay}>">
+        <span>到</span>
+        <input type="text" class="endDay" value="<{$endDay}>">
+        <div class="selectDiv_submit">提交</div>
+    </div>
+
+    <div class="ReportData">
+        <{if $data}>
+            <{if $stayId==1}>
+                <div class="ReportDataTitle">
+                    <div class="ReportDataTitle_list">日期</div>
+                    <div class="ReportDataTitle_list">战士</div>
+                    <div class="ReportDataTitle_list">法师</div>
+                    <div class="ReportDataTitle_list">道士</div>
+                    <div class="ReportDataTitle_list">总数</div>
+                </div>
+                <{foreach $data as $kk=>$vv}>
+                   <div class="ReportDataCenter">
+                        <div class="ReportDataCenter_list"><{$kk}></div>
+                        <div class="ReportDataCenter_list"><{$vv['jobIndex0']}></div>
+                        <div class="ReportDataCenter_list"><{$vv['jobIndex1']}></div>
+                        <div class="ReportDataCenter_list"><{$vv['jobIndex2']}></div>
+                        <div class="ReportDataCenter_list"><{$vv['jobSum']}></div>
+                    </div>
+                <{/foreach}>
+            <{elseif $stayId==2}>
+                <div class="ReportDataTitle">
+                    <div class="ReportDataTitle_list">日期</div>
+                    <div class="ReportDataTitle_list">1-10级</div>
+                    <div class="ReportDataTitle_list">11-20级</div>
+                    <div class="ReportDataTitle_list">21-30级</div>
+                    <div class="ReportDataTitle_list">31-40级</div>
+                    <div class="ReportDataTitle_list">41-50级</div>
+                    <div class="ReportDataTitle_list">51-60级</div>
+                    <div class="ReportDataTitle_list">61-70级</div>
+                    <div class="ReportDataTitle_list">71-80级</div>
+                    <div class="ReportDataTitle_list">81-90级</div>
+                    <div class="ReportDataTitle_list">91-100级</div>
+                </div>
+                <{foreach $data as $kk=>$vv}>
+                <div class="ReportDataCenter">
+                    <div class="ReportDataCenter_list"><{$kk}></div>
+                    <div class="ReportDataCenter_list"><{$vv['group1']}></div>
+                    <div class="ReportDataCenter_list"><{$vv['group2']}></div>
+                    <div class="ReportDataCenter_list"><{$vv['group3']}></div>
+                    <div class="ReportDataCenter_list"><{$vv['group4']}></div>
+                    <div class="ReportDataCenter_list"><{$vv['group5']}></div>
+                    <div class="ReportDataCenter_list"><{$vv['group6']}></div>
+                    <div class="ReportDataCenter_list"><{$vv['group7']}></div>
+                    <div class="ReportDataCenter_list"><{$vv['group8']}></div>
+                    <div class="ReportDataCenter_list"><{$vv['group9']}></div>
+                    <div class="ReportDataCenter_list"><{$vv['group10']}></div>
+                </div>
+                <{/foreach}>
+            <{elseif $stayId==3}>
+                <div class="ReportDataTitle">
+                    <div class="ReportDataTitle_list">日期</div>
+                    <div class="ReportDataTitle_list">vip1级</div>
+                    <div class="ReportDataTitle_list">vip2级</div>
+                    <div class="ReportDataTitle_list">vip3级</div>
+                    <div class="ReportDataTitle_list">vip4级</div>
+                    <div class="ReportDataTitle_list">vip5级</div>
+                    <div class="ReportDataTitle_list">vip6级</div>
+                    <div class="ReportDataTitle_list">vip7级</div>
+                    <div class="ReportDataTitle_list">vip8级</div>
+                    <div class="ReportDataTitle_list">vip9级</div>
+                    <div class="ReportDataTitle_list">vip10级</div>
+                    <div class="ReportDataTitle_list">vip11级</div>
+                    <div class="ReportDataTitle_list">vip12级</div>
+                    <div class="ReportDataTitle_list">vip13级</div>
+                    <div class="ReportDataTitle_list">vip14级</div>
+                    <div class="ReportDataTitle_list">vip15级</div>
+                </div>
+                <{foreach $data as $kk=>$vv}>
+                <div class="ReportDataCenter">
+                    <div class="ReportDataCenter_list"><{$kk}></div>
+                    <div class="ReportDataCenter_list"><{$vv['1']}></div>
+                    <div class="ReportDataCenter_list"><{$vv['2']}></div>
+                    <div class="ReportDataCenter_list"><{$vv['3']}></div>
+                    <div class="ReportDataCenter_list"><{$vv['4']}></div>
+                    <div class="ReportDataCenter_list"><{$vv['5']}></div>
+                    <div class="ReportDataCenter_list"><{$vv['6']}></div>
+                    <div class="ReportDataCenter_list"><{$vv['7']}></div>
+                    <div class="ReportDataCenter_list"><{$vv['8']}></div>
+                    <div class="ReportDataCenter_list"><{$vv['9']}></div>
+                    <div class="ReportDataCenter_list"><{$vv['10']}></div>
+                    <div class="ReportDataCenter_list"><{$vv['11']}></div>
+                    <div class="ReportDataCenter_list"><{$vv['12']}></div>
+                    <div class="ReportDataCenter_list"><{$vv['13']}></div>
+                    <div class="ReportDataCenter_list"><{$vv['14']}></div>
+                    <div class="ReportDataCenter_list"><{$vv['15']}></div>
+                </div>
+                <{/foreach}>
+            <{/if}>
+        <{else}>
+        <div class="ReportDataCenter">没有数据！</div>
+        <{/if}>
+
+
+        <div class="ReportDataTitle">
+
+        </div>
+
+    </div>
+</div>
+<script>
+    var className='<{$className}>';
+    $(function(){
+        $('.startDay').datetimepicker({
+            lang:"ch",           //语言选择中文
+            format:"Y-m-d",      //格式化日期
+            timepicker:false,    //关闭时间选项
+            yearStart:2000,     //设置最小年份
+            yearEnd:2050,        //设置最大年份
+            todayButton:false    //关闭选择今天按钮
+        });
+        $('.endDay').datetimepicker({
+            lang:"ch",           //语言选择中文
+            format:"Y-m-d",      //格式化日期
+            timepicker:false,    //关闭时间选项
+            yearStart:2000,     //设置最小年份
+            yearEnd:2050,        //设置最大年份
+            todayButton:false    //关闭选择今天按钮
+        });
+        $(".selectDiv_submit").click(function(){
+            var serverIndex=$(".serverIndex").val();
+            var startDay=$(".startDay").val();
+            var endDay=$(".endDay").val();
+            var stayId=$(".stayId").val();
+            if(serverIndex && startDay && endDay && stayId){
+                $(this).html('发送中...');
+                $(this).css({"background":"#616161"});
+                $.get("/DUserInfoReportGet/",{"serverIndex":serverIndex,"startDay":startDay,"endDay":endDay,'class':className,'stayId':stayId,"doingUnid":new Date().getTime()},function(data){
+                    var obj = jQuery.parseJSON(data);
+                    if(obj.status!=2000){
+                        alert(obj.message)
+                    }
+                    window.location.reload();
+                })
+            }else{
+                alert("填写必须参数！")
+            }
+
+        });
+        $(".button_m").each(function(index){
+           $(this).mousemove(function(){
+               $(".ReportDataTitle_list_show").eq(index).show();
+           }).mouseout(function(){
+               $(".ReportDataTitle_list_show").eq(index).hide();
+           })
+        });
+
+    });
+
+</script>
+<{/block}>

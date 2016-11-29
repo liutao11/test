@@ -1,0 +1,124 @@
+<{extends file='From/index.html'}>
+<{block name=bbb}>
+<script src="/views/dataTimeStyle/jquery.datetimepicker.js"></script>
+<link rel="stylesheet" href="/views/dataTimeStyle/jquery.datetimepicker.css" type="text/css" />
+<style>
+    .page_title{font-size: 14px;color: #438EB9;margin: 10px 0 0 0;height: 35px;line-height: 35px;background:#FAFAFA ;border: 1px solid #DEDEDE;border-radius: 6px;padding-left: 10px;}
+    .page_title span{font-size: 18px;color: #438EB9;padding-left: 10px;height: 40px;line-height: 40px;font-weight: bold}
+    .selectDiv{height: 50px;}
+    .selectDiv span{display: block;float: left;line-height: 50px;height: 50px;margin-left: 10px;}
+    .selectDiv select{display: block;float: left;margin-top: 10px;height: 30px;width: 150px;line-height: 30px;margin-left: 10px;}
+    .selectDiv input{display: block;float: left;height: 28px;width: 150px;margin: 10px 0 0 10px;}
+    .selectDiv_submit{float: left;height: 28px;margin-top: 10px;margin-left: 20px;background:#438EB9;color: #ffffff;line-height: 30px;text-align: center;width: 100px;font-size: 12px;cursor: pointer}
+    .payList span{color:#438EB9}
+    .ReportData{box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);border: 1px solid #DEDEDE;border-radius: 5px;padding-left: 10px;padding-right:10px; }
+    .ReportDataTitle{height: 40px;}
+    .ReportDataTitle_list{float: left;line-height: 40px;height: 40px;width: 150px;text-align: center;font-size: 14px;font-weight: 600}
+    .ReportDataCenter{background:#F5F5F5;border-bottom:1px solid #DEDEDE;height: 30px;line-height: 30px;}
+    .ReportDataCenter_list{float: left;line-height: 30px;height: 30px;width: 150px;text-align: center;font-size: 12px;}
+</style>
+
+<div class="page_title"><span><{$objectName}></span> 平台->运营数据->用户留存率</div>
+<div style="padding-top: 10px;">
+    <div class="selectDiv">
+        <span>服区*</span>
+        <select class="serverIndex">
+            <option value="0" <{if $serverIndex==0}>selected<{/if}>>选择服区</option>
+            <{foreach $serverS as $vv}>
+            <option value="<{$vv['id']}>" <{if $serverIndex==$vv['id']}>selected<{/if}>><{$vv['ServerTitle']}></option>
+            <{/foreach}>
+        </select>
+        <span>日期*</span>
+        <input type="text" class="startDay" value="<{$startDay}>">
+        <span>日期*</span>
+        <input type="text" class="endDay" value="<{$endDay}>">
+        <div class="selectDiv_submit">提交</div>
+    </div>
+
+    <table class="ReportData">
+        <tr class="ReportDataTitle">
+            <td class="ReportDataTitle_list">日期</td>
+            <td class="ReportDataTitle_list">新建用户(人)</td>
+            <td class="ReportDataTitle_list">+1留存率（%）</td>
+            <td class="ReportDataTitle_list">+2留存率（%）</td>
+            <td class="ReportDataTitle_list">+3留存率（%）</td>
+            <td class="ReportDataTitle_list">+4留存率（%）</td>
+            <td class="ReportDataTitle_list">+5留存率（%）</td>
+            <td class="ReportDataTitle_list">+6留存率（%）</td>
+            <td class="ReportDataTitle_list">+14日留存（%）</td>
+        </tr>
+        <{if $data}>
+            <{foreach $data as $kk=>$vv}>
+                <tr class="ReportDataCenter">
+                    <td class="ReportDataCenter_list"><{$vv['date']}></td>
+                    <td class="ReportDataCenter_list"><{$vv['thisUserSum']}></td>
+                    <td class="ReportDataCenter_list"><{$vv['CDayUserSumLV']}></td>
+                    <td class="ReportDataCenter_list"><{$vv['SDayUserSumLV']}></td>
+                    <td class="ReportDataCenter_list"><{$vv['DDayUserSumLV']}></td>
+                    <td class="ReportDataCenter_list"><{$vv['WDayUserSumLV']}></td>
+                    <td class="ReportDataCenter_list"><{$vv['EDayUserSumLV']}></td>
+                    <td class="ReportDataCenter_list"><{$vv['ZDayUserSumLV']}></td>
+                    <td class="ReportDataCenter_list"><{$vv['SWDayUserSumLV']}></td>
+                </tr>
+            <{/foreach}>
+        <{else}>
+        <tr class="ReportDataCenter"><td>没有数据！</td></tr>
+        <{/if}>
+
+        <tr class="ReportDataTitle">
+            <tr class="ReportDataTitle">
+                <td class="ReportDataTitle_list">汇总</td>
+                <td class="ReportDataTitle_list"></td>
+                <td class="ReportDataTitle_list"><{$UserDayLV1}></td>
+                <td class="ReportDataTitle_list"><{$UserDayLV2}></td>
+                <td class="ReportDataTitle_list"><{$UserDayLV3}></td>
+                <td class="ReportDataTitle_list"><{$UserDayLV4}></td>
+                <td class="ReportDataTitle_list"><{$UserDayLV5}></td>
+                <td class="ReportDataTitle_list"><{$UserDayLV6}></td>
+                <td class="ReportDataTitle_list"><{$UserDayLV14}></td>
+            </tr>
+        </tr>
+
+    </table>
+</div>
+<script>
+    $(function(){
+        $('.startDay').datetimepicker({
+            lang:"ch",           //语言选择中文
+            format:"Y-m-d",      //格式化日期
+            timepicker:false,    //关闭时间选项
+            yearStart:2000,     //设置最小年份
+            yearEnd:2050,        //设置最大年份
+            todayButton:false    //关闭选择今天按钮
+        });
+        $('.endDay').datetimepicker({
+            lang:"ch",           //语言选择中文
+            format:"Y-m-d",      //格式化日期
+            timepicker:false,    //关闭时间选项
+            yearStart:2000,     //设置最小年份
+            yearEnd:2050,        //设置最大年份
+            todayButton:false    //关闭选择今天按钮
+        });
+        $(".selectDiv_submit").click(function(){
+            var serverIndex=$(".serverIndex").val();
+            var startDay=$(".startDay").val();
+            var endDay=$(".endDay").val();
+            if(startDay && endDay && serverIndex){
+                $(this).html('发送中...');
+                $(this).css({"background":"#616161"});
+                $.get("/FUserRetentionGet/",{"serverIndex":serverIndex,"startDay":startDay,'endDay':endDay},function(data){
+                    var obj = jQuery.parseJSON(data);
+                    if(obj.status!=2000){
+                        alert(obj.message)
+                    }
+                    window.location.reload();
+                })
+            }else{
+                alert("填写必须参数！")
+            }
+
+        })
+    });
+
+</script>
+<{/block}>

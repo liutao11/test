@@ -1,0 +1,143 @@
+<{extends file='Admin/index.html'}>
+<{block name=bbb}>
+<script src="/views/datastyle/WdatePicker.js"></script>
+<link rel="stylesheet" type="text/css" href="/views/dataTimeStyle/jquery.datetimepicker.css" />
+<script src="/views/dataTimeStyle/jquery.datetimepicker.js"></script>
+
+<style>
+    .page_title{font-size: 14px;color: #438EB9;margin: 10px 0 0 0;height: 35px;line-height: 35px;background:#FAFAFA ;border: 1px solid #DEDEDE;border-radius: 6px;padding-left: 10px;}
+    .page_title span{font-size: 18px;color: #438EB9;padding-left: 10px;height: 40px;line-height: 40px;font-weight: bold}
+    .fisrtGet{padding-left: 10px;}
+
+
+    .table_list{clear: both;}
+    .table_tr{float: left;  height: 30px;line-height: 30px;border: 1px solid  #cccccc;width: 150px;font-size: 12px;text-align: center;overflow: hidden}
+    .table_name{float: left;line-height: 30px;height: 30px;}
+    .noticeAdd{float: left;}
+    .add_div{float: left;line-height: 30px;height: 30px;}
+    .show_div{background: url('/views/img/bg_cc.png');width: 100%;height: 100%;position: fixed;z-index: 3;display: none;top:0;left: 0}
+    .show_center{width: 1000px;margin: 150px auto 0 auto;background: #ffffff}
+    .showList{clear: both;height: 32px;margin-top: 10px;}
+    .showList_name{float: left;height: 30px;line-height: 30px;font-size: 12px;;text-align: right;width: 150px;}
+    .showList select{display: block;float: left;height: 30px;line-height: 30px;font-size: 12px;width: 150px;}
+    .showList span{display: block;float: left;height: 30px;line-height: 30px;font-size: 12px;width: 50px;text-align: right;}
+    .showList input{height: 30px;line-height: 30px;display: block;float: left;width: 300px;border: 1px solid #cccccc;font-size: 14px;}
+    
+    .showList textarea{line-height: 30px;height: 60px;display: block;float: left;width: 600px;}
+    .close_show_div{float: right;font-size: 14px;height: 40px;line-height: 40px;margin-right: 30px;}
+    .showList_submit{width: 120px;height: 25px;line-height: 25px;font-size: 14px;text-align: center;border: 1px solid  #cccccc;cursor: pointer}
+    .delete{width: 70px ;color: #438EB9;font-size: 12px;line-height: 30px;height: 30px;text-align: center;float: left}
+
+</style>
+<div class="conten">
+    <div class="page_title">服区管理</div>
+    <div style="padding-left: 10px;padding-top: 10px;">
+        <div style="margin-top: 10px;" class="queryShow">
+            <div style="font-size: 14px ;height: 30px;line-height: 30px;">
+                <div class="table_name">服区列表：</div>
+                <div class="noticeAdd" typInt="2">
+                    <div class="icon_add"></div>
+                    <div class="add_div">增加服区</div>
+                </div>
+            </div>
+            <div class="fisrtGet">
+                <div class="table_list">
+                    <div class="table_tr">项目ID</div>
+                    <div class="table_tr">项目标题</div>
+                    <div class="table_tr">操作</div>
+                </div>
+                <{if $data}>
+                    <{foreach $data as $kk=>$vv}>
+                    <div class="table_list">
+                        <div class="table_tr"><{$vv['id']}></div>
+                        <div class="table_tr"><{$vv['title']}></div>
+                        <div class="table_tr">
+                            <!--<div class="delete"  Id="<{$vv['id']}>">删除</div>-->
+                        </div>
+                    </div>
+                    <{/foreach}>
+                <{/if}>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="show_div">
+    <div class="show_center">
+        <div class="page_title">增加项目<div class="close_show_div">关闭</div></div>
+        <div class="showList">
+            <div class="showList_name">平台：</div>
+            <input type="text" class="title">
+        </div>
+        <div class="showList">
+            <input id="datetimepicker" type="text" >
+        </div>
+        <div class="showList" style="height: 64px;">
+            <div class="showList_submit" style="margin: 0 auto">提交</div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function(){
+        var conten_x=$(".conten").width();
+        typeInt='';
+        isModify=0;
+        if(conten_x <=1600){
+            $(".conten").css({"width":"1600px"});
+        }
+        $(".noticeAdd").each(function(index){
+            $(this).click(function(){
+                typeInt=$(this).attr("typeInt");
+                isModify=0;
+                $(".show_div").show();
+
+            })
+        });
+        $(".close_show_div").click(function(){
+            $(".show_div").hide();
+            isModify=0;
+        });
+        $(".showList_submit").click(function(){
+            $(".show_div").hide();
+            var title=$(".title").val();
+            $(this).html('发送中...');
+            $(this).css({"background":"#616161"});
+            if(title){
+                $.get("/ObjectSetGet/",{"title":title,"doingUnid":new Date().getTime()},function(data){
+                    var obj = jQuery.parseJSON(data);
+                    if(obj.status!=2000){
+                        alert(obj.message)
+                    }else{
+                        alert("ok");
+                    }
+                    window.location.reload();
+                });
+            }else{
+                alert("填写错误");
+            }
+        });
+        $(".delete").each(function(index){
+            var Id=$(this).attr("Id");
+            $(this).click(function(){
+                if(confirm("确定删除吗？")){
+                    $.get("/DeleteUser/",{"Id":Id,"doingUnid":new Date().getTime()},function(data){
+                        var obj = jQuery.parseJSON(data);
+                        if(obj.status!=2000){
+                            alert(obj.message)
+                        }
+                        window.location.reload();
+                    })
+                }
+            })
+        });
+        $('#datetimepicker').datetimepicker({
+            "lang":"ch",                   //语言选择中文
+            "format":"Y-m-d H:00:00",      //格式化日期
+            "timepicker":true,    //关闭时间选项
+            "yearStart":2000,     //设置最小年份
+            "yearEnd":2050,        //设置最大年份
+            "todayButton":false    //关闭选择今天按钮
+        })
+    });
+</script>
+<{/block}>

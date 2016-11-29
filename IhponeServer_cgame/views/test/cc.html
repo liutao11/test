@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="/views/js/jquery-1.7.2.min.js"></script>
+</head>
+<body>
+<div class="submit" style="border: red 1px solid;width: 150px;">发送</div>
+
+
+<script>
+    $(function(){
+        $(".submit").click(function(){
+            $.get("/cc_s/",{"aaa":"get send"},function(data){});
+            $.post("/cc_s/?qwerqw=qwer",{"ccc":"post send"},function(data){});
+        })
+    })
+
+
+
+</script>
+
+
+</body>
+</html>

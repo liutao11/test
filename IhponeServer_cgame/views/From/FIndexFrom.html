@@ -1,0 +1,166 @@
+<{extends file='From/index.html'}>
+<{block name=bbb}>
+<style>
+    .page_title{font-size: 14px;color: #438EB9;margin: 10px 0 0 0;height: 35px;line-height: 35px;background:#FAFAFA ;border: 1px solid #DEDEDE;border-radius: 6px;padding-left: 10px;}
+    .page_title span{font-size: 18px;color: #438EB9;padding-left: 10px;height: 40px;line-height: 40px;font-weight: bold}
+    .container{width: 795px;height: 420px;box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);float: left;margin: 10px 5px 10px 5px;}
+    .container_tt{height: 40px;line-height: 40px;font-size: 16px;background: transparent linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.1) 100%) repeat scroll 0% 0%}
+    #container_cen{height: 380px;}
+    .iconC1{width: 20px;height: 20px;background: url("/views/img/iconC.png") 0 0;float: left;margin: 12px 10px auto 10px;}
+    #lineUser{height: 380px;}
+    .selectDiv{height: 50px;}
+    .selectDiv span{display: block;float: left;line-height: 50px;height: 50px;margin-left: 10px;}
+    .selectDiv select{display: block;float: left;margin-top: 10px;height: 30px;width: 150px;line-height: 30px;margin-left: 10px;}
+    .selectDiv_submit{float: left;height: 28px;margin-top: 10px;margin-left: 20px;background:#438EB9;color: #ffffff;line-height: 30px;text-align: center;width: 100px;font-size: 12px;cursor: pointer}
+    .payList{line-height: 30px;height: 30px;background:#F5F5F5;border-bottom:1px solid #DEDEDE;}
+    .payList span{color:#438EB9;width: 120px;}
+    .containerPay{margin: 10px 10px 0 10px;}
+    .sumdiv{clear: both}
+    .sumdivList{border: 1px solid #DEDEDE;float:left;width: 300px;height: 100px;box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);padding-top: 10px;background: transparent linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.1) 100%) repeat scroll 0% 0%;margin:0 10px 0 5px;}
+    .sumdivList_icon{width: 30px;height: 30px;background: url("/views/img/iconS.png") -257px -260px;margin: 0 auto 0 auto;}
+    .sumdivList_tt{text-align: center;font-size: 18px;font-weight: 600;height: 40px;line-height: 40px;}
+    .sumdivList_int{font-weight: 600;font-size: 14px;color: #438EB9;text-align: center;line-height: 30px;height: 30px;}
+    .sumdivList_icon_ren{width: 30px;height: 30px;background: url("/views/img/iconS.png") -35px -160px;margin: 0 auto 0 auto;}
+    .container{border: 1px solid #DEDEDE;}
+</style>
+<script src="/views/echarts/echarts.min.js"></script>
+<div class="page_title"><span><{$objectName}></span> 平台->首页</div>
+<div style="padding-top: 10px;">
+    <div class="selectDiv">
+        <span>服区*</span>
+        <select class="serverIndex">
+            <option value="0" <{if $serverIndex==0}>selected<{/if}>>选择服区</option>
+            <{foreach $serverS as $vv}>
+            <option value="<{$vv['id']}>" <{if $serverIndex==$vv['id']}>selected<{/if}>><{$vv['ServerTitle']}></option>
+            <{/foreach}>
+        </select>
+        <div class="selectDiv_submit">提交</div>
+    </div>
+    <div class="sumdiv">
+        <div class="sumdivList">
+            <div class="sumdivList_icon"></div>
+            <div class="sumdivList_tt">今日充值</div>
+            <div class="sumdivList_int">￥<{$todayPaySum}></div>
+        </div>
+        <div class="sumdivList">
+            <div class="sumdivList_icon"></div>
+            <div class="sumdivList_tt">本月充值</div>
+            <div class="sumdivList_int">￥<{$monthPaySun}></div>
+        </div>
+        <div class="sumdivList">
+            <div class="sumdivList_icon"></div>
+            <div class="sumdivList_tt">充值总数</div>
+            <div class="sumdivList_int">￥<{$PaySum}></div>
+        </div>
+        <div class="sumdivList">
+            <div class="sumdivList_icon_ren"></div>
+            <div class="sumdivList_tt">总导入人数</div>
+            <div class="sumdivList_int">￥<{$UserIntoSum}></div>
+        </div>
+    </div>
+    <div>
+        <div class="container">
+            <div class="container_tt"><div class="iconC1"></div>充值金额</div>
+            <div id="container_cen"></div>
+        </div>
+        <div class="container">
+            <div class="container_tt"><div class="iconC1"></div>导入新人数</div>
+            <div id="lineUser"></div>
+        </div>
+    </div>
+    <div>
+        <div class="container">
+            <div class="container_tt"><div class="iconC1"></div>充值金额</div>
+            <div  class="containerPay">
+                <{foreach $newPaySum as $vv}>
+                <div class="payList">
+                    <span style="font-weight: bold">￥<{$vv['mount']}></span>元--<span><{$serverTitle}></span>服<span><{$vv['sChrName']}></span>于<{$vv['createTimes_cl']}>
+                </div>
+                <{/foreach}>
+            </div>
+        </div>
+        <div class="container">
+            <div class="container_tt"><div class="iconC1"></div>最新公告</div>
+            <div></div>
+        </div>
+    </div>
+    <div>
+        <div class="container" style="width: 525px">
+            <div class="container_tt"><div class="iconC1"></div>今日充值排名</div>
+            <div  class="containerPay">
+                <{foreach $TadayPayPaking as $vv}>
+                <div class="payList">
+                    <span style="font-weight: bold">￥<{$vv['mount']}></span>元--<span><{$serverTitle}></span>服<span><{$vv['sChrName']}></span>
+                </div>
+                <{/foreach}>
+            </div>
+        </div>
+        <div class="container"  style="width: 530px">
+            <div class="container_tt"><div class="iconC1"></div>最近新服</div>
+            <div></div>
+        </div>
+        <div class="container"  style="width: 530px">
+            <div class="container_tt"><div class="iconC1"></div>今日平台导量</div>
+            <div></div>
+        </div>
+    </div>
+</div>
+<script>
+    var myChart1 = echarts.init(document.getElementById('container_cen'));
+    var option1 =  {
+        title : {text: ''},
+        tooltip : {trigger: 'axis'},
+        legend: {data:['今天','昨天']},
+        toolbox: {show : false,
+            feature : {mark : {show: false}, dataView : {show: false, readOnly:false}, magicType : {show: false, type: ['line', 'bar']}, restore : {show: false}, saveAsImage : {show: false}}
+        },
+        calculable : true,
+        xAxis : [
+            {type : 'category', boundaryGap : false, splitLine: {show: false}, data : [ '0','1', '2', '3', '4', '5', '6', '7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23']}
+        ],
+        yAxis : [{splitLine: {show: false}, type : 'value'}],
+        series : [
+            {name:'今天',type:'line',smooth:true,itemStyle: {normal: {areaStyle: {type: 'default'}}},data:<{$todayPayJson}>},
+            {name:'昨天',type:'line',smooth:true,itemStyle: {normal: {areaStyle: {type: 'default'}}},data:<{$yesPayJson}> }
+        ]
+    };
+    myChart1.setOption(option1);
+    $(function(){
+        $(".selectDiv_submit").click(function(){
+            var serverIndex=$(".serverIndex").val();
+            if(serverIndex!=0){
+                $(this).html('发送中...');
+                $(this).css({"background":"#616161"});
+                $.get("/FIndexFromGet/",{"serverIndex":serverIndex},function(data){
+                    var obj = jQuery.parseJSON(data);
+                    if(obj.status!=2000){
+                        alert(obj.message)
+                    }
+                    window.location.reload();
+                });
+            }
+        });
+    });
+    var myChart2 = echarts.init(document.getElementById('lineUser'));
+    var option2 =  {
+                title : {text: ''},
+                tooltip : {trigger: 'axis'},
+                legend: {data:['今天','昨天']},
+                toolbox: {show : false,
+                    feature : {mark : {show: false}, dataView : {show: false, readOnly:false}, magicType : {show: false, type: ['line', 'bar']}, restore : {show: false}, saveAsImage : {show: false}}
+                },
+                calculable : true,
+                xAxis : [
+                    {type : 'category', boundaryGap : false, splitLine: {show: false}, data : [ '0','1', '2', '3', '4', '5', '6', '7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23']}
+                ],
+                yAxis : [{splitLine: {show: false}, type : 'value'}],
+                series : [
+                    {name:'今天',type:'line',smooth:true,itemStyle: {normal: {areaStyle: {type: 'default'}}},data:<{$todayNewUserInfo}>},
+                    {name:'昨天',type:'line',smooth:true,itemStyle: {normal: {areaStyle: {type: 'default'}}},data:<{$yesNewUserInfo}> }
+            ]
+    };
+    myChart2.setOption(option2);
+
+
+</script>
+<{/block}>

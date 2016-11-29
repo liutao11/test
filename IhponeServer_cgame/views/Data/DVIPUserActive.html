@@ -1,0 +1,141 @@
+<{extends file='Admin/index.html'}>
+<{block name=bbb}>
+<script src="/views/dataTimeStyle/jquery.datetimepicker.js"></script>
+<link rel="stylesheet" href="/views/dataTimeStyle/jquery.datetimepicker.css" type="text/css" />
+<style>
+    .page_title{font-size: 14px;color: #438EB9;margin: 10px 0 0 0;height: 35px;line-height: 35px;background:#FAFAFA ;border: 1px solid #DEDEDE;border-radius: 6px;padding-left: 10px;}
+    .page_title span{font-size: 18px;color: #438EB9;padding-left: 10px;height: 40px;line-height: 40px;font-weight: bold}
+    .selectDiv{height: 50px;}
+    .selectDiv span{display: block;float: left;line-height: 50px;height: 50px;margin-left: 10px;}
+    .selectDiv select{display: block;float: left;margin-top: 10px;height: 30px;width: 150px;line-height: 30px;margin-left: 10px;border: 1px solid #cccccc}
+    .selectDiv input{display: block;float: left;height: 28px;width: 150px;margin: 10px 0 0 10px;}
+    .selectDiv_submit{float: left;height: 28px;margin-top: 10px;margin-left: 20px;background:#438EB9;color: #ffffff;line-height: 30px;text-align: center;width: 100px;font-size: 12px;cursor: pointer}
+    .ReportData{box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);border: 1px solid #DEDEDE;border-radius: 5px;padding-left: 10px;padding-right:10px; }
+    .ReportDataTitle{height: 40px;}
+    .ReportDataTitle_list{float: left;line-height: 40px;height: 40px;width: 150px;text-align: center;font-size: 14px;font-weight: 600}
+    .ReportDataCenter{;background:#F5F5F5;border-bottom:1px solid #DEDEDE;height: 30px;}
+    .ReportDataCenter_list{float: left;line-height: 30px;height: 30px;width: 150px;text-align: center;font-size: 12px;}
+    .selectDataShow{height: 30px;width: 160px;float: left;margin: 8px 0 0 35px;}
+    .selectDataShow_div{float: left;width: 80px;height: 30px;text-align: center;line-height: 30px;background:#F8F8F8;cursor:pointer;box-shadow: inset 0 2px 4px rgba(0,0,0,.15), 0 1px 2px rgba(0,0,0,.05);}
+
+
+    .button_m{border-radius: 4px;background:#438EB9;color: #ffffff;font-size: 12px;text-align: center;width: 80px;height: 24px;line-height: 24px;margin: 3px auto 0 auto;cursor: pointer}
+    .ReportDataTitle_list_show{position: absolute;width: 1010px;height: 100px;background:#438EB9;left: 570px;top: 30px;line-height: 30px;color: #ffffff;z-index: 10;box-shadow: 0 4px 5px #438EB9;border-radius: 2px;display: none}
+
+    .ReportDataTitle_list_show span{}
+    .ReportDataTitle_list_show span span{color: #ffffff}
+    .button_online{border-radius: 4px;background:#438EB9;color: #ffffff;font-size: 12px;text-align: center;width: 80px;height: 24px;line-height: 24px;margin: 3px auto 0 auto;cursor: pointer}
+    .ReportDataTitle_list_show_online{position: absolute;width: 160px;height: 60px;background:#438EB9;left: 880px;top: 30px;line-height: 30px;color: #ffffff;z-index: 10;box-shadow: 0 4px 5px #438EB9;border-radius: 2px;display: none}
+</style>
+<script src="/views/echarts/echarts.min.js"></script>
+<div class="page_title"><span><{$objectName}></span> 平台->运营数据->VIP用户活跃度</div>
+<div style="padding-top: 10px;">
+    <div class="selectDiv">
+        <span>服区*</span>
+        <select class="serverIndex">
+            <option value="0" <{if $serverIndex==0}>selected<{/if}>>全部服区</option>
+            <{foreach $serverS as $vv}>
+            <option value="<{$vv['id']}>" <{if $serverIndex==$vv['id']}>selected<{/if}>><{$vv['ServerTitle']}></option>
+            <{/foreach}>
+        </select>
+        <span>日期*</span>
+        <input type="text" class="startDay" value="<{$startDay}>">
+        <span>日期*</span>
+        <input type="text" class="endDay" value="<{$endDay}>">
+        <div class="selectDiv_submit">提交</div>
+    </div>
+    <div class="ReportData">
+        <table class="ReportData_list">
+            <tr class="ReportDataTitle">
+                <td class="ReportDataTitle_list">vip等级</td>
+                <td class="ReportDataTitle_list">等级人数</td>
+                <td class="ReportDataTitle_list">所占比例(%)</td>
+                <td class="ReportDataTitle_list">流失人数</td>
+                <td class="ReportDataTitle_list">流失率</td>
+            </tr>
+            <{if $data}>
+                <{foreach $data as $kk=>$vv}>
+                    <tr class="ReportDataCenter" style="position: relative">
+                        <td class="ReportDataCenter_list" ><{$kk}></td>
+                        <td class="ReportDataCenter_list" ><{$vv['LevelSum']}></td>
+                        <td class="ReportDataCenter_list" ><{$vv['LevelSumLv']}>%</td>
+                        <td class="ReportDataCenter_list" ><{$vv['loseUserSum']}></td>
+                        <td class="ReportDataCenter_list" ><{$vv['loseUserSumLv']}>%</td>
+                    </tr>
+                <{/foreach}>
+                <tr class="ReportDataTitle">
+                    <td class="ReportDataTitle_list"></td>
+                    <td class="ReportDataTitle_list"><{$VIpSum}></td>
+                    <td class="ReportDataTitle_list"></td>
+                    <td class="ReportDataTitle_list"><{$VIploseUserSum}></td>
+                    <td class="ReportDataTitle_list"><{$VIploseUserLv}>%</td>
+                </tr>
+            <{else}>
+            <tr class="ReportDataCenter"><td>没有数据！</td></tr>
+            <{/if}>
+        </table>
+        <div class="ReportData_list">
+            <div id="container_cen" style="height: 400px;width: 1600px;">
+                <!--选热图片位置-->
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function(){
+        var className="<{$className}>";
+        $('.startDay').datetimepicker({
+            lang:"ch",           //语言选择中文
+            format:"Y-m-d",      //格式化日期
+            timepicker:false,    //关闭时间选项
+            yearStart:2000,     //设置最小年份
+            yearEnd:2050,        //设置最大年份
+            todayButton:false    //关闭选择今天按钮
+        });
+        $('.endDay').datetimepicker({
+            lang:"ch",           //语言选择中文
+            format:"Y-m-d",      //格式化日期
+            timepicker:false,    //关闭时间选项
+            yearStart:2000,     //设置最小年份
+            yearEnd:2050,        //设置最大年份
+            todayButton:false    //关闭选择今天按钮
+        });
+        $(".selectDiv_submit").click(function(){
+            var serverIndex=$(".serverIndex").val();
+            var startDay=$(".startDay").val();
+            var endDay=$(".endDay").val();
+            if(serverIndex!=0 && serverIndex!='' && startDay!= '' && endDay!='') {
+                $(this).html('发送中...');
+                $(this).css({"background":"#616161"});
+                $.get("/DTaskGroupSet/", {"serverIndex": serverIndex,'className':className,"startDay":startDay,"endDay":endDay,"doingUnid":new Date().getTime()}, function (data) {
+                    var obj = jQuery.parseJSON(data);
+                    if (obj.status != 2000) {
+                        alert(obj.message)
+                    }
+                    window.location.reload();
+                })
+            }else{
+                alert("参数非法！")
+            }
+        });
+        $(".selectDataShow_div").each(function(index){
+            $(this).click(function(){
+                $(".selectDataShow_div").css({"background": "#F8F8F8"});
+                $(this).css({"background": "#E6E6E6"});
+                $(".ReportData_list").hide();
+                $(".ReportData_list:eq("+index+")").show();
+            })
+        });
+        $(".button_m").each(function(index){
+            $(this).mousemove(function(){
+                $(".ReportDataTitle_list_show").eq(index).show();
+            }).mouseout(function(){
+                $(".ReportDataTitle_list_show").eq(index).hide();
+            })
+        });
+    });
+    $(function(){
+        $(".ReportData_list:gt(0)").hide();
+    });
+</script>
+<{/block}>

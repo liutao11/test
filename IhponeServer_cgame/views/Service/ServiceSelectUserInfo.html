@@ -1,0 +1,107 @@
+<{extends file='Admin/index.html'}>
+<{block name=bbb}>
+<script src="/views/dataTimeStyle/jquery.datetimepicker.js"></script>
+<link rel="stylesheet" href="/views/dataTimeStyle/jquery.datetimepicker.css" type="text/css" />
+<style>
+    .page_title{font-size: 14px;color: #438EB9;margin: 10px 0 0 0;height: 35px;line-height: 35px;background:#FAFAFA ;border: 1px solid #DEDEDE;border-radius: 6px;padding-left: 10px;}
+    .page_title span{font-size: 18px;color: #438EB9;padding-left: 10px;height: 40px;line-height: 40px;font-weight: bold}
+    .ReportData{box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);border: 1px solid #DEDEDE;border-radius: 5px;}
+    .showList{clear: both;height: 32px;margin-top: 10px;}
+    .showList_name{float: left;height: 30px;line-height: 30px;font-size: 12px;;text-align: right;width: 150px;}
+    .showList select{display: block;float: left;height: 30px;line-height: 30px;font-size: 12px;width: 150px;}
+    .showList span{display: block;float: left;height: 30px;line-height: 30px;font-size: 12px;width: 150px;}
+    .showList input{height: 30px;line-height: 30px;display: block;float: left;width: 300px;border: 1px solid #cccccc;font-size: 14px;}
+    .showList textarea{line-height: 30px;height: 60px;display: block;float: left;width: 600px;}
+    .selectDiv_submit{float: left;height: 28px;margin-top: 10px;margin-left: 20px;background:#438EB9;color: #ffffff;line-height: 30px;text-align: center;width: 100px;font-size: 12px;cursor: pointer}
+    .container_tt{height: 40px;line-height: 40px;font-size: 16px;background: transparent linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.1) 100%) repeat scroll 0% 0%}
+    .iconC1{width: 20px;height: 20px;background: url("/views/img/iconC.png") 0 0;float: left;margin: 12px 10px auto 10px;}
+    .ReportDataTitle_list{float: left;line-height: 40px;height: 40px;width: 100px;text-align: center;font-size: 14px;font-weight: 600}
+    .ReportDataCenter{background:#F5F5F5;border-bottom:1px solid #DEDEDE;height: 40px;}
+    .ReportDataCenter_list{float: left;line-height: 30px;height: 40px;width: 100px;text-align: center;font-size: 12px;}
+</style>
+<div class="page_title"><span><{$objectName}></span> 平台->客服->玩家信息查询</div>
+<div style="padding-top: 10px;">
+    <div class="ReportData">
+        <div class="container_tt"><div class="iconC1"></div>玩家信息查询</div>
+        <div class="showList">
+            <div class="showList_name">服区*：</div>
+            <select class="serverIndex">
+                <option value="0">--选择服区--</option>
+                <{foreach $serverS as $vv}>
+                <option value="<{$vv['id']}>"><{$vv['ServerTitle']}></option>
+                <{/foreach}>
+            </select>
+        </div>
+        <div class="showList">
+            <div class="showList_name">角色或者账号*：</div>
+            <input type="text" class="roleS" style="width: 400px;">
+        </div>
+        <div class="showList" style="height: 64px;">
+            <div class="selectDiv_submit" style="float:none;margin: 0 auto">提交</div>
+        </div>
+    </div>
+    <div class="ReportData" style="margin-top: 10px;">
+        <div class="container_tt"><div class="iconC1"></div>查询结果</div>
+        <div class="ReportDataTitle" style="height: 40px;">
+            <div class="ReportDataTitle_list">角色名</div>
+            <div class="ReportDataTitle_list" style="width: 150px">账号</div>
+            <div class="ReportDataTitle_list">等级</div>
+            <div class="ReportDataTitle_list">职业</div>
+            <div class="ReportDataTitle_list">性别</div>
+            <div class="ReportDataTitle_list">转生</div>
+            <div class="ReportDataTitle_list">金币</div>
+            <div class="ReportDataTitle_list">元宝</div>
+            <div class="ReportDataTitle_list" style="width: 150px;">创建时间</div>
+            <div class="ReportDataTitle_list">主渠道</div>
+            <div class="ReportDataTitle_list" style="width: 150px;">副渠道</div>
+            <div class="ReportDataTitle_list">状态</div>
+        </div>
+        <div class="selectList">
+
+        </div>
+        <div class="ReportDataTitle" style="height: 40px;"></div>
+    </div>
+</div>
+</div>
+<script>
+    $(function(){
+        $(".selectDiv_submit").click(function(){
+            var serverIndex=$(".serverIndex").val();
+            var roleS=$(".roleS").val();
+            if(serverIndex && roleS){
+                $(this).html('发送中...');
+                $(this).css({"background":"#616161"});
+                $.get("/ServiceSelectUserInfoGet/",{"serverIndex":serverIndex,"roleS":roleS,"doingUnid":new Date().getTime()},function(data){
+                    var obj = jQuery.parseJSON(data);
+                    if(obj.status!=2000){
+                        alert(obj.message);
+                    }else{
+                        if(obj.data){
+                            var htmlString='';
+                            $.each(obj.data,function(id){
+                               htmlString+='<div class="ReportDataCenter">'+'<div class="ReportDataCenter_list">'+obj.data[id].sChrName+'</div>'+'<div class="ReportDataCenter_list" style="width: 150px;overflow-y: scroll">'+obj.data[id].sAccount+'</div>'+'<div class="ReportDataCenter_list">'+obj.data[id].Level+'</div>'+'<div class="ReportDataCenter_list">'+obj.data[id].btJobCL+'</div>'+'<div class="ReportDataCenter_list">'+obj.data[id].btSexCL+'</div>'+'<div class="ReportDataCenter_list">'+obj.data[id].btReLevel+'</div>'+'<div class="ReportDataCenter_list">'+obj.data[id].GoldSum+'</div>'+'<div class="ReportDataCenter_list">'+obj.data[id].LoyalSum+'</div>'+'<div class="ReportDataCenter_list" style="width: 150px;">'+obj.data[id].dCreateDateCL+'</div>'+'<div class="ReportDataCenter_list">'+obj.data[id].fromIdmName+'</div>'+'<div class="ReportDataCenter_list" style="width: 150px;">'+obj.data[id].fromIds+'</div>'+'</div>';
+                            });
+
+                            $(".selectList").html(htmlString);
+
+                            $(".roleS").val('');
+                        }else{
+                            $(".selectList").html('没有数据！');
+                        }
+                        $(".selectDiv_submit").html('提交');
+                        $(".selectDiv_submit").css({"background":"#438EB9"});
+                    }
+                })
+            }
+        });
+        $('.time').datetimepicker({
+            lang:"ch",           //语言选择中文
+            format:"Y-m-d H:i:s",      //格式化日期
+            timepicker:true,    //关闭时间选项
+            yearStart:2000,     //设置最小年份
+            yearEnd:2050,        //设置最大年份
+            todayButton:false    //关闭选择今天按钮
+        });
+    });
+</script>
+<{/block}>
