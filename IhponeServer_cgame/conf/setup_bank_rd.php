@@ -15,7 +15,7 @@ define('DB_STYLE','mysql');                                                     
 $update_data_pool_host=array('127.0.0.1');                                               //数据库地址(主)
 $read_data_pool_host=array('127.0.0.1');                                   //数据库地址（从）
 define('DB_USER','root');                                                             //数据库的用户名
-define('DB_PWD','4se@q15wAe_63rl&Hs9u');                                               //数据库密码
+define('DB_PWD','123233');                                               //数据库密码
 define('DB_DATA','PhoneServer_cgame');                                                        //数据库名
 define('DB_PORT','8723');                                                                //数据库端口号
 define("DB_LINK_INT","2");                                                                //每一个进程
